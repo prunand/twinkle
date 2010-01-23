@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+    Copyright 2010 Andrew Prunicki
+    
+    This file is part of Twinkle.
+    
+    Twinkle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    Twinkle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<resources>
+    <string name="app_name">Suzuki Twinkle</string>
+    <string name="app_version">Version: 0.1</string>
+    <string name="btn_name">Name that Note</string>
+    <string name="btn_pitch">Higher or Lower?</string>
+    <string name="btn_rhythm">Name that Rhythm</string>
+    <string name="btn_replay">Replay</string>
+    <string name="btn_next">Next</string>
+    <string name="btn_back">Back</string>
+    <string name="dialog_success">Good Job!</string>
+    <string name="dialog_sight_sound">Sight or Sound?</string>
+    <string name="pitch_desc">Is the last note higher or lower?</string>
+    <string name="about_label">About...</string>
+    <string name="about_shortcut">s</string>
+    <string name="about">\nAn aid for beginning Suzuki students.\n\nCopyright (c) 2010 Andrew Prunicki\n\nhttp://prunicki.com</string>
+    <string name="in_memory">\n\nIn loving memory of John Paul, who never had the opportunity to learn the violin.</string>
+</resources>

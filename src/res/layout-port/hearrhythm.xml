@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+    Copyright 2010 Andrew Prunicki
+    
+    This file is part of Twinkle.
+    
+    Twinkle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    
+    Twinkle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    
+    You should have received a copy of the GNU General Public License
+    along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
+ -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/one_note">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1"/>
+    <Button
+        android:id="@+id/HearMissStopStop"
+        android:text="Mississippi Stop Stop"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_margin="5dip"
+        android:soundEffectsEnabled="false"/>
+    <Button
+        android:id="@+id/HearMissAlligator"
+        android:text="Mississippi Alligator"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_margin="5dip"
+        android:soundEffectsEnabled="false"/>
+    <Button
+        android:id="@+id/HearDownPony"
+        android:text="Down Pony Up Pony"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_margin="5dip"
+        android:soundEffectsEnabled="false"/>
+    <Button
+        android:id="@+id/HearIceCream"
+        android:text="Ice Cream Sh Cone"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_margin="5dip"
+        android:soundEffectsEnabled="false"/>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center"
+        android:layout_margin="15dip">
+        <Button
+            android:id="@+id/HearRhythmReplay"
+            android:text="@string/btn_replay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_margin="15dip"
+            android:soundEffectsEnabled="false"/>
+        <Button
+            android:id="@+id/HearRhythmNext"
+            android:text="@string/btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:layout_margin="15dip"
+            android:soundEffectsEnabled="false"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="1"/>
+    <Button android:id="@+id/HearRhythmBack"
+        android:text="@string/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"/>
+</LinearLayout>
