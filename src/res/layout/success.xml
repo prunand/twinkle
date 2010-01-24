@@ -18,11 +18,13 @@
     along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_height="wrap_content" android:layout_width="wrap_content">
+    android:orientation="horizontal"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content">
     <ImageView
         android:id="@+id/SuccessImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/good_job_blue_ribbon"
+        android:src="@drawable/shooting_star"
         android:clickable="true"/>
 </LinearLayout>

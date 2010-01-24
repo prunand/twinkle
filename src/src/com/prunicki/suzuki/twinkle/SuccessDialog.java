@@ -46,6 +46,7 @@ public class SuccessDialog extends Dialog {
         setOnCancelListener(mCancelListener);
         
         mSuccessImage = (ImageView) findViewById(R.id.SuccessImage);
+        mSuccessImage.setBackgroundColor(0xffffffff);
         mSuccessImage.setOnClickListener(mSuccessListener);
         
         mPlayer.playSuccess();
