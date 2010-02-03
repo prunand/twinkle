@@ -22,106 +22,104 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.ImageView;
 
 public class SeeNote extends Activity {
     
-    private ImageView mRhythmImage;
+    private StaffView mStaffView;
     
-    private Button mANote;
-    private Button mBNote;
-    private Button mCNote;
-    private Button mDNote;
-    private Button mENote;
-    private Button mFNote;
-    private Button mGNote;
+    private View[] mNoteButtons;
+    private NoteListener[] mNoteListeners;
     
-    private Button mNextButton;
-    private Button mBackButton;
+    private View mNextButton;
     
     private Random mRandom;
-    private int mNote;
+    int mNote;  //default to prevent accessor method from being created at compile.
+    
+    public SeeNote() {
+        mNoteButtons = new Button[7];
+        mNoteListeners = new NoteListener[7];
+        mRandom = new Random();
+        nextNote();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.seenote);
         
-        mRandom = new Random();
-        nextRhythm();
+        View[] noteButtons = mNoteButtons;
+        NoteListener[] noteListeners = mNoteListeners;
         
-        mRhythmImage = (ImageView) findViewById(R.id.NoteImage);
+        int x = 0;
+        noteButtons[x] = findViewById(R.id.SeeNoteA);
+        noteListeners[x++] = new NoteListener(Player.A_NOTE);
+        noteButtons[x] = findViewById(R.id.SeeNoteB);
+        noteListeners[x++] = new NoteListener(Player.B_NOTE);
+        noteButtons[x] = findViewById(R.id.SeeNoteC);
+        noteListeners[x++] = new NoteListener(Player.C_NOTE);
+        noteButtons[x] = findViewById(R.id.SeeNoteD);
+        noteListeners[x++] = new NoteListener(Player.D_NOTE);
+        noteButtons[x] = findViewById(R.id.SeeNoteE);
+        noteListeners[x++] = new NoteListener(Player.E_NOTE);
+        noteButtons[x] = findViewById(R.id.SeeNoteF);
+        noteListeners[x++] = new NoteListener(Player.F_NOTE);
+        noteButtons[x] = findViewById(R.id.SeeNoteG);
+        noteListeners[x] = new NoteListener(Player.G_NOTE);
         
-        mNextButton = (Button) findViewById(R.id.SeeNoteNext);
-        mBackButton = (Button) findViewById(R.id.SeeNoteBack);
-
-        mANote = (Button) findViewById(R.id.SeeNoteA);
-        mBNote = (Button) findViewById(R.id.SeeNoteB);
-        mCNote = (Button) findViewById(R.id.SeeNoteC);
-        mDNote = (Button) findViewById(R.id.SeeNoteD);
-        mENote = (Button) findViewById(R.id.SeeNoteE);
-        mFNote = (Button) findViewById(R.id.SeeNoteF);
-        mGNote = (Button) findViewById(R.id.SeeNoteG);
+        int count = noteButtons.length;
+        for (int i = 0; i < count; i++) {
+            noteButtons[i].setOnClickListener(noteListeners[i]);
+        }
         
+        mStaffView = (StaffView) findViewById(R.id.StaffView);
+        
+        mNextButton = (View) findViewById(R.id.SeeNoteNext);
         mNextButton.setOnClickListener(mNextListener);
-        mBackButton.setOnClickListener(mBackListener);
         
-        mANote.setOnClickListener(new NoteListener(Player.A_NOTE));
-        mBNote.setOnClickListener(new NoteListener(Player.B_NOTE));
-        mCNote.setOnClickListener(new NoteListener(Player.C_NOTE));
-        mDNote.setOnClickListener(new NoteListener(Player.D_NOTE));
-        mENote.setOnClickListener(new NoteListener(Player.E_NOTE));
-        mFNote.setOnClickListener(new NoteListener(Player.F_NOTE));
-        mGNote.setOnClickListener(new NoteListener(Player.G_NOTE));
-        
-        placeImage();
+        changeNoteInView();
     }
     
-    private void placeImage() {
-        switch (mNote) {
-            case Player.A_NOTE:
-                Log.d(Main.TAG, "placing a");
-                mRhythmImage.setImageResource(R.drawable.note_a);
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        Player player = ((SuzukiApplication) getApplication()).getPlayer();
+        
+        setPlayerIntoListeners(player);
+    }
+    
+    @Override
+    protected void onPause() {
+        super.onPause();
+        
+        setPlayerIntoListeners(null);
+    }
+
+    void changeNoteInView() {
+        mStaffView.setNote(mNote);
+    }
+
+    void nextNote() {
+        Random random = mRandom;
+        
+        while (true) {
+            int nextInt = random.nextInt(7);
+            if (mNote != nextInt) {
+                mNote = nextInt;
                 break;
-            case Player.B_NOTE:
-                Log.d(Main.TAG, "placing b");
-                mRhythmImage.setImageResource(R.drawable.note_b);
-                break;
-            case Player.C_NOTE:
-                Log.d(Main.TAG, "placing c");
-                mRhythmImage.setImageResource(R.drawable.note_c);
-                break;
-            case Player.D_NOTE:
-                Log.d(Main.TAG, "placing d");
-                mRhythmImage.setImageResource(R.drawable.note_d);
-                break;
-            case Player.E_NOTE:
-                Log.d(Main.TAG, "placing e");
-                mRhythmImage.setImageResource(R.drawable.note_e);
-                break;
-            case Player.F_NOTE:
-                Log.d(Main.TAG, "placing f");
-                mRhythmImage.setImageResource(R.drawable.note_f);
-                break;
-            case Player.G_NOTE:
-                Log.d(Main.TAG, "placing g");
-                mRhythmImage.setImageResource(R.drawable.note_g);
-                break;
+            }
         }
     }
 
-    private void nextRhythm() {
-        boolean done = false;
-        while (!done) {
-            int nextInt = mRandom.nextInt(7);
-            if (mNote != nextInt) {
-                mNote = nextInt;
-                done = true;
-            }
+    private void setPlayerIntoListeners(Player player) {
+        NoteListener[] noteListeners = mNoteListeners;
+        
+        int count = noteListeners.length;
+        for (int i = 0; i < count; i++) {
+            noteListeners[i].setPlayer(player);
         }
     }
     
@@ -129,35 +127,23 @@ public class SeeNote extends Activity {
         
         @Override
         public void onClick(View arg0) {
-            Log.d(Main.TAG, "Note was " + mNote);
-            nextRhythm();
-            Log.d(Main.TAG, "Note is " + mNote);
-            placeImage();
+            nextNote();
+            changeNoteInView();
         }
     };
     
-    private OnClickListener mBackListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View arg0) {
-           finish();
-        }
-    };
-    
-    private class NoteListener implements OnClickListener {
+    private class NoteListener extends GameButtonListener {
         
-        private int mSelectedNote;
+        private int mNote;
         
-        private NoteListener (int rhythm) {
-            mSelectedNote = rhythm;
+        private NoteListener (int note) {
+            super(SeeNote.this);
+            mNote = note;
         }
 
         @Override
-        public void onClick(View v) {
-            if (mNote == mSelectedNote) {
-                SuccessDialog dialog = new SuccessDialog(SeeNote.this);
-                dialog.show();
-            }
+        protected boolean checkSuccess() {
+            return mNote == SeeNote.this.mNote;
         }
     }
 }

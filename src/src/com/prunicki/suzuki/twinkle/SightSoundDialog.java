@@ -25,12 +25,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
 public class SightSoundDialog extends Dialog {
     
-    private Button mSightButton;
-    private Button mSoundButton;
+    private View mSightButton;
+    private View mSoundButton;
     private Class<? extends Activity> mSeeClass;
     private Class<? extends Activity> mHearClass;
 
@@ -50,8 +49,8 @@ public class SightSoundDialog extends Dialog {
         setTitle(R.string.dialog_sight_sound);
         setCanceledOnTouchOutside(true);
         
-        mSightButton = (Button) findViewById(R.id.DlgSight);
-        mSoundButton = (Button) findViewById(R.id.DlgSound);
+        mSightButton = (View) findViewById(R.id.DlgSight);
+        mSoundButton = (View) findViewById(R.id.DlgSound);
         
         try {
             mSightButton.setOnClickListener(mSightListener);
