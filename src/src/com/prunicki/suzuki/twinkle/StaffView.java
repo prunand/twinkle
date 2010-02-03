@@ -41,10 +41,10 @@ public class StaffView extends View {
     private final float mStrokeWidth;
     private final float mPadding;
     
-    private final Path mLinePath;
-    private final Paint mLinePaint;
     private final Path mFillPath;
     private final Paint mFillPaint;
+    private final Path mLinePath;
+    private final Paint mLinePaint;
     private final Path mFontPath;
     private final Paint mFontPaint;
     
@@ -72,25 +72,23 @@ public class StaffView extends View {
         mStrokeWidth = STROKE_WIDTH * mDensity;
         mPadding = 4 * mDensity;
         
+        mFillPaint = new Paint();
+        mFillPaint.setColor(Color.WHITE);
+        mFillPaint.setStyle(Style.FILL);
+        
         mLinePaint = new Paint();
         mLinePaint.setColor(Color.BLACK);
         mLinePaint.setStyle(Style.STROKE);
         mLinePaint.setStrokeWidth(mStrokeWidth);
         mLinePaint.setStrokeCap(Cap.SQUARE);
         
-        mFillPaint = new Paint();
-        mFillPaint.setColor(Color.WHITE);
-        mFillPaint.setStyle(Style.FILL);
-        
         mFontPaint = new Paint();
         mFontPaint.setTypeface(mTypeface);
         mFontPaint.setColor(Color.BLACK);
         mFontPaint.setStyle(Style.FILL_AND_STROKE);
-        mLinePaint.setStrokeWidth(mStrokeWidth);
-        mLinePaint.setStrokeCap(Cap.BUTT);
         
-        mLinePath = new Path();
         mFillPath = new Path();
+        mLinePath = new Path();
         mFontPath = new Path();
         
         mTmpPath = new Path();
@@ -161,8 +159,8 @@ public class StaffView extends View {
         mLastHeight = height;
         
         float padding = mPadding;
-        Path linePath = mLinePath;
         Path fillPath = mFillPath;
+        Path linePath = mLinePath;
         Path fontPath = mFontPath;
         Path tmpPath = mTmpPath;
         Paint fontPaint = mFontPaint;
