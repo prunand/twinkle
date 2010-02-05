@@ -30,12 +30,29 @@ import android.graphics.Path.Direction;
 import android.util.AttributeSet;
 import android.view.View;
 
-public class StaffView extends View {
-    private static final int STROKE_WIDTH = 2;
+public abstract class StaffView extends View {
+    private static final int STROKE_WIDTH = 1;
     private static final int RATIO = 3;
     private static final String TIME_4 = "#";
     private static final String TREBLE_CLEF = "$";
-    private static final String WHOLE_NOTE = "1";
+    
+    public static final String DOUBlE_WHOLE_NOTE = "0";
+    public static final String WHOLE_NOTE = "1";
+    public static final String HALF_NOTE = "2";
+    public static final String QUARTER_NOTE = "3";
+    public static final String EIGHTH_NOTE = "4";
+    public static final String SIXTEENTH_NOTE = "5";
+    public static final String EIGHTH_START_NOTE = "6";
+    public static final String SIXTEENTH_START_NOTE = "7";
+    public static final String EIGHTH_MIDDLE_NOTE = "8";
+    public static final String SIXTEENTH_MIDDLE_NOTE = "9";
+    public static final String EIGHTH_TO_SIXTEENTH_MIDDLE_NOTE = ":";
+    public static final String SIXTEENTH_TO_EIGHTH_MIDDLE_NOTE = ";";
+    public static final String EIGHTH_END_NOTE = "<";
+    public static final String SIXTEENTH_END_NOTE = "=";
+    
+    public static final String EIGHTH_REST = "A";
+    public static final String SIXTEENTH_REST = "B";
     
     private final float mDensity;
     private final float mStrokeWidth;
@@ -46,17 +63,16 @@ public class StaffView extends View {
     private final Path mLinePath;
     private final Paint mLinePaint;
     private final Path mFontPath;
-    private final Paint mFontPaint;
+    protected final Paint mFontPaint;
     
     private final Typeface mTypeface;
     
-    private int mNote;
-    private float[] mLineY;
+    protected float[] mLineY;
     
     private int mLastWidth;
     private int mLastHeight;
-    private float mLineHeight;
-    private float mStartNoteX;
+    protected float mLineHeight;
+    protected float mStartNoteX;
     
     private float[] mTmpFloatArray;
     private Path mTmpPath;
@@ -64,7 +80,6 @@ public class StaffView extends View {
     public StaffView(Context context, AttributeSet attrs) {
         super(context, attrs);
         
-        mNote = -1;
         mLineY = new float[5];
         mTypeface = Typeface.createFromAsset(context.getAssets(), "staff.ttf");
         
@@ -107,52 +122,12 @@ public class StaffView extends View {
         canvas.drawPath(mLinePath, mLinePaint);
         canvas.drawPath(mFontPath, mFontPaint);
         
-        if (mNote >= 0) {
-            drawNote(canvas);
-        }
+        drawCustom(canvas);
         
         super.onDraw(canvas);
     }
 
-    public void setNote(int note) {
-        if (note != mNote) {
-            mNote = note;
-            postInvalidate();
-        }
-    }
-    
-    private void drawNote(Canvas canvas) {
-        mFontPaint.setTextSize(mLineHeight);
-        
-        float[] lineYArray = mLineY;
-        
-        float y = lineYArray[4];
-        switch (mNote) {
-            case 0:
-                y = lineYArray[1];
-                break;
-            case 1:
-                y = (lineYArray[1] + lineYArray[2]) / 2;
-                break;
-            case 2:
-                y = lineYArray[2];
-                break;
-            case 3:
-                y = (lineYArray[2] + lineYArray[3]) / 2;
-                break;
-            case 4:
-                y = lineYArray[3];
-                break;
-            case 5:
-                y = (lineYArray[3] + lineYArray[4]) / 2;
-                break;
-            case 6:
-                y = lineYArray[4];
-                break;
-        }
-        
-        canvas.drawText(WHOLE_NOTE, mStartNoteX, y, mFontPaint);
-    }
+    protected abstract void drawCustom(Canvas canvas);
 
     private void compute(int width, int height) {
         mLastWidth = width;
@@ -175,8 +150,8 @@ public class StaffView extends View {
         fillPath.reset();
         fontPath.reset();
         
-        fillPath.addRect(0, 0, width, height, Direction.CW);
-        linePath.addRect(0, 0, width, height, Direction.CW);
+        fillPath.addRect(0, 0, width - strokeWidth, height - strokeWidth, Direction.CW);
+        linePath.addRect(0, 0, width - strokeWidth, height - strokeWidth, Direction.CW);
         
         float startX = padding;
         float startY = padding;

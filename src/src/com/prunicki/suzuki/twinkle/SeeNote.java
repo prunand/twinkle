@@ -28,7 +28,7 @@ import android.widget.Button;
 
 public class SeeNote extends Activity {
     
-    private StaffView mStaffView;
+    private NoteView mStaffView;
     
     private View[] mNoteButtons;
     private NoteListener[] mNoteListeners;
@@ -50,35 +50,34 @@ public class SeeNote extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.seenote);
         
-        View[] noteButtons = mNoteButtons;
-        NoteListener[] noteListeners = mNoteListeners;
+        View[] buttons = mNoteButtons;
+        NoteListener[] listeners = mNoteListeners;
         
         int x = 0;
-        noteButtons[x] = findViewById(R.id.SeeNoteA);
-        noteListeners[x++] = new NoteListener(Player.A_NOTE);
-        noteButtons[x] = findViewById(R.id.SeeNoteB);
-        noteListeners[x++] = new NoteListener(Player.B_NOTE);
-        noteButtons[x] = findViewById(R.id.SeeNoteC);
-        noteListeners[x++] = new NoteListener(Player.C_NOTE);
-        noteButtons[x] = findViewById(R.id.SeeNoteD);
-        noteListeners[x++] = new NoteListener(Player.D_NOTE);
-        noteButtons[x] = findViewById(R.id.SeeNoteE);
-        noteListeners[x++] = new NoteListener(Player.E_NOTE);
-        noteButtons[x] = findViewById(R.id.SeeNoteF);
-        noteListeners[x++] = new NoteListener(Player.F_NOTE);
-        noteButtons[x] = findViewById(R.id.SeeNoteG);
-        noteListeners[x] = new NoteListener(Player.G_NOTE);
+        buttons[x] = findViewById(R.id.SeeNoteA);
+        listeners[x++] = new NoteListener(Player.A_NOTE);
+        buttons[x] = findViewById(R.id.SeeNoteB);
+        listeners[x++] = new NoteListener(Player.B_NOTE);
+        buttons[x] = findViewById(R.id.SeeNoteC);
+        listeners[x++] = new NoteListener(Player.C_NOTE);
+        buttons[x] = findViewById(R.id.SeeNoteD);
+        listeners[x++] = new NoteListener(Player.D_NOTE);
+        buttons[x] = findViewById(R.id.SeeNoteE);
+        listeners[x++] = new NoteListener(Player.E_NOTE);
+        buttons[x] = findViewById(R.id.SeeNoteF);
+        listeners[x++] = new NoteListener(Player.F_NOTE);
+        buttons[x] = findViewById(R.id.SeeNoteG);
+        listeners[x] = new NoteListener(Player.G_NOTE);
         
-        int count = noteButtons.length;
+        int count = buttons.length;
         for (int i = 0; i < count; i++) {
-            noteButtons[i].setOnClickListener(noteListeners[i]);
+            buttons[i].setOnClickListener(listeners[i]);
         }
-        
-        mStaffView = (StaffView) findViewById(R.id.StaffView);
         
         mNextButton = (View) findViewById(R.id.SeeNoteNext);
         mNextButton.setOnClickListener(mNextListener);
         
+        mStaffView = (NoteView) findViewById(R.id.NoteView);
         changeNoteInView();
     }
     
@@ -87,15 +86,14 @@ public class SeeNote extends Activity {
         super.onResume();
         
         Player player = ((SuzukiApplication) getApplication()).getPlayer();
-        
-        setPlayerIntoListeners(player);
+        GameButtonListener.setPlayerIntoListeners(mNoteListeners, player);
     }
     
     @Override
     protected void onPause() {
         super.onPause();
         
-        setPlayerIntoListeners(null);
+        GameButtonListener.setPlayerIntoListeners(mNoteListeners, null);
     }
 
     void changeNoteInView() {
@@ -111,15 +109,6 @@ public class SeeNote extends Activity {
                 mNote = nextInt;
                 break;
             }
-        }
-    }
-
-    private void setPlayerIntoListeners(Player player) {
-        NoteListener[] noteListeners = mNoteListeners;
-        
-        int count = noteListeners.length;
-        for (int i = 0; i < count; i++) {
-            noteListeners[i].setPlayer(player);
         }
     }
     
