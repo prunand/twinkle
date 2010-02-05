@@ -18,7 +18,7 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.SoftReference;
 import java.util.HashMap;
 
 import android.app.Application;
@@ -26,13 +26,13 @@ import android.app.Application;
 public class SuzukiApplication extends Application {
     private static final Long PLAYER = new Long(1);
     
-    private HashMap<Long, WeakReference<Object>> map;
+    private HashMap<Long, SoftReference<Object>> map;
 
     @Override
     public void onCreate() {
         super.onCreate();
         
-        map = new HashMap<Long, WeakReference<Object>>();
+        map = new HashMap<Long, SoftReference<Object>>();
     }
 
     @Override
@@ -51,20 +51,20 @@ public class SuzukiApplication extends Application {
     }
     
     public Player getPlayer() {
-        WeakReference<Object> playerRef = map.get(PLAYER);
+        SoftReference<Object> playerRef = map.get(PLAYER);
         Player player = (Player) (playerRef == null ? null : playerRef.get());
         
         if (player == null) {
             player = new Player();
             player.initialize(this);
-            map.put(PLAYER, new WeakReference<Object>(player));
+            map.put(PLAYER, new SoftReference<Object>(player));
         }
         
         return (Player) player;
     }
 
     private void releasePlayer() {
-        WeakReference<Object> playerRef = map.get(PLAYER);
+        SoftReference<Object> playerRef = map.get(PLAYER);
         Player player = (Player) (playerRef == null ? null : playerRef.get());
         
         if (player != null) {
