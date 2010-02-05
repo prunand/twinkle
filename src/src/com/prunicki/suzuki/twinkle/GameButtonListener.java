@@ -46,4 +46,11 @@ public abstract class GameButtonListener implements OnClickListener {
     }
     
     protected abstract boolean checkSuccess();
+    
+    public static void setPlayerIntoListeners(GameButtonListener[] listeners, Player player) {
+        int count = listeners.length;
+        for (int i = 0; i < count; i++) {
+            listeners[i].setPlayer(player);
+        }
+    }
 }
