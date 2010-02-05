@@ -44,7 +44,9 @@ public class Player {
     private static final int STARTING_TRACK = 0x02;
     
     private static final int QUARTER_NOTE_SEGMENT = 0;
-    private static final int NOTES_SEGMENT = 1;
+    private static final int THUMP_SEGMENT = 1;
+    private static final int NOTES_SEGMENT = 2;
+    private static final int FIRST_RHYTHM_SEGMENT = 3;
     
     private boolean mInitialized;
     private JetPlayer mSuzukiJetPlayer;
@@ -90,9 +92,14 @@ public class Player {
         playSuzukiJet(NOTES_SEGMENT, notes);
     }
 
+    public synchronized void playThump() {
+        mSingleInt[0] = 0;
+        playSuzukiJet(THUMP_SEGMENT, mSingleInt);
+    }
+
     public synchronized void playRhythm(int rhythm) {
         mSingleInt[0] = 0;
-        playSuzukiJet(rhythm + 2, mSingleInt);
+        playSuzukiJet(rhythm + FIRST_RHYTHM_SEGMENT, mSingleInt);
     }
     
     public synchronized void playSuccess() {
