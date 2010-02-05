@@ -20,14 +20,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:background="@drawable/one_note">
-    <ImageView
-        android:id="@+id/RhythmImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <com.prunicki.suzuki.twinkle.RhythmView
+        android:id="@+id/RhythmView"
+        android:layout_width="fill_parent"
+        android:layout_height="100dip"
         android:layout_gravity="center"
-        android:src="@drawable/miss_stop_stop"/>
+        android:layout_margin="15dip"/>
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -61,29 +60,13 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dip"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:layout_weight="1">
-            <Button
+            <ImageButton
                 android:id="@+id/SeeRhythmNext"
-                android:text="@string/btn_next"
-                android:layout_width="fill_parent"
+                android:src="@drawable/next"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_margin="5dip"/>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1"/>
-            <Button android:id="@+id/SeeRhythmBack"
-                android:text="@string/btn_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dip"
-                android:layout_gravity="right"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

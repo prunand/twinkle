@@ -22,75 +22,75 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ImageView;
 
 public class SeeRhythm extends Activity {
     
-    private ImageView mRhythmImage;
+    private RhythmView mStaffView;
+    private View[] mButtons;
+    private RhythmListener[] mButtonListeners;
     
-    private Button mMissStopStop;
-    private Button mMissAlligator;
-    private Button mHearDownPony;
-    private Button mHearIceCream;
-    
-    private Button mNextButton;
-    private Button mBackButton;
+    private View mNextButton;
     
     private Random mRandom;
-    private int mRhythm;
+    int mRhythm;
+    
+    public SeeRhythm() {
+        mButtons = new View[4];
+        mButtonListeners = new RhythmListener[4];
+        mRandom = new Random();
+        nextRhythm();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.seerhythm);
         
-        mRandom = new Random();
-        nextRhythm();
-        
-        mRhythmImage = (ImageView) findViewById(R.id.RhythmImage);
-        
-        mNextButton = (Button) findViewById(R.id.SeeRhythmNext);
-        mBackButton = (Button) findViewById(R.id.SeeRhythmBack);
+        View[] buttons = mButtons;
+        RhythmListener[] listeners = mButtonListeners;
 
-        mMissStopStop = (Button) findViewById(R.id.SeeMissStopStop);
-        mMissAlligator = (Button) findViewById(R.id.SeeMissAlligator);
-        mHearDownPony = (Button) findViewById(R.id.SeeDownPony);
-        mHearIceCream = (Button) findViewById(R.id.SeeIceCream);
+        int x = 0;
+        buttons[x] = findViewById(R.id.SeeMissStopStop);
+        listeners[x++] = new RhythmListener(Player.MISSISSIPPI_STOP_STOP_RHYTHM);
+        buttons[x] = findViewById(R.id.SeeMissAlligator);
+        listeners[x++] = new RhythmListener(Player.MISSISSIPPI_ALLIGATOR_RHYTHM);
+        buttons[x] = findViewById(R.id.SeeDownPony);
+        listeners[x++] = new RhythmListener(Player.DOWN_PONY_UP_PONY_RHYTHM);
+        buttons[x] = findViewById(R.id.SeeIceCream);
+        listeners[x++] = new RhythmListener(Player.ICE_CREAM_SH_CONE_RHYTHM);
         
+        int count = buttons.length;
+        for (int i = 0; i < count; i++) {
+            buttons[i].setOnClickListener(listeners[i]);
+        }
+        
+        mNextButton = (View) findViewById(R.id.SeeRhythmNext);
         mNextButton.setOnClickListener(mNextListener);
-        mBackButton.setOnClickListener(mBackListener);
         
-        mMissStopStop.setOnClickListener(new RhythmListener(Player.MISSISSIPPI_STOP_STOP_RHYTHM));
-        mMissAlligator.setOnClickListener(new RhythmListener(Player.MISSISSIPPI_ALLIGATOR_RHYTHM));
-        mHearDownPony.setOnClickListener(new RhythmListener(Player.DOWN_PONY_UP_PONY_RHYTHM));
-        mHearIceCream.setOnClickListener(new RhythmListener(Player.ICE_CREAM_SH_CONE_RHYTHM));
+        mStaffView = (RhythmView) findViewById(R.id.RhythmView);
+        changeRhythmInView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         
-        placeImage();
+        Player player = ((SuzukiApplication) getApplication()).getPlayer();
+        
+        GameButtonListener.setPlayerIntoListeners(mButtonListeners, player);
     }
     
-    private void placeImage() {
-        switch (mRhythm) {
-            case Player.MISSISSIPPI_STOP_STOP_RHYTHM:
-                Log.d(Main.TAG, "placing mss");
-                mRhythmImage.setImageResource(R.drawable.miss_stop_stop);
-                break;
-            case Player.MISSISSIPPI_ALLIGATOR_RHYTHM:
-                Log.d(Main.TAG, "placing ma");
-                mRhythmImage.setImageResource(R.drawable.miss_alligator);
-                break;
-            case Player.DOWN_PONY_UP_PONY_RHYTHM:
-                Log.d(Main.TAG, "placing dpup");
-                mRhythmImage.setImageResource(R.drawable.down_pony_up_pony);
-                break;
-            case Player.ICE_CREAM_SH_CONE_RHYTHM:
-                Log.d(Main.TAG, "placing icsc");
-                mRhythmImage.setImageResource(R.drawable.ice_cream_sh_cone);
-                break;
-        }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        
+        GameButtonListener.setPlayerIntoListeners(mButtonListeners, null);
+    }
+
+    private void changeRhythmInView() {
+        mStaffView.setRhythm(mRhythm);
     }
 
     private void nextRhythm() {
@@ -108,35 +108,23 @@ public class SeeRhythm extends Activity {
         
         @Override
         public void onClick(View arg0) {
-            Log.d(Main.TAG, "Rhythm was " + mRhythm);
             nextRhythm();
-            Log.d(Main.TAG, "Rhythm is " + mRhythm);
-            placeImage();
+            changeRhythmInView();
         }
     };
     
-    private OnClickListener mBackListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View arg0) {
-           finish();
-        }
-    };
-    
-    private class RhythmListener implements OnClickListener {
+    private class RhythmListener extends GameButtonListener {
         
         private int mSelectedRhythm;
         
         private RhythmListener (int rhythm) {
+            super(SeeRhythm.this);
             mSelectedRhythm = rhythm;
         }
 
         @Override
-        public void onClick(View v) {
-            if (mRhythm == mSelectedRhythm) {
-                SuccessDialog dialog = new SuccessDialog(SeeRhythm.this);
-                dialog.show();
-            }
+        protected boolean checkSuccess() {
+            return mSelectedRhythm == SeeRhythm.this.mRhythm;
         }
     }
 }
