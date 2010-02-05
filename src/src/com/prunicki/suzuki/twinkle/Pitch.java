@@ -24,17 +24,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 
 public class Pitch extends Activity {
     
-    private Button mHigherButton;
-    private Button mLowerButton;
-    private Button mSameButton;
+    private View mHigherButton;
+    private View mLowerButton;
+    private View mSameButton;
     
-    private Button mReplayButton;
-    private Button mNextButton;
-    private Button mBackButton;
+    private View mReplayButton;
+    private View mNextButton;
     private Player mPlayer;
     private Random mRandom;
     private int[] mNotes;
@@ -52,17 +50,15 @@ public class Pitch extends Activity {
         generateNotes();
         mFirstRun = true;
         
-        mReplayButton = (Button) findViewById(R.id.PitchReplay);
-        mNextButton = (Button) findViewById(R.id.PitchNext);
-        mBackButton = (Button) findViewById(R.id.PitchBack);
+        mReplayButton = (View) findViewById(R.id.PitchReplay);
+        mNextButton = (View) findViewById(R.id.PitchNext);
 
-        mHigherButton = (Button) findViewById(R.id.Higher);
-        mLowerButton = (Button) findViewById(R.id.Lower);
-        mSameButton = (Button) findViewById(R.id.Same);
+        mHigherButton = (View) findViewById(R.id.Higher);
+        mLowerButton = (View) findViewById(R.id.Lower);
+        mSameButton = (View) findViewById(R.id.Same);
         
         mReplayButton.setOnClickListener(mReplayListener);
         mNextButton.setOnClickListener(mNextListener);
-        mBackButton.setOnClickListener(mBackListener);
         
         mHigherButton.setOnClickListener(mHigherListener);
         mLowerButton.setOnClickListener(mLowerListener);
@@ -124,14 +120,6 @@ public class Pitch extends Activity {
             mPlayer.playNote(mNotes);
         }
     };
-    
-    private OnClickListener mBackListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View arg0) {
-           finish();
-        }
-    };
 
     private OnClickListener mHigherListener = new OnClickListener() {
 
@@ -140,6 +128,8 @@ public class Pitch extends Activity {
             if (!mSame && mHigher) {
                 SuccessDialog dialog = new SuccessDialog(Pitch.this);
                 dialog.show();
+            } else {
+                mPlayer.playThump();
             }
         }
     };
@@ -151,6 +141,8 @@ public class Pitch extends Activity {
             if (!mSame && !mHigher) {
                 SuccessDialog dialog = new SuccessDialog(Pitch.this);
                 dialog.show();
+            } else {
+                mPlayer.playThump();
             }
         }
     };
@@ -162,6 +154,8 @@ public class Pitch extends Activity {
             if (mSame) {
                 SuccessDialog dialog = new SuccessDialog(Pitch.this);
                 dialog.show();
+            } else {
+                mPlayer.playThump();
             }
         }
     };

@@ -33,9 +33,8 @@ public class HearRhythm extends Activity {
     private Button mHearDownPony;
     private Button mHearIceCream;
     
-    private Button mReplayButton;
-    private Button mNextButton;
-    private Button mBackButton;
+    private View mReplayButton;
+    private View mNextButton;
     
     private Player mPlayer;
     private Random mRandom;
@@ -51,9 +50,8 @@ public class HearRhythm extends Activity {
         mRhythm = nextRhythm();
         mFirstRun = true;
         
-        mReplayButton = (Button) findViewById(R.id.HearRhythmReplay);
-        mNextButton = (Button) findViewById(R.id.HearRhythmNext);
-        mBackButton = (Button) findViewById(R.id.HearRhythmBack);
+        mReplayButton = (View) findViewById(R.id.HearRhythmReplay);
+        mNextButton = (View) findViewById(R.id.HearRhythmNext);
 
         mMissStopStop = (Button) findViewById(R.id.HearMissStopStop);
         mMissAlligator = (Button) findViewById(R.id.HearMissAlligator);
@@ -62,7 +60,6 @@ public class HearRhythm extends Activity {
         
         mReplayButton.setOnClickListener(mReplayListener);
         mNextButton.setOnClickListener(mNextListener);
-        mBackButton.setOnClickListener(mBackListener);
         
         mMissStopStop.setOnClickListener(new RhythmListener(Player.MISSISSIPPI_STOP_STOP_RHYTHM));
         mMissAlligator.setOnClickListener(new RhythmListener(Player.MISSISSIPPI_ALLIGATOR_RHYTHM));
@@ -109,14 +106,6 @@ public class HearRhythm extends Activity {
         public void onClick(View arg0) {
             mRhythm = nextRhythm();
             mPlayer.playRhythm(mRhythm);
-        }
-    };
-    
-    private OnClickListener mBackListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View arg0) {
-           finish();
         }
     };
     

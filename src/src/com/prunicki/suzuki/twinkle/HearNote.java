@@ -28,9 +28,8 @@ import android.widget.Button;
 
 public class HearNote extends Activity {
     
-    private Button mNextButton;
-    private Button mReplayButton;
-    private Button mBackButton;
+    private View mNextButton;
+    private View mReplayButton;
     
     private Button mABtn;
     private Button mBBtn;
@@ -54,9 +53,8 @@ public class HearNote extends Activity {
         mNote = nextNote();
         mFirstRun = true;
         
-        mReplayButton = (Button) findViewById(R.id.HearNoteReplay);
-        mNextButton = (Button) findViewById(R.id.HearNoteNext);
-        mBackButton = (Button) findViewById(R.id.HearNoteBack);
+        mReplayButton = findViewById(R.id.HearNoteReplay);
+        mNextButton = findViewById(R.id.HearNoteNext);
         
         mABtn = (Button) findViewById(R.id.HearNoteA);
         mBBtn = (Button) findViewById(R.id.HearNoteB);
@@ -68,7 +66,6 @@ public class HearNote extends Activity {
         
         mReplayButton.setOnClickListener(mReplayListener);
         mNextButton.setOnClickListener(mNextListener);
-        mBackButton.setOnClickListener(mBackListener);
         
         mABtn.setOnClickListener(new NoteButtonListener(Player.A_NOTE));
         mBBtn.setOnClickListener(new NoteButtonListener(Player.B_NOTE));
@@ -118,14 +115,6 @@ public class HearNote extends Activity {
         public void onClick(View arg0) {
             mNote = nextNote();
             mPlayer.playNote(mNote);
-        }
-    };
-    
-    private OnClickListener mBackListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View arg0) {
-            finish();
         }
     };
     
