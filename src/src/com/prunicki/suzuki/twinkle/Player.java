@@ -18,6 +18,9 @@
  */
 package com.prunicki.suzuki.twinkle;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
@@ -54,6 +57,7 @@ public class Player {
     private int[] mSingleInt;
     private int mSuccessSoundID;
     private int mSoundStream;
+    private Timer mTimer;
     
     public synchronized void initialize(Context context) {
         if (!mInitialized) {
@@ -66,6 +70,8 @@ public class Player {
             
             mInitialized = true;
             mSingleInt = new int[1];
+            
+            mTimer = new Timer(Player.class.getSimpleName(), true);
         }
     }
 
@@ -80,6 +86,9 @@ public class Player {
             mSoundPool = null;
             
             mInitialized = false;
+            
+            mTimer.cancel();
+            mTimer = null;
         }
     }
 
@@ -102,11 +111,12 @@ public class Player {
         playSuzukiJet(rhythm + FIRST_RHYTHM_SEGMENT, mSingleInt);
     }
     
-    public synchronized void playSuccess() {
+    public synchronized void playSuccess(TimerTask timerTask) {
         if (mInitialized) {
             pause();
             
             mSoundStream = mSoundPool.play(mSuccessSoundID, 0.5f, 0.5f, 0, 0, 1.0f);
+            mTimer.schedule(timerTask, 3000);
         }
     }
     

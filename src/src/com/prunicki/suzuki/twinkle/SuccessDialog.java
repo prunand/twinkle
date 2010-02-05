@@ -18,6 +18,9 @@
  */
 package com.prunicki.suzuki.twinkle;
 
+import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -29,11 +32,14 @@ import android.widget.ImageView;
 public class SuccessDialog extends Dialog {
     private ImageView mSuccessImage;
     private Player mPlayer;
+    private SuccessTimerTask mTimerTask;
+    AtomicBoolean stopped = new AtomicBoolean(false);
     
     public SuccessDialog(Context context) {
         super(context);
         Activity activity = (Activity) context;
         mPlayer = ((SuzukiApplication) activity.getApplication()).getPlayer();
+        mTimerTask = new SuccessTimerTask();
     }
 
     @Override
@@ -48,14 +54,24 @@ public class SuccessDialog extends Dialog {
         mSuccessImage = (ImageView) findViewById(R.id.SuccessImage);
         mSuccessImage.setBackgroundColor(0xffffffff);
         mSuccessImage.setOnClickListener(mSuccessListener);
-        
-        mPlayer.playSuccess();
     }
     
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mPlayer.playSuccess(mTimerTask);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        pausePlayer();
+    }
+
     private OnCancelListener mCancelListener = new OnCancelListener() {
         @Override
         public void onCancel(DialogInterface dialog) {
-            mPlayer.pause();
+            pausePlayer();
         }
     };
     
@@ -66,4 +82,20 @@ public class SuccessDialog extends Dialog {
             SuccessDialog.this.cancel();
         }
     };
+    
+    void pausePlayer() {
+        stopped.set(true);
+        mPlayer.pause();
+    }
+    
+    private class SuccessTimerTask extends TimerTask {
+
+        @Override
+        public void run() {
+            if (!stopped.get()) {
+                pausePlayer();
+                SuccessDialog.this.cancel();
+            }
+        }
+    }
 }
