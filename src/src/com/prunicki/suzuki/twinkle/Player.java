@@ -78,17 +78,7 @@ public class Player {
     public synchronized void release() {
         if (mInitialized) {
             pause();
-            
-            mSuzukiJetPlayer.closeJetFile();
-            mSuzukiJetPlayer = null;
-            
-            mSoundPool.release();
-            mSoundPool = null;
-            
-            mInitialized = false;
-            
-            mTimer.cancel();
-            mTimer = null;
+            doRelease();
         }
     }
 
@@ -128,6 +118,15 @@ public class Player {
             mSoundPool.stop(mSoundStream);
         }
     }
+    
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            doRelease();
+        } catch (Throwable t) {
+            super.finalize();
+        }
+    }
 
     private void playSuzukiJet(int segment, int[] tracks) {
         if (mInitialized) {
@@ -164,5 +163,30 @@ public class Player {
                 Log.w(Main.TAG, "Attempting to play Segment " + segment + " when not initialized.");
             }
         }
+    }
+    
+    private void doRelease() {
+        try {
+            if (mSuzukiJetPlayer != null) {
+                mSuzukiJetPlayer.closeJetFile();
+                mSuzukiJetPlayer = null;
+            }
+        } catch (Exception e) {}
+        
+        try {
+            if (mSoundPool != null) {
+                mSoundPool.release();
+                mSoundPool = null;
+            }
+        } catch (Exception e) {}
+
+        try {
+            if (mTimer != null) {
+                mTimer.cancel();
+                mTimer = null;
+            }
+        } catch (Exception e) {}
+        
+        mInitialized = false;
     }
 }
