@@ -30,80 +30,87 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center"
         android:layout_marginLeft="25dip"
-        android:layout_marginRight="25dip">
+        android:layout_marginRight="25dip"
+        android:orientation="horizontal">
         <Button
             android:id="@+id/SeeNoteA"
             android:text="A"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"/>
+            android:layout_margin="5dip"
+            android:soundEffectsEnabled="false"/>
         <Button
             android:id="@+id/SeeNoteB"
             android:text="B"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"/>
+            android:layout_margin="5dip"
+            android:soundEffectsEnabled="false"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center"
         android:layout_marginLeft="25dip"
-        android:layout_marginRight="25dip">
+        android:layout_marginRight="25dip"
+        android:orientation="horizontal">
         <Button
             android:id="@+id/SeeNoteC"
             android:text="C"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"/>
+            android:layout_margin="5dip"
+            android:soundEffectsEnabled="false"/>
         <Button
             android:id="@+id/SeeNoteD"
             android:text="D"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"/>
+            android:layout_margin="5dip"
+            android:soundEffectsEnabled="false"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center"
         android:layout_marginLeft="25dip"
-        android:layout_marginRight="25dip">
+        android:layout_marginRight="25dip"
+        android:orientation="horizontal">
         <Button
             android:id="@+id/SeeNoteE"
             android:text="E"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"/>
+            android:layout_margin="5dip"
+            android:soundEffectsEnabled="false"/>
         <Button
             android:id="@+id/SeeNoteF"
             android:text="F"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"/>
+            android:layout_margin="5dip"
+            android:soundEffectsEnabled="false"/>
     </LinearLayout>
     <Button
         android:id="@+id/SeeNoteG"
         android:text="G"
         android:layout_width="100dip"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_margin="5dip"
-        android:layout_gravity="center"/>
+        android:soundEffectsEnabled="false"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_weight="1"/>
     <ImageButton
         android:id="@+id/SeeNoteNext"
         android:src="@drawable/next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_margin="5dip"
-        android:layout_gravity="center"/>
+        android:soundEffectsEnabled="false"/>
 </LinearLayout>

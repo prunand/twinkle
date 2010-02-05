@@ -34,39 +34,43 @@
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="vertical"
-            android:layout_weight="1">
+            android:orientation="vertical">
             <Button
                 android:id="@+id/SeeMissStopStop"
                 android:text="Mississippi Stop Stop"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dip"/>
+                android:layout_margin="5dip"
+                android:soundEffectsEnabled="false"/>
             <Button
                 android:id="@+id/SeeMissAlligator"
                 android:text="Mississippi Alligator"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dip"/>
+                android:layout_margin="5dip"
+                android:soundEffectsEnabled="false"/>
             <Button
                 android:id="@+id/SeeDownPony"
                 android:text="Down Pony Up Pony"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dip"/>
+                android:layout_margin="5dip"
+                android:soundEffectsEnabled="false"/>
             <Button
                 android:id="@+id/SeeIceCream"
                 android:text="Ice Cream Sh Cone"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dip"/>
+                android:layout_margin="5dip"
+                android:soundEffectsEnabled="false"/>
             <ImageButton
                 android:id="@+id/SeeRhythmNext"
                 android:src="@drawable/next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="5dip"/>
+                android:layout_margin="5dip"
+                android:soundEffectsEnabled="false"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

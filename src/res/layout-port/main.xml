@@ -22,13 +22,12 @@
     android:layout_height="fill_parent"
     android:padding="30dip"
     android:orientation="horizontal">
-    <!-- 
-     -->
 	<LinearLayout
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
+	    android:layout_gravity="center"
 	    android:orientation="vertical"
-	    android:layout_gravity="center" android:padding="15dip">
+        android:padding="15dip">
 	    <Button
 	        android:id="@+id/Pitch"
 	        android:text="@string/btn_pitch"

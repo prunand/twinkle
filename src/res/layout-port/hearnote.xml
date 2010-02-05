@@ -24,99 +24,103 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_weight="1"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center"
         android:layout_marginLeft="25dip"
-        android:layout_marginRight="25dip">
+        android:layout_marginRight="25dip"
+        android:orientation="horizontal">
         <Button
             android:id="@+id/HearNoteA"
             android:text="A"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"/>
+            android:layout_margin="5dip"
+            android:soundEffectsEnabled="false"/>
         <Button
             android:id="@+id/HearNoteB"
             android:text="B"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"/>
+            android:layout_margin="5dip"
+            android:soundEffectsEnabled="false"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center"
         android:layout_marginLeft="25dip"
-        android:layout_marginRight="25dip">
+        android:layout_marginRight="25dip"
+        android:orientation="horizontal">
         <Button
             android:id="@+id/HearNoteC"
             android:text="C"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"/>
+            android:layout_margin="5dip"
+            android:soundEffectsEnabled="false"/>
         <Button
             android:id="@+id/HearNoteD"
             android:text="D"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"/>
+            android:layout_margin="5dip"
+            android:soundEffectsEnabled="false"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center"
         android:layout_marginLeft="25dip"
-        android:layout_marginRight="25dip">
+        android:layout_marginRight="25dip"
+        android:orientation="horizontal">
         <Button
             android:id="@+id/HearNoteE"
             android:text="E"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"/>
+            android:layout_margin="5dip"
+            android:soundEffectsEnabled="false"/>
         <Button
             android:id="@+id/HearNoteF"
             android:text="F"
             android:layout_width="100dip"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"/>
+            android:layout_margin="5dip"
+            android:soundEffectsEnabled="false"/>
     </LinearLayout>
     <Button
         android:id="@+id/HearNoteG"
         android:text="G"
         android:layout_width="100dip"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_margin="5dip"
-        android:layout_gravity="center"/>
+        android:soundEffectsEnabled="false"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_weight="1"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:layout_gravity="center"
-        >
+        android:orientation="horizontal">
         <ImageButton
             android:id="@+id/HearNoteReplay"
             android:src="@drawable/replay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:soundEffectsEnabled="false"
-            android:layout_margin="20dip"/>
+            android:layout_margin="20dip"
+            android:soundEffectsEnabled="false"/>
         <ImageButton
             android:id="@+id/HearNoteNext"
             android:src="@drawable/next"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:soundEffectsEnabled="false"
-            android:layout_margin="20dip"/>
+            android:layout_margin="20dip"
+            android:soundEffectsEnabled="false"/>
     </LinearLayout>
 </LinearLayout>

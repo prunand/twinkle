@@ -20,17 +20,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" android:padding="15dip">
+    android:orientation="vertical"
+    android:padding="15dip">
     <ImageButton
         android:id="@+id/DlgSight"
         android:src="@drawable/eye"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:soundEffectsEnabled="false"/>
     <ImageButton
         android:id="@+id/DlgSound"
         android:src="@drawable/ear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:soundEffectsEnabled="false"/>
 </LinearLayout>
