@@ -18,7 +18,6 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,7 +29,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-public class Main extends Activity {
+public class Main extends TwinkleActivity {
     static final String TAG = "SuzukiTwinkle";
     
     private Button mNameButton;
@@ -50,7 +49,7 @@ public class Main extends Activity {
         mRhythmButton.setOnClickListener(mRhythmListener);
         mNameButton.setOnClickListener(mNameListener);
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);

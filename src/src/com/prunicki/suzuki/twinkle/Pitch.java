@@ -20,12 +20,11 @@ package com.prunicki.suzuki.twinkle;
 
 import java.util.Random;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public class Pitch extends Activity {
+public class Pitch extends TwinkleActivity {
     
     private View mHigherButton;
     private View mLowerButton;

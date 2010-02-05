@@ -19,14 +19,13 @@
 package com.prunicki.suzuki.twinkle;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-public class SightSoundDialog extends Dialog {
+public class SightSoundDialog extends TwinkleDialog {
     
     private View mSightButton;
     private View mSoundButton;

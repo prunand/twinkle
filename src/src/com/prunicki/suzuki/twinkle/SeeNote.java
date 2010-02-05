@@ -20,13 +20,12 @@ package com.prunicki.suzuki.twinkle;
 
 import java.util.Random;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class SeeNote extends Activity {
+public class SeeNote extends TwinkleActivity {
     
     private NoteView mStaffView;
     

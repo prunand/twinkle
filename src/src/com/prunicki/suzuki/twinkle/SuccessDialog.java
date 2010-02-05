@@ -22,14 +22,13 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 
-public class SuccessDialog extends Dialog {
+public class SuccessDialog extends TwinkleDialog {
     private ImageView mSuccessImage;
     private Player mPlayer;
     private SuccessTimerTask mTimerTask;
