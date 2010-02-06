@@ -18,59 +18,61 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import java.util.Random;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class HearRhythm extends TwinkleActivity {
+public class HearRhythm extends GameActivity {
+    private View[] mButtons;
+    private RhythmListener[] mButtonListeners;
     
-    private Button mMissStopStop;
-    private Button mMissAlligator;
-    private Button mHearDownPony;
-    private Button mHearIceCream;
-    
-    private View mReplayButton;
     private View mNextButton;
+    private View mReplayButton;
     
-    private Player mPlayer;
-    private Random mRandom;
-    private int mRhythm;
+    int mRhythm;
     private boolean mFirstRun;
+    
+    public HearRhythm() {
+        super(4);
+        mFirstRun = true;
+        mButtons = new Button[4];
+        mButtonListeners = new RhythmListener[4];
+        nextRhythm();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hearrhythm);
         
-        mRandom = new Random();
-        mRhythm = nextRhythm();
-        mFirstRun = true;
+        View[] buttons = mButtons;
+        RhythmListener[] listeners = mButtonListeners;
         
-        mReplayButton = (View) findViewById(R.id.HearRhythmReplay);
+        int x = 0;
+        buttons[x] = findViewById(R.id.HearMissStopStop);
+        listeners[x++] = new RhythmListener(Player.MISSISSIPPI_STOP_STOP_RHYTHM);
+        buttons[x] = findViewById(R.id.HearMissAlligator);
+        listeners[x++] = new RhythmListener(Player.MISSISSIPPI_ALLIGATOR_RHYTHM);
+        buttons[x] = findViewById(R.id.HearDownPony);
+        listeners[x++] = new RhythmListener(Player.DOWN_PONY_UP_PONY_RHYTHM);
+        buttons[x] = findViewById(R.id.HearIceCream);
+        listeners[x++] = new RhythmListener(Player.ICE_CREAM_SH_CONE_RHYTHM);
+        
+        setListenersIntoButtons(buttons, listeners);
+        
         mNextButton = (View) findViewById(R.id.HearRhythmNext);
-
-        mMissStopStop = (Button) findViewById(R.id.HearMissStopStop);
-        mMissAlligator = (Button) findViewById(R.id.HearMissAlligator);
-        mHearDownPony = (Button) findViewById(R.id.HearDownPony);
-        mHearIceCream = (Button) findViewById(R.id.HearIceCream);
-        
-        mReplayButton.setOnClickListener(mReplayListener);
         mNextButton.setOnClickListener(mNextListener);
         
-        mMissStopStop.setOnClickListener(new RhythmListener(Player.MISSISSIPPI_STOP_STOP_RHYTHM));
-        mMissAlligator.setOnClickListener(new RhythmListener(Player.MISSISSIPPI_ALLIGATOR_RHYTHM));
-        mHearDownPony.setOnClickListener(new RhythmListener(Player.DOWN_PONY_UP_PONY_RHYTHM));
-        mHearIceCream.setOnClickListener(new RhythmListener(Player.ICE_CREAM_SH_CONE_RHYTHM));
+        mReplayButton = (View) findViewById(R.id.HearRhythmReplay);
+        mReplayButton.setOnClickListener(mReplayListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         
-        mPlayer = ((SuzukiApplication) getApplication()).getPlayer();
+        GameButtonListener.setPlayerIntoListeners(mButtonListeners, mPlayer);
         
         if (mFirstRun) {
             mPlayer.playRhythm(mRhythm);
@@ -83,12 +85,11 @@ public class HearRhythm extends TwinkleActivity {
     protected void onPause() {
         super.onPause();
         
-        mPlayer.pause();
-        mPlayer = null;
+        GameButtonListener.setPlayerIntoListeners(mButtonListeners, null);
     }
     
-    private int nextRhythm() {
-        return mRandom.nextInt(4);
+    void nextRhythm() {
+        mRhythm = nextRandom(mRhythm);
     }
     
     private OnClickListener mReplayListener = new OnClickListener() {
@@ -103,27 +104,22 @@ public class HearRhythm extends TwinkleActivity {
         
         @Override
         public void onClick(View arg0) {
-            mRhythm = nextRhythm();
+            nextRhythm();
             mPlayer.playRhythm(mRhythm);
         }
     };
     
-    private class RhythmListener implements OnClickListener {
-        
-        private int mSelectedRhythm;
+    private class RhythmListener extends GameButtonListener {
+        private int mRhythm;
         
         private RhythmListener (int rhythm) {
-            mSelectedRhythm = rhythm;
+            super(HearRhythm.this);
+            mRhythm = rhythm;
         }
 
         @Override
-        public void onClick(View v) {
-            if (mRhythm == mSelectedRhythm) {
-                SuccessDialog dialog = new SuccessDialog(HearRhythm.this);
-                dialog.show();
-            } else {
-                mPlayer.playRhythm(mSelectedRhythm);
-            }
+        protected boolean checkSuccess() {
+            return mRhythm == HearRhythm.this.mRhythm;
         }
     }
 }

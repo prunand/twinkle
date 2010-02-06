@@ -26,7 +26,6 @@ public class TwinkleActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 }

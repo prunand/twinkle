@@ -18,27 +18,23 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import java.util.Random;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public class SeeRhythm extends TwinkleActivity {
-    
+public class SeeRhythm extends GameActivity {
     private RhythmView mStaffView;
     private View[] mButtons;
     private RhythmListener[] mButtonListeners;
     
     private View mNextButton;
     
-    private Random mRandom;
     int mRhythm;
     
     public SeeRhythm() {
+        super(4);
         mButtons = new View[4];
         mButtonListeners = new RhythmListener[4];
-        mRandom = new Random();
         nextRhythm();
     }
 
@@ -60,10 +56,7 @@ public class SeeRhythm extends TwinkleActivity {
         buttons[x] = findViewById(R.id.SeeIceCream);
         listeners[x++] = new RhythmListener(Player.ICE_CREAM_SH_CONE_RHYTHM);
         
-        int count = buttons.length;
-        for (int i = 0; i < count; i++) {
-            buttons[i].setOnClickListener(listeners[i]);
-        }
+        setListenersIntoButtons(buttons, listeners);
         
         mNextButton = (View) findViewById(R.id.SeeRhythmNext);
         mNextButton.setOnClickListener(mNextListener);
@@ -88,19 +81,12 @@ public class SeeRhythm extends TwinkleActivity {
         GameButtonListener.setPlayerIntoListeners(mButtonListeners, null);
     }
 
-    private void changeRhythmInView() {
-        mStaffView.setRhythm(mRhythm);
+    void nextRhythm() {
+        mRhythm = nextRandom(mRhythm);
     }
-
-    private void nextRhythm() {
-        boolean done = false;
-        while (!done) {
-            int nextInt = mRandom.nextInt(4);
-            if (mRhythm != nextInt) {
-                mRhythm = nextInt;
-                done = true;
-            }
-        }
+    
+    void changeRhythmInView() {
+        mStaffView.setRhythm(mRhythm);
     }
     
     private OnClickListener mNextListener = new OnClickListener() {
@@ -113,17 +99,16 @@ public class SeeRhythm extends TwinkleActivity {
     };
     
     private class RhythmListener extends GameButtonListener {
-        
-        private int mSelectedRhythm;
+        private int mRhythm;
         
         private RhythmListener (int rhythm) {
             super(SeeRhythm.this);
-            mSelectedRhythm = rhythm;
+            mRhythm = rhythm;
         }
 
         @Override
         protected boolean checkSuccess() {
-            return mSelectedRhythm == SeeRhythm.this.mRhythm;
+            return mRhythm == SeeRhythm.this.mRhythm;
         }
     }
 }

@@ -18,29 +18,24 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import java.util.Random;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class SeeNote extends TwinkleActivity {
-    
+public class SeeNote extends GameActivity {
     private NoteView mStaffView;
-    
-    private View[] mNoteButtons;
-    private NoteListener[] mNoteListeners;
+    private View[] mButtons;
+    private NoteListener[] mButtonListeners;
     
     private View mNextButton;
     
-    private Random mRandom;
-    int mNote;  //default to prevent accessor method from being created at compile.
+    int mNote;
     
     public SeeNote() {
-        mNoteButtons = new Button[7];
-        mNoteListeners = new NoteListener[7];
-        mRandom = new Random();
+        super(7);
+        mButtons = new Button[7];
+        mButtonListeners = new NoteListener[7];
         nextNote();
     }
 
@@ -49,8 +44,8 @@ public class SeeNote extends TwinkleActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.seenote);
         
-        View[] buttons = mNoteButtons;
-        NoteListener[] listeners = mNoteListeners;
+        View[] buttons = mButtons;
+        NoteListener[] listeners = mButtonListeners;
         
         int x = 0;
         buttons[x] = findViewById(R.id.SeeNoteA);
@@ -68,10 +63,7 @@ public class SeeNote extends TwinkleActivity {
         buttons[x] = findViewById(R.id.SeeNoteG);
         listeners[x] = new NoteListener(Player.G_NOTE);
         
-        int count = buttons.length;
-        for (int i = 0; i < count; i++) {
-            buttons[i].setOnClickListener(listeners[i]);
-        }
+        setListenersIntoButtons(buttons, listeners);
         
         mNextButton = (View) findViewById(R.id.SeeNoteNext);
         mNextButton.setOnClickListener(mNextListener);
@@ -84,15 +76,14 @@ public class SeeNote extends TwinkleActivity {
     protected void onResume() {
         super.onResume();
         
-        Player player = ((SuzukiApplication) getApplication()).getPlayer();
-        GameButtonListener.setPlayerIntoListeners(mNoteListeners, player);
+        GameButtonListener.setPlayerIntoListeners(mButtonListeners, mPlayer);
     }
     
     @Override
     protected void onPause() {
         super.onPause();
         
-        GameButtonListener.setPlayerIntoListeners(mNoteListeners, null);
+        GameButtonListener.setPlayerIntoListeners(mButtonListeners, null);
     }
 
     void changeNoteInView() {
@@ -100,15 +91,7 @@ public class SeeNote extends TwinkleActivity {
     }
 
     void nextNote() {
-        Random random = mRandom;
-        
-        while (true) {
-            int nextInt = random.nextInt(7);
-            if (mNote != nextInt) {
-                mNote = nextInt;
-                break;
-            }
-        }
+        mNote = nextRandom(mNote);
     }
     
     private OnClickListener mNextListener = new OnClickListener() {

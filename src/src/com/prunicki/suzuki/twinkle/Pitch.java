@@ -18,57 +18,61 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import java.util.Random;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public class Pitch extends TwinkleActivity {
+public class Pitch extends GameActivity {
+    private View[] mButtons;
+    private GameButtonListener[] mButtonListeners;
     
-    private View mHigherButton;
-    private View mLowerButton;
-    private View mSameButton;
-    
-    private View mReplayButton;
     private View mNextButton;
-    private Player mPlayer;
-    private Random mRandom;
-    private int[] mNotes;
-    private boolean mSame;
-    private boolean mHigher;
-    private boolean mFirstRun;
+    private View mReplayButton;
+    
+    int[] mNotes;
+    boolean mSame;
+    boolean mHigher;
+    boolean mFirstRun;
+    
+    public Pitch() {
+        super(7);
+        mFirstRun = true;
+        mButtons = new View[3];
+        mButtonListeners = new GameButtonListener[3];
+        mNotes = new int[2];
+        generateNotes();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pitch);
         
-        mRandom = new Random();
-        mNotes = new int[2];
-        generateNotes();
-        mFirstRun = true;
-        
-        mReplayButton = (View) findViewById(R.id.PitchReplay);
-        mNextButton = (View) findViewById(R.id.PitchNext);
+        View[] buttons = mButtons;
+        GameButtonListener[] listeners = mButtonListeners;
 
-        mHigherButton = (View) findViewById(R.id.Higher);
-        mLowerButton = (View) findViewById(R.id.Lower);
-        mSameButton = (View) findViewById(R.id.Same);
+        int x = 0;
+        buttons[x] = findViewById(R.id.Higher);
+        listeners[x++] = new HigherListener();
+        buttons[x] = findViewById(R.id.Lower);
+        listeners[x++] = new LowerListener();
+        buttons[x] = findViewById(R.id.Same);
+        listeners[x++] = new SameListener();
         
-        mReplayButton.setOnClickListener(mReplayListener);
+        setListenersIntoButtons(buttons, listeners);
+        
+        mNextButton = findViewById(R.id.PitchNext);
         mNextButton.setOnClickListener(mNextListener);
         
-        mHigherButton.setOnClickListener(mHigherListener);
-        mLowerButton.setOnClickListener(mLowerListener);
-        mSameButton.setOnClickListener(mSameListener);
+        mReplayButton = findViewById(R.id.PitchReplay);
+        mReplayButton.setOnClickListener(mReplayListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         
-        mPlayer = ((SuzukiApplication) getApplication()).getPlayer();
+        GameButtonListener.setPlayerIntoListeners(mButtonListeners, mPlayer);
         
         if (mFirstRun) {
             mPlayer.playNote(mNotes);
@@ -81,13 +85,12 @@ public class Pitch extends TwinkleActivity {
     protected void onPause() {
         super.onPause();
         
-        mPlayer.pause();
-        mPlayer = null;
+        GameButtonListener.setPlayerIntoListeners(mButtonListeners, null);
     }
     
     private void generateNotes() {
-        mNotes[0] = nextNote();
-        mNotes[1] = nextNote();
+        mNotes[0] = nextRandom(mNotes[0]);
+        mNotes[1] = nextRandom(mNotes[1]);
         
         mSame = false;
         if (mNotes[1] < mNotes[0]) {
@@ -97,10 +100,6 @@ public class Pitch extends TwinkleActivity {
         } else {
             mHigher = false;
         }
-    }
-    
-    private int nextNote() {
-        return mRandom.nextInt(7);
     }
     
     private OnClickListener mReplayListener = new OnClickListener() {
@@ -119,43 +118,40 @@ public class Pitch extends TwinkleActivity {
             mPlayer.playNote(mNotes);
         }
     };
-
-    private OnClickListener mHigherListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            if (!mSame && mHigher) {
-                SuccessDialog dialog = new SuccessDialog(Pitch.this);
-                dialog.show();
-            } else {
-                mPlayer.playThump();
-            }
-        }
-    };
     
-    private OnClickListener mLowerListener = new OnClickListener() {
+    private class HigherListener extends GameButtonListener {
+        
+        private HigherListener() {
+            super(Pitch.this);
+        }
 
         @Override
-        public void onClick(View v) {
-            if (!mSame && !mHigher) {
-                SuccessDialog dialog = new SuccessDialog(Pitch.this);
-                dialog.show();
-            } else {
-                mPlayer.playThump();
-            }
+        public boolean checkSuccess() {
+            return !mSame && mHigher;
         }
-    };
+    }
     
-    private OnClickListener mSameListener = new OnClickListener() {
+    private class LowerListener extends GameButtonListener {
+        
+        private LowerListener() {
+            super(Pitch.this);
+        }
 
         @Override
-        public void onClick(View v) {
-            if (mSame) {
-                SuccessDialog dialog = new SuccessDialog(Pitch.this);
-                dialog.show();
-            } else {
-                mPlayer.playThump();
-            }
+        public boolean checkSuccess() {
+            return !mSame && !mHigher;
         }
-    };
+    }
+    
+    private class SameListener extends GameButtonListener {
+        
+        private SameListener() {
+            super(Pitch.this);
+        }
+
+        @Override
+        public boolean checkSuccess() {
+            return mSame;
+        }
+    }
 }

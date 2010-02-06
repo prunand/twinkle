@@ -18,71 +18,71 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import java.util.Random;
-
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class HearNote extends TwinkleActivity {
+public class HearNote extends GameActivity {
+    private View[] mButtons;
+    private NoteListener[] mButtonListeners;
     
     private View mNextButton;
     private View mReplayButton;
     
-    private Button mABtn;
-    private Button mBBtn;
-    private Button mCBtn;
-    private Button mDBtn;
-    private Button mEBtn;
-    private Button mFBtn;
-    private Button mGBtn;
-    
-    private Player mPlayer;
-    private Random mRandom;
-    private int mNote;
+    int mNote;
     private boolean mFirstRun;
+    
+    public HearNote() {
+        super(7);
+        mFirstRun = true;
+        mButtons = new Button[7];
+        mButtonListeners = new NoteListener[7];
+        nextNote();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.hearnote);
         
-        mRandom = new Random();
-        mNote = nextNote();
-        mFirstRun = true;
+        View[] buttons = mButtons;
+        NoteListener[] listeners = mButtonListeners;
         
-        mReplayButton = findViewById(R.id.HearNoteReplay);
+        
+        int x = 0;
+        buttons[x] = findViewById(R.id.HearNoteA);
+        listeners[x++] = new NoteListener(Player.A_NOTE);
+        buttons[x] = findViewById(R.id.HearNoteB);
+        listeners[x++] = new NoteListener(Player.B_NOTE);
+        buttons[x] = findViewById(R.id.HearNoteC);
+        listeners[x++] = new NoteListener(Player.C_NOTE);
+        buttons[x] = findViewById(R.id.HearNoteD);
+        listeners[x++] = new NoteListener(Player.D_NOTE);
+        buttons[x] = findViewById(R.id.HearNoteE);
+        listeners[x++] = new NoteListener(Player.E_NOTE);
+        buttons[x] = findViewById(R.id.HearNoteF);
+        listeners[x++] = new NoteListener(Player.F_NOTE);
+        buttons[x] = findViewById(R.id.HearNoteG);
+        listeners[x++] = new NoteListener(Player.G_NOTE);
+        
+        setListenersIntoButtons(buttons, listeners);
+        
         mNextButton = findViewById(R.id.HearNoteNext);
-        
-        mABtn = (Button) findViewById(R.id.HearNoteA);
-        mBBtn = (Button) findViewById(R.id.HearNoteB);
-        mCBtn = (Button) findViewById(R.id.HearNoteC);
-        mDBtn = (Button) findViewById(R.id.HearNoteD);
-        mEBtn = (Button) findViewById(R.id.HearNoteE);
-        mFBtn = (Button) findViewById(R.id.HearNoteF);
-        mGBtn = (Button) findViewById(R.id.HearNoteG);
-        
-        mReplayButton.setOnClickListener(mReplayListener);
         mNextButton.setOnClickListener(mNextListener);
         
-        mABtn.setOnClickListener(new NoteButtonListener(Player.A_NOTE));
-        mBBtn.setOnClickListener(new NoteButtonListener(Player.B_NOTE));
-        mCBtn.setOnClickListener(new NoteButtonListener(Player.C_NOTE));
-        mDBtn.setOnClickListener(new NoteButtonListener(Player.D_NOTE));
-        mEBtn.setOnClickListener(new NoteButtonListener(Player.E_NOTE));
-        mFBtn.setOnClickListener(new NoteButtonListener(Player.F_NOTE));
-        mGBtn.setOnClickListener(new NoteButtonListener(Player.G_NOTE));
+        mReplayButton = findViewById(R.id.HearNoteReplay);
+        mReplayButton.setOnClickListener(mReplayListener);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         
-        mPlayer = ((SuzukiApplication) getApplication()).getPlayer();
+        GameButtonListener.setPlayerIntoListeners(mButtonListeners, mPlayer);
         
         if (mFirstRun) {
-            mPlayer.playNote(mNote);
+            playNote();
         }
         
         mFirstRun = false;
@@ -92,19 +92,22 @@ public class HearNote extends TwinkleActivity {
     protected void onPause() {
         super.onPause();
         
-        mPlayer.pause();
-        mPlayer = null;
+        GameButtonListener.setPlayerIntoListeners(mButtonListeners, null);
     }
     
-    private int nextNote() {
-        return mRandom.nextInt(7);
+    void nextNote() {
+        mNote = nextRandom(mNote);
     }
     
+    void playNote() {
+        mPlayer.playNote(mNote);
+    }
+
     private OnClickListener mReplayListener = new OnClickListener() {
 
         @Override
         public void onClick(View arg0) {
-            mPlayer.playNote(mNote);
+            playNote();
         }
     };
     
@@ -112,27 +115,22 @@ public class HearNote extends TwinkleActivity {
         
         @Override
         public void onClick(View arg0) {
-            mNote = nextNote();
-            mPlayer.playNote(mNote);
+            nextNote();
+            playNote();
         }
     };
     
-    private class NoteButtonListener implements OnClickListener {
+    private class NoteListener extends GameButtonListener {
+        private int mNote;
         
-        private int mButtonNote;
-        
-        private NoteButtonListener(int note) {
-            mButtonNote = note;
+        private NoteListener(int note) {
+            super(HearNote.this);
+            mNote = note;
         }
 
         @Override
-        public void onClick(View v) {
-            if (mButtonNote == mNote) {
-                SuccessDialog dialog = new SuccessDialog(HearNote.this);
-                dialog.show();
-            } else {
-                mPlayer.playNote(mButtonNote);
-            }
+        public boolean checkSuccess() {
+            return mNote == HearNote.this.mNote;
         }
     }
 }
