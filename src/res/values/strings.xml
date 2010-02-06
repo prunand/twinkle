@@ -27,8 +27,8 @@
     <string name="btn_rhythm">Name that Rhythm</string>
     <string name="pitch_desc_1">Is the last note higher,</string>
     <string name="pitch_desc_2">lower or the same?</string>
-    <string name="note_desc">What note do you here?</string>
-    <string name="rhythm_desc">What rhythm do you here?</string>
+    <string name="note_desc">What note do you hear?</string>
+    <string name="rhythm_desc">What rhythm do you hear?</string>
     <string name="about_label">About...</string>
     <string name="about_shortcut">s</string>
     <string name="about">\nAn aid for beginning Suzuki students.\n\nCopyright (c) 2010 Andrew Prunicki\n\nEmail feedback: prunand@iit.edu</string>
