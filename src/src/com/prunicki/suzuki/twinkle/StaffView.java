@@ -33,6 +33,7 @@ import android.view.View;
 public abstract class StaffView extends View {
     private static final int STROKE_WIDTH = 1;
     private static final int RATIO = 3;
+    private static final float MEASURE_RATIO = 2.75f;
     private static final String TIME_4 = "#";
     private static final String TREBLE_CLEF = "$";
     
@@ -74,9 +75,6 @@ public abstract class StaffView extends View {
     protected float mLineHeight;
     protected float mStartNoteX;
     
-    private float[] mTmpFloatArray;
-    private Path mTmpPath;
-    
     public StaffView(Context context, AttributeSet attrs) {
         super(context, attrs);
         
@@ -105,9 +103,6 @@ public abstract class StaffView extends View {
         mFillPath = new Path();
         mLinePath = new Path();
         mFontPath = new Path();
-        
-        mTmpPath = new Path();
-        mTmpFloatArray = new float[1];
     }
 
     @Override
@@ -117,14 +112,14 @@ public abstract class StaffView extends View {
         int defaultWidth = getDefaultSize(minWidth, widthMeasureSpec);
         int defaultHeight = getDefaultSize(minHeight, heightMeasureSpec);
         
-        int width = defaultWidth;
-        int height = defaultWidth / RATIO;
+        float width = defaultWidth;
+        float height = defaultWidth / MEASURE_RATIO;
         if (height > defaultHeight) {
-            width = defaultHeight * RATIO;
+            width = defaultHeight * MEASURE_RATIO;
             height = defaultHeight;
         }
         
-        setMeasuredDimension(width, height);
+        setMeasuredDimension((int) width, (int) height);
     }
     
     @Override
@@ -154,11 +149,9 @@ public abstract class StaffView extends View {
         Path fillPath = mFillPath;
         Path linePath = mLinePath;
         Path fontPath = mFontPath;
-        Path tmpPath = mTmpPath;
         Paint fontPaint = mFontPaint;
         float strokeWidth = mStrokeWidth;
         float[] lineYArray = mLineY;
-        float[] tmpFloatArray = mTmpFloatArray;
         
         float paddedWidth = width - padding * 2;
         float paddedHeight = height - padding * 2;
@@ -202,6 +195,9 @@ public abstract class StaffView extends View {
         
         float clefX = startX + 4 * strokeWidth;
         float clefY = staffStartY + staffHeight + 2;
+        
+        Path tmpPath = new Path();
+        float[] tmpFloatArray = new float[1];
         
         fontPaint.setTextSize(drawHeight);
         fontPaint.getTextPath(TREBLE_CLEF, 0, 1, clefX, clefY, tmpPath);
