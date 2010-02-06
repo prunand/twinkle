@@ -75,10 +75,9 @@ public class HearRhythm extends GameActivity {
         GameButtonListener.setPlayerIntoListeners(mButtonListeners, mPlayer);
         
         if (mFirstRun) {
+            mFirstRun = false;
             mPlayer.playRhythm(mRhythm);
         }
-        
-        mFirstRun = false;
     }
 
     @Override

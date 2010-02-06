@@ -49,7 +49,6 @@ public class HearNote extends GameActivity {
         View[] buttons = mButtons;
         NoteListener[] listeners = mButtonListeners;
         
-        
         int x = 0;
         buttons[x] = findViewById(R.id.HearNoteA);
         listeners[x++] = new NoteListener(Player.A_NOTE);
@@ -82,10 +81,9 @@ public class HearNote extends GameActivity {
         GameButtonListener.setPlayerIntoListeners(mButtonListeners, mPlayer);
         
         if (mFirstRun) {
+            mFirstRun = false;
             playNote();
         }
-        
-        mFirstRun = false;
     }
 
     @Override

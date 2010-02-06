@@ -75,10 +75,9 @@ public class Pitch extends GameActivity {
         GameButtonListener.setPlayerIntoListeners(mButtonListeners, mPlayer);
         
         if (mFirstRun) {
+            mFirstRun = false;
             mPlayer.playNote(mNotes);
         }
-        
-        mFirstRun = false;
     }
 
     @Override
