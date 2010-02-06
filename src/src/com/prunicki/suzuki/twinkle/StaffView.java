@@ -111,6 +111,23 @@ public abstract class StaffView extends View {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int minWidth = getSuggestedMinimumWidth();
+        int minHeight = getSuggestedMinimumHeight();
+        int defaultWidth = getDefaultSize(minWidth, widthMeasureSpec);
+        int defaultHeight = getDefaultSize(minHeight, heightMeasureSpec);
+        
+        int width = defaultWidth;
+        int height = defaultWidth / RATIO;
+        if (height > defaultHeight) {
+            width = defaultHeight * RATIO;
+            height = defaultHeight;
+        }
+        
+        setMeasuredDimension(width, height);
+    }
+    
+    @Override
     protected void onDraw(Canvas canvas) {
         int width = getWidth();
         int height = getHeight();
