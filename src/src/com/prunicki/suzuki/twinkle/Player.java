@@ -105,7 +105,7 @@ public class Player {
         if (mInitialized) {
             pause();
             
-            mSoundStream = mSoundPool.play(mSuccessSoundID, 0.5f, 0.5f, 0, 0, 1.0f);
+            mSoundStream = mSoundPool.play(mSuccessSoundID, 0.2f, 0.2f, 0, 0, 1.0f);
             mTimer.schedule(timerTask, 3000);
         }
     }
