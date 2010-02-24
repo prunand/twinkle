@@ -22,9 +22,13 @@
     <string name="app_version">Version: 0.2</string>
     <string name="dialog_success">Good Job!</string>
     <string name="dialog_sight_sound">Sight or Sound?</string>
-    <string name="btn_name">Name that Note</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_cancel">Cancel</string>
     <string name="btn_pitch">Higher or Lower?</string>
-    <string name="btn_rhythm">Name that Rhythm</string>
+    <string name="btn_see_note">See Note</string>
+    <string name="btn_hear_note">Hear Note</string>
+    <string name="btn_see_rhythm">See Rhythm</string>
+    <string name="btn_hear_rhythm">Hear Rhythm</string>
     <string name="pitch_desc_1">Is the last note higher,</string>
     <string name="pitch_desc_2">lower or the same?</string>
     <string name="note_desc">What note do you hear?</string>
