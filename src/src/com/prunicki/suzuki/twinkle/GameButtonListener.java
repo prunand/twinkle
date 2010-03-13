@@ -23,15 +23,15 @@ import android.view.View.OnClickListener;
 
 public abstract class GameButtonListener implements OnClickListener {
     private final GameRoundCallback mCallback;
-    private Player mPlayer;
+    private SoundPlayer mSoundPlayer;
     private boolean mClickedWrong;
     
     public GameButtonListener(GameRoundCallback callback) {
         mCallback = callback;
     }
     
-    public final void setPlayer(Player player) {
-        mPlayer = player;
+    public final void setSoundPlayer(SoundPlayer soundPlayer) {
+        mSoundPlayer = soundPlayer;
     }
 
     @Override
@@ -39,7 +39,7 @@ public abstract class GameButtonListener implements OnClickListener {
         if (checkSuccess()) {
             mCallback.roundComplete();
         } else {
-            mPlayer.playThump();
+            mSoundPlayer.playThump();
             mClickedWrong = true;
         }
     }
@@ -50,10 +50,10 @@ public abstract class GameButtonListener implements OnClickListener {
 
     protected abstract boolean checkSuccess();
     
-    public static void setPlayerIntoListeners(GameButtonListener[] listeners, Player player) {
+    public static void setSoundPlayerIntoListeners(GameButtonListener[] listeners, SoundPlayer soundPlayer) {
         int count = listeners.length;
         for (int i = 0; i < count; i++) {
-            listeners[i].setPlayer(player);
+            listeners[i].setSoundPlayer(soundPlayer);
         }
     }
 }

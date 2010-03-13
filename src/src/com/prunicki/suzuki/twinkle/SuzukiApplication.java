@@ -21,7 +21,7 @@ package com.prunicki.suzuki.twinkle;
 import android.app.Application;
 
 public class SuzukiApplication extends Application {
-    private Player mPlayer;
+    private SoundPlayer mSoundPlayer;
     private ScoreDAO mDAO;
 
     @Override
@@ -44,19 +44,19 @@ public class SuzukiApplication extends Application {
         releasePlayer();
     }
     
-    public Player getPlayer() {
-        if (mPlayer == null) {
-            mPlayer = new Player();
-            mPlayer.initialize(this);
+    public SoundPlayer getSoundPlayer() {
+        if (mSoundPlayer == null) {
+            mSoundPlayer = new SoundPlayer();
+            mSoundPlayer.initialize(this);
         }
         
-        return mPlayer;
+        return mSoundPlayer;
     }
 
     private void releasePlayer() {
-        if (mPlayer != null) {
-            mPlayer.release();
-            mPlayer = null;
+        if (mSoundPlayer != null) {
+            mSoundPlayer.release();
+            mSoundPlayer = null;
         }
     }
     

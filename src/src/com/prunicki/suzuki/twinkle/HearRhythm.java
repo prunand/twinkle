@@ -39,20 +39,20 @@ public class HearRhythm extends GameRound {
         
         int x = 0;
         buttons[x] = activity.findViewById(R.id.HearMissStopStop);
-        listeners[x++] = new RhythmListener(Player.MISSISSIPPI_STOP_STOP_RHYTHM, callback);
+        listeners[x++] = new RhythmListener(SoundPlayer.MISSISSIPPI_STOP_STOP_RHYTHM, callback);
         buttons[x] = activity.findViewById(R.id.HearMissAlligator);
-        listeners[x++] = new RhythmListener(Player.MISSISSIPPI_ALLIGATOR_RHYTHM, callback);
+        listeners[x++] = new RhythmListener(SoundPlayer.MISSISSIPPI_ALLIGATOR_RHYTHM, callback);
         buttons[x] = activity.findViewById(R.id.HearDownPony);
-        listeners[x++] = new RhythmListener(Player.DOWN_PONY_UP_PONY_RHYTHM, callback);
+        listeners[x++] = new RhythmListener(SoundPlayer.DOWN_PONY_UP_PONY_RHYTHM, callback);
         buttons[x] = activity.findViewById(R.id.HearIceCream);
-        listeners[x++] = new RhythmListener(Player.ICE_CREAM_SH_CONE_RHYTHM, callback);
+        listeners[x++] = new RhythmListener(SoundPlayer.ICE_CREAM_SH_CONE_RHYTHM, callback);
         
         setListenersIntoButtons(buttons, listeners);
     }
 
     @Override
-    protected void playNotes(Player.PlayerCallback playerCallback) {
-        mPlayer.playRhythm(mRhythm, playerCallback);
+    protected void playNotes(SoundPlayer.PlayerCallback soundPlayerCallback) {
+        mSoundPlayer.playRhythm(mRhythm, soundPlayerCallback);
     }
 
     void nextRhythm() {

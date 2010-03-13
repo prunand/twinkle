@@ -41,19 +41,19 @@ public class SeeNote extends GameRound {
         
         int x = 0;
         buttons[x] = activity.findViewById(R.id.SeeNoteA);
-        listeners[x++] = new NoteListener(Player.A_NOTE, callback);
+        listeners[x++] = new NoteListener(SoundPlayer.A_NOTE, callback);
         buttons[x] = activity.findViewById(R.id.SeeNoteB);
-        listeners[x++] = new NoteListener(Player.B_NOTE, callback);
+        listeners[x++] = new NoteListener(SoundPlayer.B_NOTE, callback);
         buttons[x] = activity.findViewById(R.id.SeeNoteC);
-        listeners[x++] = new NoteListener(Player.C_NOTE, callback);
+        listeners[x++] = new NoteListener(SoundPlayer.C_NOTE, callback);
         buttons[x] = activity.findViewById(R.id.SeeNoteD);
-        listeners[x++] = new NoteListener(Player.D_NOTE, callback);
+        listeners[x++] = new NoteListener(SoundPlayer.D_NOTE, callback);
         buttons[x] = activity.findViewById(R.id.SeeNoteE);
-        listeners[x++] = new NoteListener(Player.E_NOTE, callback);
+        listeners[x++] = new NoteListener(SoundPlayer.E_NOTE, callback);
         buttons[x] = activity.findViewById(R.id.SeeNoteF);
-        listeners[x++] = new NoteListener(Player.F_NOTE, callback);
+        listeners[x++] = new NoteListener(SoundPlayer.F_NOTE, callback);
         buttons[x] = activity.findViewById(R.id.SeeNoteG);
-        listeners[x] = new NoteListener(Player.G_NOTE, callback);
+        listeners[x] = new NoteListener(SoundPlayer.G_NOTE, callback);
         
         setListenersIntoButtons(buttons, listeners);
         

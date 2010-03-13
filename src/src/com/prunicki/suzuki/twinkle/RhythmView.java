@@ -48,16 +48,16 @@ public class RhythmView extends StaffView {
         
         String rhythm = null;
         switch (mRhythm) {
-            case Player.MISSISSIPPI_STOP_STOP_RHYTHM:
+            case SoundPlayer.MISSISSIPPI_STOP_STOP_RHYTHM:
                 rhythm = MISSISSIPPI_STOP_STOP;
                 break;
-            case Player.MISSISSIPPI_ALLIGATOR_RHYTHM:
+            case SoundPlayer.MISSISSIPPI_ALLIGATOR_RHYTHM:
                 rhythm = MISSISSIPPI_ALLIGATOR;
                 break;
-            case Player.DOWN_PONY_UP_PONY_RHYTHM:
+            case SoundPlayer.DOWN_PONY_UP_PONY_RHYTHM:
                 rhythm = DOWN_PONY_UP_PONY;
                 break;
-            case Player.ICE_CREAM_SH_CONE_RHYTHM:
+            case SoundPlayer.ICE_CREAM_SH_CONE_RHYTHM:
                 rhythm = ICE_CREAM_SH_CONE;
                 break;
         }

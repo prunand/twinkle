@@ -26,7 +26,7 @@ import android.view.View.OnClickListener;
 public abstract class GameActivity extends TwinkleActivity {
     private final Random mRandom;
     private final int mMaxRandom;
-    protected Player mPlayer;
+    protected SoundPlayer mSoundPlayer;
     
     public GameActivity(int maxRandom) {
         mMaxRandom = maxRandom;
@@ -37,15 +37,15 @@ public abstract class GameActivity extends TwinkleActivity {
     protected void onResume() {
         super.onResume();
         
-        mPlayer = ((SuzukiApplication) getApplication()).getPlayer();
+        mSoundPlayer = ((SuzukiApplication) getApplication()).getSoundPlayer();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         
-        mPlayer.pause();
-        mPlayer = null;
+        mSoundPlayer.pause();
+        mSoundPlayer = null;
     }
     
     protected int nextRandom(int prev) {

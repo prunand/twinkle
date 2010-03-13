@@ -29,7 +29,7 @@ import android.media.SoundPool;
 import android.media.JetPlayer.OnJetEventListener;
 import android.util.Log;
 
-public class Player {
+public class SoundPlayer {
     
     public static final int E_NOTE = 0;
     public static final int D_NOTE = 1;
@@ -74,7 +74,7 @@ public class Player {
             mInitialized = true;
             mSingleInt = new int[1];
             
-            mTimer = new Timer(Player.class.getSimpleName(), true);
+            mTimer = new Timer(SoundPlayer.class.getSimpleName(), true);
         }
     }
 

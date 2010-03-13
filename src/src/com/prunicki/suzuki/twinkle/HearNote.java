@@ -39,26 +39,26 @@ public class HearNote extends GameRound {
         
         int x = 0;
         buttons[x] = activity.findViewById(R.id.HearNoteA);
-        listeners[x++] = new NoteListener(Player.A_NOTE, callback);
+        listeners[x++] = new NoteListener(SoundPlayer.A_NOTE, callback);
         buttons[x] = activity.findViewById(R.id.HearNoteB);
-        listeners[x++] = new NoteListener(Player.B_NOTE, callback);
+        listeners[x++] = new NoteListener(SoundPlayer.B_NOTE, callback);
         buttons[x] = activity.findViewById(R.id.HearNoteC);
-        listeners[x++] = new NoteListener(Player.C_NOTE, callback);
+        listeners[x++] = new NoteListener(SoundPlayer.C_NOTE, callback);
         buttons[x] = activity.findViewById(R.id.HearNoteD);
-        listeners[x++] = new NoteListener(Player.D_NOTE, callback);
+        listeners[x++] = new NoteListener(SoundPlayer.D_NOTE, callback);
         buttons[x] = activity.findViewById(R.id.HearNoteE);
-        listeners[x++] = new NoteListener(Player.E_NOTE, callback);
+        listeners[x++] = new NoteListener(SoundPlayer.E_NOTE, callback);
         buttons[x] = activity.findViewById(R.id.HearNoteF);
-        listeners[x++] = new NoteListener(Player.F_NOTE, callback);
+        listeners[x++] = new NoteListener(SoundPlayer.F_NOTE, callback);
         buttons[x] = activity.findViewById(R.id.HearNoteG);
-        listeners[x++] = new NoteListener(Player.G_NOTE, callback);
+        listeners[x++] = new NoteListener(SoundPlayer.G_NOTE, callback);
         
         setListenersIntoButtons(buttons, listeners);
     }
 
     @Override
-    protected void playNotes(Player.PlayerCallback playerCallback) {
-        mPlayer.playNote(mNote, playerCallback);
+    protected void playNotes(SoundPlayer.PlayerCallback soundPlayerCallback) {
+        mSoundPlayer.playNote(mNote, soundPlayerCallback);
     }
 
     void nextNote() {

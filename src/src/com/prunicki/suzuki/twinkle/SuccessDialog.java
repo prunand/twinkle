@@ -32,7 +32,7 @@ import android.widget.TextView;
 
 public class SuccessDialog {
     private View mSuccessImage;
-    private Player mPlayer;
+    private SoundPlayer mSoundPlayer;
     private SuccessTimerTask mTimerTask;
     private TextView mSuccessText;
     private Activity mActivity;
@@ -41,7 +41,7 @@ public class SuccessDialog {
     
     public SuccessDialog(Context context, int score) {
         mActivity = (Activity) context;
-        mPlayer = ((SuzukiApplication) mActivity.getApplication()).getPlayer();
+        mSoundPlayer = ((SuzukiApplication) mActivity.getApplication()).getSoundPlayer();
         mTimerTask = new SuccessTimerTask();
         
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -68,12 +68,12 @@ public class SuccessDialog {
     
     protected void show() {
         mdialog.show();
-        mPlayer.playSuccess(mTimerTask);
+        mSoundPlayer.playSuccess(mTimerTask);
     }
     
     void pausePlayer() {
         stopped.set(true);
-        mPlayer.pause();
+        mSoundPlayer.pause();
     }
 
     private OnCancelListener mCancelListener = new OnCancelListener() {

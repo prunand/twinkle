@@ -15,7 +15,7 @@ public abstract class GameRound {
     private final int mMaxRandom;
     
     protected Activity mActivity;
-    protected Player mPlayer;
+    protected SoundPlayer mSoundPlayer;
     protected View[] mButtons;
     protected GameButtonListener[] mButtonListeners;
     protected int mFirstRun;
@@ -63,8 +63,8 @@ public abstract class GameRound {
     
     protected void onResume() {
         mFirstRun++;
-        mPlayer = ((SuzukiApplication) mActivity.getApplication()).getPlayer();
-        GameButtonListener.setPlayerIntoListeners(mButtonListeners, mPlayer);
+        mSoundPlayer = ((SuzukiApplication) mActivity.getApplication()).getSoundPlayer();
+        GameButtonListener.setSoundPlayerIntoListeners(mButtonListeners, mSoundPlayer);
         
         if (isFirstRun()) {
             performPlayNotes();
@@ -72,10 +72,10 @@ public abstract class GameRound {
     }
     
     protected void onPause() {
-        GameButtonListener.setPlayerIntoListeners(mButtonListeners, null);
+        GameButtonListener.setSoundPlayerIntoListeners(mButtonListeners, null);
     }
     
-    protected void playNotes(Player.PlayerCallback playerCallback) {
+    protected void playNotes(SoundPlayer.PlayerCallback soundPlayerCallback) {
     }
     
     protected final boolean isFirstRun() {
@@ -113,7 +113,7 @@ public abstract class GameRound {
             dialog.setCanceledOnTouchOutside(true);
             dialog.show();
             
-            playNotes(new Player.PlayerCallback() {
+            playNotes(new SoundPlayer.PlayerCallback() {
                 
                 @Override
                 public void playbackComplete() {
