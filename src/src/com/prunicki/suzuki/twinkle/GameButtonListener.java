@@ -18,17 +18,16 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 public abstract class GameButtonListener implements OnClickListener {
-    
-    private final Context mContext;
+    private final GameRoundCallback mCallback;
     private Player mPlayer;
+    private boolean mClickedWrong;
     
-    public GameButtonListener(Context context) {
-        mContext = context;
+    public GameButtonListener(GameRoundCallback callback) {
+        mCallback = callback;
     }
     
     public final void setPlayer(Player player) {
@@ -38,13 +37,17 @@ public abstract class GameButtonListener implements OnClickListener {
     @Override
     public void onClick(View arg0) {
         if (checkSuccess()) {
-            SuccessDialog dialog = new SuccessDialog(mContext);
-            dialog.show();
+            mCallback.roundComplete();
         } else {
             mPlayer.playThump();
+            mClickedWrong = true;
         }
     }
     
+    public boolean isClickedWrong() {
+        return mClickedWrong;
+    }
+
     protected abstract boolean checkSuccess();
     
     public static void setPlayerIntoListeners(GameButtonListener[] listeners, Player player) {

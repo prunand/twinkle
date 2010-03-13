@@ -28,26 +28,31 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ToggleButton;
 
 public class Main extends TwinkleActivity {
     static final String TAG = "SuzukiTwinkle";
     
-    private Button mNameButton;
-    private Button mPitchButton;
-    private Button mRhythmButton;
+    private Button mPlayButton;
+    private Button mPracticeButton;
+    private Button mSwitchPlayerButton;
+    private ToggleButton mDifficultyButton;
+    ScoreDAO mDAO;
+
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        mPitchButton = (Button) findViewById(R.id.Pitch);
-        mRhythmButton = (Button) findViewById(R.id.Rhythm);
-        mNameButton = (Button) findViewById(R.id.Name);
+        mPlayButton = (Button) findViewById(R.id.MainPlay);
+        mSwitchPlayerButton = (Button) findViewById(R.id.SwitchPlayer);
+        mPracticeButton = (Button) findViewById(R.id.MainPractice);
+        mDifficultyButton = (ToggleButton) findViewById(R.id.MainDifficultyLevel);
         
-        mPitchButton.setOnClickListener(mPitchListener);
-        mRhythmButton.setOnClickListener(mRhythmListener);
-        mNameButton.setOnClickListener(mNameListener);
+        mPlayButton.setOnClickListener(mPlayListener);
+        mSwitchPlayerButton.setOnClickListener(mSwitchPlayerListener);
+        mPracticeButton.setOnClickListener(mPracticeListener);
     }
 
     @Override
@@ -60,42 +65,49 @@ public class Main extends TwinkleActivity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        Dialog d = null;
+        LinearLayout layout = null;
         switch(item.getItemId()) {
             case R.id.about:
-                Dialog d = new Dialog(this);
+                d  = new Dialog(this);
                 d.setContentView(R.layout.about);
                 d.setCanceledOnTouchOutside(true);
                 
-                LinearLayout layout = (LinearLayout) d.findViewById(R.id.AboutLayout);
+                layout  = (LinearLayout) d.findViewById(R.id.AboutLayout);
                 layout.setOnClickListener(new AboutListener(d));
                 
                 String appName = Main.this.getResources().getString(R.string.app_name);
                 d.setTitle("About " + appName);
                 d.show();
-                break;
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private OnClickListener mPitchListener = new OnClickListener() {
+    private OnClickListener mPlayListener = new OnClickListener() {
         public void onClick(View v) {
-            Intent intent = new Intent(Main.this, Pitch.class);
+            boolean hard = mDifficultyButton.isChecked();
+            int level = hard ? GameScreen.DIFFICULTY_LEVEL_HARD : GameScreen.DIFFICULTY_LEVEL_EASY;
             
-            Main.this.startActivity(intent);
+            Intent intent = new Intent(Main.this, GameScreen.class);
+            intent.putExtra(GameScreen.DIFFICULTY_LEVEL_KEY, level);
+            startActivity(intent);
         }
     };
-
-    private OnClickListener mRhythmListener = new OnClickListener() {
+    
+    private OnClickListener mSwitchPlayerListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
-            SightSoundDialog dialog = new SightSoundDialog(Main.this, SeeRhythm.class, HearRhythm.class);
-            dialog.show();
+            ChangePlayerDialog dlg = new ChangePlayerDialog(Main.this);
+            dlg.show();
         }
     };
-
-    private OnClickListener mNameListener = new OnClickListener() {
+    
+    private OnClickListener mPracticeListener = new OnClickListener() {
+        @Override
         public void onClick(View v) {
-            SightSoundDialog dialog = new SightSoundDialog(Main.this, SeeNote.class, HearNote.class);
-            dialog.show();
+            SuccessDialog dlg = new SuccessDialog(Main.this, 22);
+            dlg.show();
         }
     };
 

@@ -18,7 +18,8 @@
     along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/about"
+    <item
+        android:id="@+id/about"
         android:title="@string/about_label"
         android:alphabeticShortcut="@string/about_shortcut"/>
 </menu>

@@ -18,67 +18,40 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import android.os.Bundle;
+import android.app.Activity;
 import android.view.View;
-import android.view.View.OnClickListener;
 
-public class SeeRhythm extends GameActivity {
+public class SeeRhythm extends GameRound {
     private RhythmView mStaffView;
-    private View[] mButtons;
-    private RhythmListener[] mButtonListeners;
-    
-    private View mNextButton;
-    
     int mRhythm;
     
-    public SeeRhythm() {
-        super(4);
-        mButtons = new View[4];
-        mButtonListeners = new RhythmListener[4];
+    public SeeRhythm(GameRoundCallback callback) {
+        super(R.layout.seerhythm, false, 4, callback);
         nextRhythm();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.seerhythm);
+    protected void onCreate(Activity activity) {
+        super.onCreate(activity);
         
         View[] buttons = mButtons;
-        RhythmListener[] listeners = mButtonListeners;
+        GameButtonListener[] listeners = mButtonListeners;
+        GameRoundCallback callback = mCallback;
 
         int x = 0;
-        buttons[x] = findViewById(R.id.SeeMissStopStop);
-        listeners[x++] = new RhythmListener(Player.MISSISSIPPI_STOP_STOP_RHYTHM);
-        buttons[x] = findViewById(R.id.SeeMissAlligator);
-        listeners[x++] = new RhythmListener(Player.MISSISSIPPI_ALLIGATOR_RHYTHM);
-        buttons[x] = findViewById(R.id.SeeDownPony);
-        listeners[x++] = new RhythmListener(Player.DOWN_PONY_UP_PONY_RHYTHM);
-        buttons[x] = findViewById(R.id.SeeIceCream);
-        listeners[x++] = new RhythmListener(Player.ICE_CREAM_SH_CONE_RHYTHM);
+        buttons[x] = activity.findViewById(R.id.SeeMissStopStop);
+        listeners[x++] = new RhythmListener(Player.MISSISSIPPI_STOP_STOP_RHYTHM, callback);
+        buttons[x] = activity.findViewById(R.id.SeeMissAlligator);
+        listeners[x++] = new RhythmListener(Player.MISSISSIPPI_ALLIGATOR_RHYTHM, callback);
+        buttons[x] = activity.findViewById(R.id.SeeDownPony);
+        listeners[x++] = new RhythmListener(Player.DOWN_PONY_UP_PONY_RHYTHM, callback);
+        buttons[x] = activity.findViewById(R.id.SeeIceCream);
+        listeners[x++] = new RhythmListener(Player.ICE_CREAM_SH_CONE_RHYTHM, callback);
         
         setListenersIntoButtons(buttons, listeners);
         
-        mNextButton = (View) findViewById(R.id.SeeRhythmNext);
-        mNextButton.setOnClickListener(mNextListener);
-        
-        mStaffView = (RhythmView) findViewById(R.id.RhythmView);
+        mStaffView = (RhythmView) activity.findViewById(R.id.RhythmView);
         changeRhythmInView();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        
-        Player player = ((SuzukiApplication) getApplication()).getPlayer();
-        
-        GameButtonListener.setPlayerIntoListeners(mButtonListeners, player);
-    }
-    
-    @Override
-    protected void onPause() {
-        super.onPause();
-        
-        GameButtonListener.setPlayerIntoListeners(mButtonListeners, null);
     }
 
     void nextRhythm() {
@@ -89,20 +62,11 @@ public class SeeRhythm extends GameActivity {
         mStaffView.setRhythm(mRhythm);
     }
     
-    private OnClickListener mNextListener = new OnClickListener() {
-        
-        @Override
-        public void onClick(View arg0) {
-            nextRhythm();
-            changeRhythmInView();
-        }
-    };
-    
     private class RhythmListener extends GameButtonListener {
         private int mRhythm;
         
-        private RhythmListener (int rhythm) {
-            super(SeeRhythm.this);
+        private RhythmListener (int rhythm, GameRoundCallback callback) {
+            super(callback);
             mRhythm = rhythm;
         }
 

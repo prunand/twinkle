@@ -18,111 +18,58 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import android.os.Bundle;
+import android.app.Activity;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 
-public class HearNote extends GameActivity {
-    private View[] mButtons;
-    private NoteListener[] mButtonListeners;
-    
-    private View mNextButton;
-    private View mReplayButton;
-    
+public class HearNote extends GameRound {
     int mNote;
-    private boolean mFirstRun;
     
-    public HearNote() {
-        super(7);
-        mFirstRun = true;
-        mButtons = new Button[7];
-        mButtonListeners = new NoteListener[7];
+    public HearNote(GameRoundCallback callback) {
+        super(R.layout.hearnote, true, 7, callback);
         nextNote();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.hearnote);
+    protected void onCreate(Activity activity) {
+        super.onCreate(activity);
         
         View[] buttons = mButtons;
-        NoteListener[] listeners = mButtonListeners;
+        GameButtonListener[] listeners = mButtonListeners;
+        GameRoundCallback callback = mCallback;
         
         int x = 0;
-        buttons[x] = findViewById(R.id.HearNoteA);
-        listeners[x++] = new NoteListener(Player.A_NOTE);
-        buttons[x] = findViewById(R.id.HearNoteB);
-        listeners[x++] = new NoteListener(Player.B_NOTE);
-        buttons[x] = findViewById(R.id.HearNoteC);
-        listeners[x++] = new NoteListener(Player.C_NOTE);
-        buttons[x] = findViewById(R.id.HearNoteD);
-        listeners[x++] = new NoteListener(Player.D_NOTE);
-        buttons[x] = findViewById(R.id.HearNoteE);
-        listeners[x++] = new NoteListener(Player.E_NOTE);
-        buttons[x] = findViewById(R.id.HearNoteF);
-        listeners[x++] = new NoteListener(Player.F_NOTE);
-        buttons[x] = findViewById(R.id.HearNoteG);
-        listeners[x++] = new NoteListener(Player.G_NOTE);
+        buttons[x] = activity.findViewById(R.id.HearNoteA);
+        listeners[x++] = new NoteListener(Player.A_NOTE, callback);
+        buttons[x] = activity.findViewById(R.id.HearNoteB);
+        listeners[x++] = new NoteListener(Player.B_NOTE, callback);
+        buttons[x] = activity.findViewById(R.id.HearNoteC);
+        listeners[x++] = new NoteListener(Player.C_NOTE, callback);
+        buttons[x] = activity.findViewById(R.id.HearNoteD);
+        listeners[x++] = new NoteListener(Player.D_NOTE, callback);
+        buttons[x] = activity.findViewById(R.id.HearNoteE);
+        listeners[x++] = new NoteListener(Player.E_NOTE, callback);
+        buttons[x] = activity.findViewById(R.id.HearNoteF);
+        listeners[x++] = new NoteListener(Player.F_NOTE, callback);
+        buttons[x] = activity.findViewById(R.id.HearNoteG);
+        listeners[x++] = new NoteListener(Player.G_NOTE, callback);
         
         setListenersIntoButtons(buttons, listeners);
-        
-        mNextButton = findViewById(R.id.HearNoteNext);
-        mNextButton.setOnClickListener(mNextListener);
-        
-        mReplayButton = findViewById(R.id.HearNoteReplay);
-        mReplayButton.setOnClickListener(mReplayListener);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        
-        GameButtonListener.setPlayerIntoListeners(mButtonListeners, mPlayer);
-        
-        if (mFirstRun) {
-            mFirstRun = false;
-            playNote();
-        }
+    protected void playNotes(Player.PlayerCallback playerCallback) {
+        mPlayer.playNote(mNote, playerCallback);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        
-        GameButtonListener.setPlayerIntoListeners(mButtonListeners, null);
-    }
-    
     void nextNote() {
         mNote = nextRandom(mNote);
     }
     
-    void playNote() {
-        mPlayer.playNote(mNote);
-    }
-
-    private OnClickListener mReplayListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View arg0) {
-            playNote();
-        }
-    };
-    
-    private OnClickListener mNextListener = new OnClickListener() {
-        
-        @Override
-        public void onClick(View arg0) {
-            nextNote();
-            playNote();
-        }
-    };
-    
     private class NoteListener extends GameButtonListener {
         private int mNote;
         
-        private NoteListener(int note) {
-            super(HearNote.this);
+        private NoteListener(int note, GameRoundCallback callback) {
+            super(callback);
             mNote = note;
         }
 

@@ -18,75 +18,45 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import android.os.Bundle;
+import android.app.Activity;
 import android.view.View;
-import android.view.View.OnClickListener;
 
-public class Pitch extends GameActivity {
-    private View[] mButtons;
-    private GameButtonListener[] mButtonListeners;
-    
-    private View mNextButton;
-    private View mReplayButton;
-    
+public class Pitch extends GameRound {
     int[] mNotes;
     boolean mSame;
     boolean mHigher;
-    boolean mFirstRun;
-    
-    public Pitch() {
-        super(7);
-        mFirstRun = true;
-        mButtons = new View[3];
-        mButtonListeners = new GameButtonListener[3];
+
+    public Pitch(GameRoundCallback callback) {
+        super(R.layout.pitch, true, 3, callback);
+        
         mNotes = new int[2];
         generateNotes();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.pitch);
+    protected void onCreate(Activity activity) {
+        super.onCreate(activity);
         
         View[] buttons = mButtons;
         GameButtonListener[] listeners = mButtonListeners;
+        GameRoundCallback callback = mCallback;
 
         int x = 0;
-        buttons[x] = findViewById(R.id.Higher);
-        listeners[x++] = new HigherListener();
-        buttons[x] = findViewById(R.id.Lower);
-        listeners[x++] = new LowerListener();
-        buttons[x] = findViewById(R.id.Same);
-        listeners[x++] = new SameListener();
+        buttons[x] = activity.findViewById(R.id.Higher);
+        listeners[x++] = new HigherListener(callback);
+        buttons[x] = activity.findViewById(R.id.Lower);
+        listeners[x++] = new LowerListener(callback);
+        buttons[x] = activity.findViewById(R.id.Same);
+        listeners[x++] = new SameListener(callback);
         
         setListenersIntoButtons(buttons, listeners);
-        
-        mNextButton = findViewById(R.id.PitchNext);
-        mNextButton.setOnClickListener(mNextListener);
-        
-        mReplayButton = findViewById(R.id.PitchReplay);
-        mReplayButton.setOnClickListener(mReplayListener);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        
-        GameButtonListener.setPlayerIntoListeners(mButtonListeners, mPlayer);
-        
-        if (mFirstRun) {
-            mFirstRun = false;
-            mPlayer.playNote(mNotes);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        
-        GameButtonListener.setPlayerIntoListeners(mButtonListeners, null);
     }
     
+    @Override
+    protected void playNotes(Player.PlayerCallback playerCallback) {
+        mPlayer.playNote(mNotes, playerCallback);
+    }
+
     private void generateNotes() {
         mNotes[0] = nextRandom(mNotes[0]);
         mNotes[1] = nextRandom(mNotes[1]);
@@ -101,55 +71,52 @@ public class Pitch extends GameActivity {
         }
     }
     
-    private OnClickListener mReplayListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View arg0) {
-            mPlayer.playNote(mNotes);
-        }
-    };
-    
-    private OnClickListener mNextListener = new OnClickListener() {
-        
-        @Override
-        public void onClick(View arg0) {
-            generateNotes();
-            mPlayer.playNote(mNotes);
-        }
-    };
-    
     private class HigherListener extends GameButtonListener {
+        private boolean pressed;
         
-        private HigherListener() {
-            super(Pitch.this);
+        private HigherListener(GameRoundCallback callback) {
+            super(callback);
         }
 
         @Override
         public boolean checkSuccess() {
-            return !mSame && mHigher;
+            boolean success = !mSame && mHigher;
+            if (!success && !pressed) {
+                pressed = true;
+            }
+            return success;
         }
     }
     
     private class LowerListener extends GameButtonListener {
+        private boolean pressed;
         
-        private LowerListener() {
-            super(Pitch.this);
+        private LowerListener(GameRoundCallback callback) {
+            super(callback);
         }
 
         @Override
         public boolean checkSuccess() {
-            return !mSame && !mHigher;
+            boolean success = !mSame && !mHigher;
+            if (!success && !pressed) {
+                pressed = true;
+            }
+            return success;
         }
     }
     
     private class SameListener extends GameButtonListener {
+        private boolean pressed;
         
-        private SameListener() {
-            super(Pitch.this);
+        private SameListener(GameRoundCallback callback) {
+            super(callback);
         }
 
         @Override
         public boolean checkSuccess() {
+            if (!mSame && !pressed) {
+                pressed = true;
+            }
             return mSame;
         }
     }

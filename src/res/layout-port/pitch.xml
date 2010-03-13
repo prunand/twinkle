@@ -17,38 +17,17 @@
     You should have received a copy of the GNU General Public License
     along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <LinearLayout
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:text="@string/pitch_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.5"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_margin="5dip"
         android:layout_gravity="center"
-        android:orientation="vertical"
         android:padding="5dip"
-        android:background="@drawable/border">
-        <TextView
-            android:text="@string/pitch_desc_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textStyle="bold"/>
-        <TextView
-            android:text="@string/pitch_desc_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textStyle="bold"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.5"/>
+        android:background="@drawable/border"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -58,7 +37,7 @@
             android:id="@+id/Higher"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dip"
+            android:layout_margin="15dip"
             android:drawableBottom="@drawable/higher"
             android:text="Higher?"
             android:soundEffectsEnabled="false"/>
@@ -66,7 +45,7 @@
             android:id="@+id/Lower"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dip"
+            android:layout_margin="15dip"
             android:drawableBottom="@drawable/lower"
             android:text="Lower?"
             android:soundEffectsEnabled="false"/>
@@ -80,35 +59,4 @@
         android:drawableBottom="@drawable/same"
         android:text="Same?"
         android:soundEffectsEnabled="false"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-    <TableLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
-        <TableRow>
-            <Button
-                android:id="@+id/PitchReplay"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_margin="20dip"
-                android:drawableBottom="@drawable/replay"
-                android:text="Replay"
-                android:soundEffectsEnabled="false"/>
-            <Button
-                android:id="@+id/PitchNext"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_margin="20dip"
-                android:drawableBottom="@drawable/next"
-                android:text="Next"
-                android:soundEffectsEnabled="false"/>
-        </TableRow>
-    </TableLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-</LinearLayout>
+</merge>

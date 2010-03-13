@@ -26,6 +26,7 @@ import android.content.res.AssetFileDescriptor;
 import android.media.AudioManager;
 import android.media.JetPlayer;
 import android.media.SoundPool;
+import android.media.JetPlayer.OnJetEventListener;
 import android.util.Log;
 
 public class Player {
@@ -58,6 +59,7 @@ public class Player {
     private int mSuccessSoundID;
     private int mSoundStream;
     private Timer mTimer;
+    private PlayerCallback mCallback;
     
     public synchronized void initialize(Context context) {
         if (!mInitialized) {
@@ -67,6 +69,7 @@ public class Player {
             
             AssetFileDescriptor piano = context.getResources().openRawResourceFd(R.raw.suzuki);
             mSuzukiJetPlayer.loadJetFile(piano);
+            mSuzukiJetPlayer.setEventListener(new NoteMidiEventListener());
             
             mInitialized = true;
             mSingleInt = new int[1];
@@ -82,23 +85,23 @@ public class Player {
         }
     }
 
-    public synchronized void playNote(int note) {
+    public synchronized void playNote(int note, PlayerCallback callback) {
         mSingleInt[0] = note;
-        playSuzukiJet(NOTES_SEGMENT, mSingleInt);
+        playSuzukiJet(NOTES_SEGMENT, mSingleInt, callback);
     }
 
-    public synchronized void playNote(int notes[]) {
-        playSuzukiJet(NOTES_SEGMENT, notes);
+    public synchronized void playNote(int notes[], PlayerCallback callback) {
+        playSuzukiJet(NOTES_SEGMENT, notes, callback);
     }
 
     public synchronized void playThump() {
         mSingleInt[0] = 0;
-        playSuzukiJet(THUMP_SEGMENT, mSingleInt);
+        playSuzukiJet(THUMP_SEGMENT, mSingleInt, null);
     }
 
-    public synchronized void playRhythm(int rhythm) {
+    public synchronized void playRhythm(int rhythm, PlayerCallback callback) {
         mSingleInt[0] = 0;
-        playSuzukiJet(rhythm + FIRST_RHYTHM_SEGMENT, mSingleInt);
+        playSuzukiJet(rhythm + FIRST_RHYTHM_SEGMENT, mSingleInt, callback);
     }
     
     public synchronized void playSuccess(TimerTask timerTask) {
@@ -114,8 +117,11 @@ public class Player {
         if (mInitialized) {
             if (mSuzukiJetPlayer.pause()) {
                 mSuzukiJetPlayer.clearQueue();
+            } else {
+                Log.w(Main.TAG, "Could not pause the jet player.");
             }
             mSoundPool.stop(mSoundStream);
+            mCallback = null;
         }
     }
     
@@ -128,7 +134,7 @@ public class Player {
         }
     }
 
-    private void playSuzukiJet(int segment, int[] tracks) {
+    private void playSuzukiJet(int segment, int[] tracks, PlayerCallback callback) {
         if (mInitialized) {
             pause();
             
@@ -158,6 +164,7 @@ public class Player {
                     Log.d(Main.TAG, "Segment " + segment + " _NOT_ queued.");
                 }
             }
+            mCallback = callback;
         } else {
             if (Log.isLoggable(Main.TAG, Log.WARN)) {
                 Log.w(Main.TAG, "Attempting to play Segment " + segment + " when not initialized.");
@@ -188,5 +195,37 @@ public class Player {
         } catch (Exception e) {}
         
         mInitialized = false;
+    }
+    
+    private class NoteMidiEventListener implements OnJetEventListener {
+
+        @Override
+        public void onJetEvent(JetPlayer player, short segment, byte track,
+                byte channel, byte controller, byte value) {
+            Log.d(Main.TAG, "Received Jet event: " + value);
+        }
+
+        @Override
+        public void onJetNumQueuedSegmentUpdate(JetPlayer player, int nbSegments) {
+            Log.d(Main.TAG, "Number of queued segments updated: " + nbSegments);
+            if (mCallback != null && nbSegments == 0) {
+                mCallback.playbackComplete();
+            }
+        }
+
+        @Override
+        public void onJetPauseUpdate(JetPlayer player, int paused) {
+            Log.d(Main.TAG, "Jet paused: " + paused);
+        }
+
+        @Override
+        public void onJetUserIdUpdate(JetPlayer player, int userId,
+                int repeatCount) {
+            Log.d(Main.TAG, "User id updated: " + userId);
+        }
+    }
+    
+    public static interface PlayerCallback {
+        void playbackComplete();
     }
 }

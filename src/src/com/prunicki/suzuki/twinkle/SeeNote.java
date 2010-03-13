@@ -18,74 +18,49 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import android.os.Bundle;
+import android.app.Activity;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 
-public class SeeNote extends GameActivity {
+public class SeeNote extends GameRound {
     private NoteView mStaffView;
-    private View[] mButtons;
-    private NoteListener[] mButtonListeners;
-    
-    private View mNextButton;
     
     int mNote;
     
-    public SeeNote() {
-        super(7);
-        mButtons = new Button[7];
-        mButtonListeners = new NoteListener[7];
+    public SeeNote(GameRoundCallback callback) {
+        super(R.layout.seenote, false, 7, callback);
         nextNote();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.seenote);
+    protected void onCreate(Activity activity) {
+        super.onCreate(activity);
         
         View[] buttons = mButtons;
-        NoteListener[] listeners = mButtonListeners;
+        GameButtonListener[] listeners = mButtonListeners;
+        GameRoundCallback callback = mCallback;
         
         int x = 0;
-        buttons[x] = findViewById(R.id.SeeNoteA);
-        listeners[x++] = new NoteListener(Player.A_NOTE);
-        buttons[x] = findViewById(R.id.SeeNoteB);
-        listeners[x++] = new NoteListener(Player.B_NOTE);
-        buttons[x] = findViewById(R.id.SeeNoteC);
-        listeners[x++] = new NoteListener(Player.C_NOTE);
-        buttons[x] = findViewById(R.id.SeeNoteD);
-        listeners[x++] = new NoteListener(Player.D_NOTE);
-        buttons[x] = findViewById(R.id.SeeNoteE);
-        listeners[x++] = new NoteListener(Player.E_NOTE);
-        buttons[x] = findViewById(R.id.SeeNoteF);
-        listeners[x++] = new NoteListener(Player.F_NOTE);
-        buttons[x] = findViewById(R.id.SeeNoteG);
-        listeners[x] = new NoteListener(Player.G_NOTE);
+        buttons[x] = activity.findViewById(R.id.SeeNoteA);
+        listeners[x++] = new NoteListener(Player.A_NOTE, callback);
+        buttons[x] = activity.findViewById(R.id.SeeNoteB);
+        listeners[x++] = new NoteListener(Player.B_NOTE, callback);
+        buttons[x] = activity.findViewById(R.id.SeeNoteC);
+        listeners[x++] = new NoteListener(Player.C_NOTE, callback);
+        buttons[x] = activity.findViewById(R.id.SeeNoteD);
+        listeners[x++] = new NoteListener(Player.D_NOTE, callback);
+        buttons[x] = activity.findViewById(R.id.SeeNoteE);
+        listeners[x++] = new NoteListener(Player.E_NOTE, callback);
+        buttons[x] = activity.findViewById(R.id.SeeNoteF);
+        listeners[x++] = new NoteListener(Player.F_NOTE, callback);
+        buttons[x] = activity.findViewById(R.id.SeeNoteG);
+        listeners[x] = new NoteListener(Player.G_NOTE, callback);
         
         setListenersIntoButtons(buttons, listeners);
         
-        mNextButton = (View) findViewById(R.id.SeeNoteNext);
-        mNextButton.setOnClickListener(mNextListener);
-        
-        mStaffView = (NoteView) findViewById(R.id.NoteView);
+        mStaffView = (NoteView) activity.findViewById(R.id.NoteView);
         changeNoteInView();
     }
     
-    @Override
-    protected void onResume() {
-        super.onResume();
-        
-        GameButtonListener.setPlayerIntoListeners(mButtonListeners, mPlayer);
-    }
-    
-    @Override
-    protected void onPause() {
-        super.onPause();
-        
-        GameButtonListener.setPlayerIntoListeners(mButtonListeners, null);
-    }
-
     void changeNoteInView() {
         mStaffView.setNote(mNote);
     }
@@ -94,21 +69,11 @@ public class SeeNote extends GameActivity {
         mNote = nextRandom(mNote);
     }
     
-    private OnClickListener mNextListener = new OnClickListener() {
-        
-        @Override
-        public void onClick(View arg0) {
-            nextNote();
-            changeNoteInView();
-        }
-    };
-    
     private class NoteListener extends GameButtonListener {
-        
         private int mNote;
         
-        private NoteListener (int note) {
-            super(SeeNote.this);
+        private NoteListener (int note, GameRoundCallback callback) {
+            super(callback);
             mNote = note;
         }
 

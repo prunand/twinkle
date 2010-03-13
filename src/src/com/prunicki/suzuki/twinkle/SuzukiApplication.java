@@ -18,21 +18,15 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import java.lang.ref.SoftReference;
-import java.util.HashMap;
-
 import android.app.Application;
 
 public class SuzukiApplication extends Application {
-    private static final Long PLAYER = new Long(1);
-    
-    private HashMap<Long, SoftReference<Object>> map;
+    private Player mPlayer;
+    private ScoreDAO mDAO;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        
-        map = new HashMap<Long, SoftReference<Object>>();
     }
 
     @Override
@@ -40,7 +34,7 @@ public class SuzukiApplication extends Application {
         super.onLowMemory();
         
         releasePlayer();
-        map.clear();
+        releaseDAO();
     }
 
     @Override
@@ -51,24 +45,43 @@ public class SuzukiApplication extends Application {
     }
     
     public Player getPlayer() {
-        SoftReference<Object> playerRef = map.get(PLAYER);
-        Player player = (Player) (playerRef == null ? null : playerRef.get());
-        
-        if (player == null) {
-            player = new Player();
-            player.initialize(this);
-            map.put(PLAYER, new SoftReference<Object>(player));
+        if (mPlayer == null) {
+            mPlayer = new Player();
+            mPlayer.initialize(this);
         }
         
-        return (Player) player;
+        return mPlayer;
     }
 
     private void releasePlayer() {
-        SoftReference<Object> playerRef = map.get(PLAYER);
-        Player player = (Player) (playerRef == null ? null : playerRef.get());
+        if (mPlayer != null) {
+            mPlayer.release();
+            mPlayer = null;
+        }
+    }
+    
+    public ScoreDAO getDAO() {
+        if (mDAO == null) {
+            mDAO = new ScoreDAO(this);
+            mDAO.open();
+            mDAO.createPlayer("Anna");
+            mDAO.createPlayer("Emily");
+            mDAO.createPlayer("John");
+            mDAO.createPlayer("Levi");
+            mDAO.createPlayer("Rita");
+            mDAO.createPlayer("Fred");
+            mDAO.createPlayer("Francis");
+            mDAO.createPlayer("Frederick");
+            mDAO.createPlayer("Johanson");
+        }
         
-        if (player != null) {
-            player.release();
+        return mDAO;
+    }
+    
+    private void releaseDAO() {
+        if (mDAO != null) {
+            mDAO.release();
+            mDAO = null;
         }
     }
 }

@@ -18,101 +18,52 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import android.os.Bundle;
+import android.app.Activity;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 
-public class HearRhythm extends GameActivity {
-    private View[] mButtons;
-    private RhythmListener[] mButtonListeners;
-    
-    private View mNextButton;
-    private View mReplayButton;
-    
+public class HearRhythm extends GameRound {
     int mRhythm;
-    private boolean mFirstRun;
     
-    public HearRhythm() {
-        super(4);
-        mFirstRun = true;
-        mButtons = new Button[4];
-        mButtonListeners = new RhythmListener[4];
+    public HearRhythm(GameRoundCallback callback) {
+        super(R.layout.hearrhythm, true, 4, callback);
         nextRhythm();
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.hearrhythm);
+    protected void onCreate(Activity activity) {
+        super.onCreate(activity);
         
         View[] buttons = mButtons;
-        RhythmListener[] listeners = mButtonListeners;
+        GameButtonListener[] listeners = mButtonListeners;
+        GameRoundCallback callback = mCallback;
         
         int x = 0;
-        buttons[x] = findViewById(R.id.HearMissStopStop);
-        listeners[x++] = new RhythmListener(Player.MISSISSIPPI_STOP_STOP_RHYTHM);
-        buttons[x] = findViewById(R.id.HearMissAlligator);
-        listeners[x++] = new RhythmListener(Player.MISSISSIPPI_ALLIGATOR_RHYTHM);
-        buttons[x] = findViewById(R.id.HearDownPony);
-        listeners[x++] = new RhythmListener(Player.DOWN_PONY_UP_PONY_RHYTHM);
-        buttons[x] = findViewById(R.id.HearIceCream);
-        listeners[x++] = new RhythmListener(Player.ICE_CREAM_SH_CONE_RHYTHM);
+        buttons[x] = activity.findViewById(R.id.HearMissStopStop);
+        listeners[x++] = new RhythmListener(Player.MISSISSIPPI_STOP_STOP_RHYTHM, callback);
+        buttons[x] = activity.findViewById(R.id.HearMissAlligator);
+        listeners[x++] = new RhythmListener(Player.MISSISSIPPI_ALLIGATOR_RHYTHM, callback);
+        buttons[x] = activity.findViewById(R.id.HearDownPony);
+        listeners[x++] = new RhythmListener(Player.DOWN_PONY_UP_PONY_RHYTHM, callback);
+        buttons[x] = activity.findViewById(R.id.HearIceCream);
+        listeners[x++] = new RhythmListener(Player.ICE_CREAM_SH_CONE_RHYTHM, callback);
         
         setListenersIntoButtons(buttons, listeners);
-        
-        mNextButton = (View) findViewById(R.id.HearRhythmNext);
-        mNextButton.setOnClickListener(mNextListener);
-        
-        mReplayButton = (View) findViewById(R.id.HearRhythmReplay);
-        mReplayButton.setOnClickListener(mReplayListener);
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        
-        GameButtonListener.setPlayerIntoListeners(mButtonListeners, mPlayer);
-        
-        if (mFirstRun) {
-            mFirstRun = false;
-            mPlayer.playRhythm(mRhythm);
-        }
+    protected void playNotes(Player.PlayerCallback playerCallback) {
+        mPlayer.playRhythm(mRhythm, playerCallback);
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        
-        GameButtonListener.setPlayerIntoListeners(mButtonListeners, null);
-    }
-    
     void nextRhythm() {
         mRhythm = nextRandom(mRhythm);
     }
     
-    private OnClickListener mReplayListener = new OnClickListener() {
-
-        @Override
-        public void onClick(View arg0) {
-            mPlayer.playRhythm(mRhythm);
-        }
-    };
-    
-    private OnClickListener mNextListener = new OnClickListener() {
-        
-        @Override
-        public void onClick(View arg0) {
-            nextRhythm();
-            mPlayer.playRhythm(mRhythm);
-        }
-    };
-    
     private class RhythmListener extends GameButtonListener {
         private int mRhythm;
         
-        private RhythmListener (int rhythm) {
-            super(HearRhythm.this);
+        private RhythmListener (int rhythm, GameRoundCallback callback) {
+            super(callback);
             mRhythm = rhythm;
         }
 

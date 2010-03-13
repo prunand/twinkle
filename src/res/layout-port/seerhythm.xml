@@ -17,10 +17,7 @@
     You should have received a copy of the GNU General Public License
     along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical">
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
     <com.prunicki.suzuki.twinkle.RhythmView
         android:id="@+id/RhythmView"
         android:layout_width="fill_parent"
@@ -55,20 +52,4 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dip"
         android:soundEffectsEnabled="false"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-    <ImageButton
-        android:id="@+id/SeeRhythmNext"
-        android:src="@drawable/next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="5dip"
-        android:soundEffectsEnabled="false"/>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"/>
-</LinearLayout>
+</merge>

@@ -22,55 +22,65 @@ import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Bundle;
+import android.content.DialogInterface.OnCancelListener;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.TextView;
 
-public class SuccessDialog extends TwinkleDialog {
-    private ImageView mSuccessImage;
+public class SuccessDialog {
+    private View mSuccessImage;
     private Player mPlayer;
     private SuccessTimerTask mTimerTask;
+    private TextView mSuccessText;
+    private Activity mActivity;
     AtomicBoolean stopped = new AtomicBoolean(false);
+    AlertDialog mdialog;
     
-    public SuccessDialog(Context context) {
-        super(context);
-        Activity activity = (Activity) context;
-        mPlayer = ((SuzukiApplication) activity.getApplication()).getPlayer();
+    public SuccessDialog(Context context, int score) {
+        mActivity = (Activity) context;
+        mPlayer = ((SuzukiApplication) mActivity.getApplication()).getPlayer();
         mTimerTask = new SuccessTimerTask();
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.success);
         
-        setTitle(R.string.dialog_success);
-        setCanceledOnTouchOutside(true);
-        setOnCancelListener(mCancelListener);
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View successView = inflater.inflate(R.layout.success, null);
         
-        mSuccessImage = (ImageView) findViewById(R.id.SuccessImage);
-        mSuccessImage.setBackgroundColor(0xffffffff);
+        mSuccessImage = successView.findViewById(R.id.SuccessImage);
+        mSuccessText = (TextView) successView.findViewById(R.id.SuccessText);
+        
+//        mSuccessImage.setBackgroundColor(0xffffffff);
         mSuccessImage.setOnClickListener(mSuccessListener);
+        
+        String youWon = mActivity.getResources().getString(R.string.you_won_stars);
+
+        mSuccessText.setText(String.format(youWon, score));
+        
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+        dialogBuilder.setView(successView);
+        
+        mdialog = dialogBuilder.create();
+        mdialog.setCanceledOnTouchOutside(true);
+        mdialog.setOnCancelListener(mCancelListener);
+        mdialog.setOnDismissListener(mOnDismissListener);
     }
     
-    @Override
-    protected void onStart() {
-        super.onStart();
+    protected void show() {
+        mdialog.show();
         mPlayer.playSuccess(mTimerTask);
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        pausePlayer();
+    
+    void pausePlayer() {
+        stopped.set(true);
+        mPlayer.pause();
     }
 
     private OnCancelListener mCancelListener = new OnCancelListener() {
         @Override
         public void onCancel(DialogInterface dialog) {
             pausePlayer();
+            mActivity.finish();
         }
     };
     
@@ -78,22 +88,24 @@ public class SuccessDialog extends TwinkleDialog {
 
         @Override
         public void onClick(View v) {
-            SuccessDialog.this.cancel();
+            mdialog.cancel();
         }
     };
     
-    void pausePlayer() {
-        stopped.set(true);
-        mPlayer.pause();
-    }
+    private DialogInterface.OnDismissListener mOnDismissListener = new DialogInterface.OnDismissListener() {
+        
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            pausePlayer();
+        }
+    };
     
     private class SuccessTimerTask extends TimerTask {
-
         @Override
         public void run() {
             if (!stopped.get()) {
                 pausePlayer();
-                SuccessDialog.this.cancel();
+                mdialog.cancel();
             }
         }
     }
