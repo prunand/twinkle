@@ -15,35 +15,35 @@ public class ScoreDAO {
     private static final String CREATE_PLAYER_TABLE_SQL =
         "CREATE TABLE \"player\" (" +
         "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-        "\"name\" TEXT NOT NULL" +
-        ");";
-    
-    private static final String CREATE_SCORE_TABLE_SQL =
-        "CREATE TABLE \"score\" (" +
-        "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-        "\"player_id\" INTEGER NOT NULL," +
-        "\"game_id\" INTEGER NOT NULL," +
-        "\"total_played\" INTEGER NOT NULL," +
-        "\"total_score\" INTEGER NOT NULL," +
+        "\"name\" TEXT NOT NULL," +
+        "\"hi_score\" INTEGER NOT NULL," +
         "\"last_score\" INTEGER NOT NULL," +
-        "\"hi_score\" INTEGER NOT NULL" +
+        "\"total_score\" INTEGER NOT NULL," +
+        "\"total_played\" INTEGER NOT NULL" +
         ");";
     
     public static final int TABLE_KEY_INDEX = 0;
     public static final String TABLE_KEY_NAME = "_id";
     
     private static final String PLAYER_TABLE_NAME = "player";
-    private static final String PLAYER_NAME_COLUMN = "name";
-    private static final String[] PLAYER_TABLE_COLUMNS = {TABLE_KEY_NAME, PLAYER_NAME_COLUMN};
     
     public static final int PLAYER_NAME_COLUMN_INDEX = 1;
+    public static final int PLAYER_HI_SCORE_COLUMN_INDEX = 2;
+    public static final int PLAYER_LAST_SCORE_COLUMN_INDEX = 3;
+    public static final int PLAYER_TOTAL_SCORE_COLUMN_INDEX = 4;
+    public static final int PLAYER_TOTAL_PLAYED_COLUMN_INDEX = 5;
     
-    private static final String SCORE_TABLE_NAME = "score";
-    private static final String[] SCORE_TABLE_COLUMNS = {TABLE_KEY_NAME, "player_id"};
+    private static final String PLAYER_NAME_COLUMN = "name";
+    private static final String PLAYER_HI_SCORE_COLUMN = "hi_score";
+    private static final String PLAYER_LAST_SCORE_COLUMN = "last_score";
+    private static final String PLAYER_TOTAL_SCORE_COLUMN = "total_score";
+    private static final String PLAYER_TOTAL_PLAYED_COLUMN = "total_played";
+    private static final String[] PLAYER_TABLE_COLUMNS = {TABLE_KEY_NAME, PLAYER_NAME_COLUMN,
+        PLAYER_HI_SCORE_COLUMN, PLAYER_LAST_SCORE_COLUMN, PLAYER_TOTAL_SCORE_COLUMN, PLAYER_TOTAL_PLAYED_COLUMN};
     
-    private static final String[] TABLE_NAMES = {PLAYER_TABLE_NAME, SCORE_TABLE_NAME};
+    private static final String[] TABLE_NAMES = {PLAYER_TABLE_NAME};
     
-    private static final String COUNT_PLAYER_SQL = "select count(" + TABLE_KEY_NAME + ") from " + PLAYER_TABLE_NAME;
+//    private static final String COUNT_PLAYER_SQL = "select count(" + TABLE_KEY_NAME + ") from " + PLAYER_TABLE_NAME;
     
     private final Context mContext;
     private ScoreDBHelper mDBHelper;
@@ -66,16 +66,30 @@ public class ScoreDAO {
         mDb = null;
     }
     
-    public Cursor fetchPlayer(int id) {
+    public int playerCount() {
+        Cursor cursor = mDb.query(PLAYER_TABLE_NAME, new String[] {"cnt"}, "count(_id) as cnt", null, null, null, null);
+        try {
+            cursor.moveToFirst();
+            int count = cursor.getInt(0);
+            return count;
+        } finally {
+            cursor.close();
+        }
+        
+    }
+    
+    public Cursor fetchPlayer(long id) {
         Cursor cursor = mDb.query(PLAYER_TABLE_NAME, PLAYER_TABLE_COLUMNS,
                 createKeyCriteria(id), null, null, null, null);
         
         int count = cursor.getCount();
         if (count > 1) {
             throw new IllegalStateException("Only 1 row should ever be returned.");
-        } else if (count == 1) {
+        } else if (count == 0) {
+            cursor.close();
             return null;
         }
+        cursor.moveToFirst();
         
         return cursor;
     }
@@ -92,14 +106,30 @@ public class ScoreDAO {
     }
     
     public int createPlayer(String name) {
-        ContentValues values = new ContentValues();
-        values.put(PLAYER_NAME_COLUMN, name);
+        ContentValues values = createPlayerContentValues(name, 0, 0, 0, 0);
         
         return (int) mDb.insert(PLAYER_TABLE_NAME, null, values);
     }
+
+    public void savePlayer(long id, String name, int hiScore, int lastScore, int totalScore, int totalPlayed) {
+        ContentValues values = createPlayerContentValues(name, hiScore, lastScore, totalScore, totalPlayed);
+        
+        mDb.update(PLAYER_TABLE_NAME, values, createKeyCriteria(id), null);
+    }
     
-    private String createKeyCriteria(final long id) {
+    private String createKeyCriteria(long id) {
         return TABLE_KEY_NAME + "=" + id;
+    }
+
+    private ContentValues createPlayerContentValues(String name, int hiScore, int lastScore, int totalScore,
+            int totalPlayed) {
+        ContentValues values = new ContentValues();
+        values.put(PLAYER_NAME_COLUMN, name);
+        values.put(PLAYER_HI_SCORE_COLUMN, hiScore);
+        values.put(PLAYER_LAST_SCORE_COLUMN, lastScore);
+        values.put(PLAYER_TOTAL_SCORE_COLUMN, totalScore);
+        values.put(PLAYER_TOTAL_PLAYED_COLUMN, totalPlayed);
+        return values;
     }
     
     private class ScoreDBHelper extends SQLiteOpenHelper {
@@ -111,7 +141,6 @@ public class ScoreDAO {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_PLAYER_TABLE_SQL);
-            db.execSQL(CREATE_SCORE_TABLE_SQL);
         }
 
         @Override

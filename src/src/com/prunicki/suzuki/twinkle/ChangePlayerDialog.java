@@ -22,8 +22,6 @@ public class ChangePlayerDialog extends TwinkleDialog {
         setContentView(R.layout.changeplayer);
         
         setTitle("Choose Player");
-//        Display display = getWindow().getWindowManager().getDefaultDisplay();
-//        int windowHeight = display.getHeight();
         
         mlistView = (ListView) findViewById(android.R.id.list);
         mlistView.setOnItemClickListener(itemListener);
@@ -51,7 +49,13 @@ public class ChangePlayerDialog extends TwinkleDialog {
     private OnItemClickListener itemListener = new OnItemClickListener() {
 
         @Override
-        public void onItemClick(AdapterView<?> listView, View view, int arg2, long arg3) {
+        public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
+            SuzukiApplication appCtx = (SuzukiApplication) getContext().getApplicationContext();
+            
+            ScoreDAO dao = appCtx.getDAO();
+            Player player = ModelHelper.fetchPlayer(id, dao);
+            appCtx.setCurrentPlayer(player);
+            ChangePlayerDialog.this.dismiss();
         }
     };
 }

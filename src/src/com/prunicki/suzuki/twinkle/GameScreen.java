@@ -9,6 +9,8 @@ public class GameScreen extends TwinkleActivity implements GameRoundCallback {
     public static final int DIFFICULTY_LEVEL_EASY = 0;
     public static final int DIFFICULTY_LEVEL_HARD = 1;
     
+    private Player mPlayer;
+    private ScoreDAO mDao;
     private int mDifficultyLevel;
     private ViewGroup mGameView;
     private GameRound[] gameRounds;
@@ -29,6 +31,10 @@ public class GameScreen extends TwinkleActivity implements GameRoundCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
+        
+        SuzukiApplication app = (SuzukiApplication) getApplication();
+        mPlayer = app.getCurrentPlayer();
+        mDao = app.getDAO();
         
         mDifficultyLevel = getIntent().getIntExtra(DIFFICULTY_LEVEL_KEY, DIFFICULTY_LEVEL_EASY);
         mGameView = (ViewGroup) findViewById(R.id.GameView);
@@ -66,6 +72,8 @@ public class GameScreen extends TwinkleActivity implements GameRoundCallback {
             for (int i = 0; i < gameRounds.length; i++) {
                 score += gameRounds[i].getScore(mDifficultyLevel);
             }
+            mPlayer.setLastScore(score);
+            ModelHelper.savePlayer(mPlayer, mDao);
 
             SuccessDialog dlg = new SuccessDialog(this, score);
             dlg.show();

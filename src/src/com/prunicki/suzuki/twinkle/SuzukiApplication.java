@@ -18,22 +18,34 @@
  */
 package com.prunicki.suzuki.twinkle;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+
 import android.app.Application;
 
+//TODO Consider creating a "listenable" annotation or interface.
 public class SuzukiApplication extends Application {
+    public static final String PROP_CHG_PLAYER = "propChgPlyr";
+    
+    private Player mCurrentPlayer;
     private SoundPlayer mSoundPlayer;
     private ScoreDAO mDAO;
-
+    private ArrayList<WeakReference<PropertyChangeListener>> listeners;
+    
     @Override
     public void onCreate() {
         super.onCreate();
+        
+        listeners = new ArrayList<WeakReference<PropertyChangeListener>>();
     }
 
     @Override
     public void onLowMemory() {
         super.onLowMemory();
         
-        releasePlayer();
+        releaseSoundPlayer();
         releaseDAO();
     }
 
@@ -41,7 +53,24 @@ public class SuzukiApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         
-        releasePlayer();
+        releaseSoundPlayer();
+    }
+    
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        Utils.addPropertyChangeListener(listeners, listener);
+    }
+    
+    public Player getCurrentPlayer() {
+        return mCurrentPlayer;
+    }
+    
+    public void setCurrentPlayer(Player player) {
+        if (player != mCurrentPlayer) {
+            Player oldPlayer = player;
+            mCurrentPlayer = player;
+            
+            Utils.firePropertyChangeEvent(listeners, new PropertyChangeEvent(this, PROP_CHG_PLAYER, oldPlayer, player));
+        }
     }
     
     public SoundPlayer getSoundPlayer() {
@@ -52,30 +81,30 @@ public class SuzukiApplication extends Application {
         
         return mSoundPlayer;
     }
-
-    private void releasePlayer() {
-        if (mSoundPlayer != null) {
-            mSoundPlayer.release();
-            mSoundPlayer = null;
-        }
-    }
     
     public ScoreDAO getDAO() {
         if (mDAO == null) {
             mDAO = new ScoreDAO(this);
             mDAO.open();
-            mDAO.createPlayer("Anna");
-            mDAO.createPlayer("Emily");
-            mDAO.createPlayer("John");
-            mDAO.createPlayer("Levi");
-            mDAO.createPlayer("Rita");
-            mDAO.createPlayer("Fred");
-            mDAO.createPlayer("Francis");
-            mDAO.createPlayer("Frederick");
-            mDAO.createPlayer("Johanson");
+            int id = mDAO.createPlayer("Anna");
+            id = mDAO.createPlayer("Emily");
+            id = mDAO.createPlayer("John");
+            id = mDAO.createPlayer("Levi");
+            id = mDAO.createPlayer("Rita");
+            id = mDAO.createPlayer("Fred");
+            id = mDAO.createPlayer("Francis");
+            id = mDAO.createPlayer("Frederick");
+            id = mDAO.createPlayer("Johanson");
         }
         
         return mDAO;
+    }
+
+    private void releaseSoundPlayer() {
+        if (mSoundPlayer != null) {
+            mSoundPlayer.release();
+            mSoundPlayer = null;
+        }
     }
     
     private void releaseDAO() {
