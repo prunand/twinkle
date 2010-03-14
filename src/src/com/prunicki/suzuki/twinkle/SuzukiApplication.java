@@ -60,6 +60,10 @@ public class SuzukiApplication extends Application {
         Utils.addPropertyChangeListener(listeners, listener);
     }
     
+    public void removePropertyChangeListener(PropertyChangeListener listener) {
+        Utils.removePropertyChangeListener(listeners, listener);
+    }
+    
     public Player getCurrentPlayer() {
         return mCurrentPlayer;
     }
@@ -86,15 +90,15 @@ public class SuzukiApplication extends Application {
         if (mDAO == null) {
             mDAO = new ScoreDAO(this);
             mDAO.open();
-            int id = mDAO.createPlayer("Anna");
-            id = mDAO.createPlayer("Emily");
-            id = mDAO.createPlayer("John");
-            id = mDAO.createPlayer("Levi");
-            id = mDAO.createPlayer("Rita");
-            id = mDAO.createPlayer("Fred");
-            id = mDAO.createPlayer("Francis");
-            id = mDAO.createPlayer("Frederick");
-            id = mDAO.createPlayer("Johanson");
+//            int id = mDAO.createPlayer("Anna");
+//            id = mDAO.createPlayer("Emily");
+//            id = mDAO.createPlayer("John");
+//            id = mDAO.createPlayer("Levi");
+//            id = mDAO.createPlayer("Rita");
+//            id = mDAO.createPlayer("Fred");
+//            id = mDAO.createPlayer("Francis");
+//            id = mDAO.createPlayer("Frederick");
+//            id = mDAO.createPlayer("Johanson");
         }
         
         return mDAO;

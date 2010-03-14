@@ -29,13 +29,12 @@
         android:orientation="vertical"
         >
         <TextView
-            android:id="@+id/playerNameText"
             android:text="@string/player_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="25sp"/>
         <EditText
-            android:id="@+id/playerNameEdit"
+            android:id="@+id/Name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"/>
     </LinearLayout>
@@ -46,7 +45,7 @@
         android:orientation="horizontal"
         >
         <Button
-            android:id="@+id/playerNameCancelButton"
+            android:id="@+id/Cancel"
             android:text="@string/btn_cancel"
             android:layout_width="0px"
             android:layout_height="wrap_content"
@@ -54,8 +53,8 @@
             android:layout_margin="15dip"
             android:layout_weight="1"/>
         <Button
-            android:id="@+id/playerNameOkButton"
-            android:text="@string/btn_save"
+            android:id="@+id/Add"
+            android:text="Add"
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

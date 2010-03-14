@@ -30,13 +30,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class Main extends TwinkleActivity {
     static final String TAG = "SuzukiTwinkle";
     
+    private SuzukiApplication mApp;
+    private ScoreDAO mDao;
+    private Player mPlayer;
     private TextView mSalutation;
     private TextView mHiScore;
     private Button mPlayButton;
@@ -49,6 +54,10 @@ public class Main extends TwinkleActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
+        mApp = (SuzukiApplication) getApplication();
+        mApp.addPropertyChangeListener(mPropChgListener);
+        mDao = mApp.getDAO();
+        
         mSalutation = (TextView) findViewById(R.id.Salutation);
         mHiScore = (TextView) findViewById(R.id.HiScore);
         mPlayButton = (Button) findViewById(R.id.MainPlay);
@@ -59,25 +68,39 @@ public class Main extends TwinkleActivity {
         mPlayButton.setOnClickListener(mPlayListener);
         mSwitchPlayerButton.setOnClickListener(mSwitchPlayerListener);
         mPracticeButton.setOnClickListener(mPracticeListener);
+        mDifficultyButton.setOnCheckedChangeListener(mDifficultyListener);
     }
     
     @Override
     protected void onResume() {
         super.onResume();
         
-        SuzukiApplication app = (SuzukiApplication) getApplication();
-        app.addPropertyChangeListener(mPropChgListener);
-        
-        Player player = app.getCurrentPlayer();
+        Player player = mApp.getCurrentPlayer();
         if (player == null) {
-            ChangePlayerDialog dlg = new ChangePlayerDialog(Main.this);
-            dlg.show();
+            int cnt = mDao.playerCount();
+            if (cnt > 0) {
+                ChangePlayerDialog dlg = new ChangePlayerDialog(Main.this);
+                dlg.show();
+            } else {
+                NewPlayerDialog dlg = new NewPlayerDialog(Main.this);
+                dlg.show();
+            }
         } else {
-            mSalutation.setText("Welcome " + player.getName());
-            mHiScore.setText("Hi Score: " + player.getHiScore());
+            setPlayerWidgetValues(player);
         }
+        mPlayer = player;
     }
     
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        
+        mApp.removePropertyChangeListener(mPropChgListener);
+        if (mPlayer != null) {
+            mPlayer.removePropertyChangeListener(mPropChgListener);
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -105,6 +128,14 @@ public class Main extends TwinkleActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    void setPlayerWidgetValues(Player player) {
+        //TODO Change to run setText on the UI thread.
+        mSalutation.setText("Welcome " + player.getName());
+        mHiScore.setText("Hi Score: " + player.getHiScore());
+        boolean hard = player.getDifficulty() == GameScreen.DIFFICULTY_LEVEL_HARD ? true : false;
+        mDifficultyButton.setChecked(hard);
     }
 
     private OnClickListener mPlayListener = new OnClickListener() {
@@ -134,8 +165,17 @@ public class Main extends TwinkleActivity {
         }
     };
     
+    private OnCheckedChangeListener mDifficultyListener = new OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            int difficulty = isChecked ? GameScreen.DIFFICULTY_LEVEL_HARD : GameScreen.DIFFICULTY_LEVEL_EASY;
+            
+            mPlayer.setDifficulty(difficulty);
+            ModelHelper.savePlayer(mPlayer, mDao);
+        }
+    };
+    
     private PropertyChangeListener mPropChgListener = new PropertyChangeListener() {
-        
         @Override
         public void propertyChange(PropertyChangeEvent event) {
             if (SuzukiApplication.PROP_CHG_PLAYER.equals(event.getPropertyName())) {
@@ -143,11 +183,12 @@ public class Main extends TwinkleActivity {
                 oldPlayer.removePropertyChangeListener(this);
                 Player player = (Player) event.getNewValue();
                 player.addPropertyChangeListener(this);
-                //TODO Change to run setText on the UI thread.
-                mSalutation.setText("Welcome " + player.getName());
-                mHiScore.setText("Hi Score: " + player.getHiScore());
+                mPlayer = player;
+                
+                setPlayerWidgetValues(player);
             } else if (Player.PROP_CHG_LAST_SCORE.equals(event.getPropertyName())) {
                 Player player = (Player) event.getSource();
+                //TODO Change to run setText on the UI thread.
                 mHiScore.setText("Hi Score: " + player.getHiScore());
             }
         }

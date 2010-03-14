@@ -25,8 +25,8 @@
             android:id="@+id/Salutation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="3dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
             android:text="Welcome Anna!"
             android:textSize="25sp"/>
         <TextView

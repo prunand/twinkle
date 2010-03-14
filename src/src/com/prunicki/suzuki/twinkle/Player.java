@@ -7,18 +7,22 @@ import java.util.ArrayList;
 
 public class Player {
     public static final String PROP_CHG_LAST_SCORE = "propChgLastScore";
+    public static final String PROP_CHG_DIFFICULTY = "propChgDifficulty";
     
     private final long mId;
     private final String mName;
+    private int mDifficulty;
     private int mHiScore;
     private int mLastScore;
     private int mTotalScore;
     private int mTotalPlayed;
     private ArrayList<WeakReference<PropertyChangeListener>> mListeners;
     
-    public Player(long id, String name, int hiScore, int lastScore, int totalScore, int totalPlayed) {
+    public Player(long id, String name, int difficulty, int hiScore, int lastScore,
+            int totalScore, int totalPlayed) {
         this.mId = id;
         this.mName = name;
+        this.mDifficulty = difficulty;
         this.mHiScore = hiScore;
         this.mLastScore = lastScore;
         this.mTotalScore = totalScore;
@@ -35,6 +39,16 @@ public class Player {
         return mName;
     }
 
+    public int getDifficulty() {
+        return mDifficulty;
+    }
+
+    public void setDifficulty(int difficulty) {
+        int oldDifficulty = mDifficulty;
+        this.mDifficulty = difficulty;
+        Utils.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(this, PROP_CHG_DIFFICULTY, oldDifficulty, difficulty));
+    }
+
     public int getHiScore() {
         return mHiScore;
     }
@@ -44,7 +58,7 @@ public class Player {
     }
 
     public void setLastScore(int lastScore) {
-        int prevLastScore = lastScore;
+        int oldLastScore = lastScore;
         this.mLastScore = lastScore;
         if (lastScore > mHiScore) {
             mHiScore = lastScore;
@@ -52,7 +66,7 @@ public class Player {
         mTotalScore += lastScore;
         mTotalPlayed++;
         
-        Utils.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(this, PROP_CHG_LAST_SCORE, prevLastScore, lastScore));
+        Utils.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(this, PROP_CHG_LAST_SCORE, oldLastScore, lastScore));
     }
 
     public int getTotalScore() {

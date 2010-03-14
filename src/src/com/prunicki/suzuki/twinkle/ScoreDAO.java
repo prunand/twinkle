@@ -16,6 +16,7 @@ public class ScoreDAO {
         "CREATE TABLE \"player\" (" +
         "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
         "\"name\" TEXT NOT NULL," +
+        "\"difficulty\" INTEGER NOT NULL," +
         "\"hi_score\" INTEGER NOT NULL," +
         "\"last_score\" INTEGER NOT NULL," +
         "\"total_score\" INTEGER NOT NULL," +
@@ -28,17 +29,19 @@ public class ScoreDAO {
     private static final String PLAYER_TABLE_NAME = "player";
     
     public static final int PLAYER_NAME_COLUMN_INDEX = 1;
-    public static final int PLAYER_HI_SCORE_COLUMN_INDEX = 2;
-    public static final int PLAYER_LAST_SCORE_COLUMN_INDEX = 3;
-    public static final int PLAYER_TOTAL_SCORE_COLUMN_INDEX = 4;
-    public static final int PLAYER_TOTAL_PLAYED_COLUMN_INDEX = 5;
+    public static final int PLAYER_DIFFICULTY_COLUMN_INDEX = 2;
+    public static final int PLAYER_HI_SCORE_COLUMN_INDEX = 3;
+    public static final int PLAYER_LAST_SCORE_COLUMN_INDEX = 4;
+    public static final int PLAYER_TOTAL_SCORE_COLUMN_INDEX = 5;
+    public static final int PLAYER_TOTAL_PLAYED_COLUMN_INDEX = 6;
     
     private static final String PLAYER_NAME_COLUMN = "name";
+    private static final String PLAYER_DIFFICULTY_COLUMN = "difficulty";
     private static final String PLAYER_HI_SCORE_COLUMN = "hi_score";
     private static final String PLAYER_LAST_SCORE_COLUMN = "last_score";
     private static final String PLAYER_TOTAL_SCORE_COLUMN = "total_score";
     private static final String PLAYER_TOTAL_PLAYED_COLUMN = "total_played";
-    private static final String[] PLAYER_TABLE_COLUMNS = {TABLE_KEY_NAME, PLAYER_NAME_COLUMN,
+    private static final String[] PLAYER_TABLE_COLUMNS = {TABLE_KEY_NAME, PLAYER_NAME_COLUMN, PLAYER_DIFFICULTY_COLUMN,
         PLAYER_HI_SCORE_COLUMN, PLAYER_LAST_SCORE_COLUMN, PLAYER_TOTAL_SCORE_COLUMN, PLAYER_TOTAL_PLAYED_COLUMN};
     
     private static final String[] TABLE_NAMES = {PLAYER_TABLE_NAME};
@@ -56,8 +59,6 @@ public class ScoreDAO {
     public void open() throws SQLException {
         mDBHelper = new ScoreDBHelper(mContext);
         mDb = mDBHelper.getWritableDatabase();
-        mDBHelper.dropTables(mDb);
-        mDBHelper.onCreate(mDb);
     }
     
     public void release() {
@@ -67,7 +68,7 @@ public class ScoreDAO {
     }
     
     public int playerCount() {
-        Cursor cursor = mDb.query(PLAYER_TABLE_NAME, new String[] {"cnt"}, "count(_id) as cnt", null, null, null, null);
+        Cursor cursor = mDb.query(PLAYER_TABLE_NAME, new String[] {"count(_id) cnt"}, null, null, null, null, null);
         try {
             cursor.moveToFirst();
             int count = cursor.getInt(0);
@@ -96,7 +97,7 @@ public class ScoreDAO {
     
     public Cursor fetchAllPlayers() {
         Cursor cursor = mDb.query(PLAYER_TABLE_NAME, PLAYER_TABLE_COLUMNS,
-                null, null, null, null, null);
+                null, null, null, null, PLAYER_NAME_COLUMN);
         
         if (cursor != null) {
             cursor.moveToFirst();
@@ -106,13 +107,13 @@ public class ScoreDAO {
     }
     
     public int createPlayer(String name) {
-        ContentValues values = createPlayerContentValues(name, 0, 0, 0, 0);
+        ContentValues values = createPlayerContentValues(name, 0, 0, 0, 0, 0);
         
         return (int) mDb.insert(PLAYER_TABLE_NAME, null, values);
     }
 
-    public void savePlayer(long id, String name, int hiScore, int lastScore, int totalScore, int totalPlayed) {
-        ContentValues values = createPlayerContentValues(name, hiScore, lastScore, totalScore, totalPlayed);
+    public void savePlayer(long id, String name, int difficulty, int hiScore, int lastScore, int totalScore, int totalPlayed) {
+        ContentValues values = createPlayerContentValues(name, difficulty, hiScore, lastScore, totalScore, totalPlayed);
         
         mDb.update(PLAYER_TABLE_NAME, values, createKeyCriteria(id), null);
     }
@@ -121,10 +122,11 @@ public class ScoreDAO {
         return TABLE_KEY_NAME + "=" + id;
     }
 
-    private ContentValues createPlayerContentValues(String name, int hiScore, int lastScore, int totalScore,
-            int totalPlayed) {
+    private ContentValues createPlayerContentValues(String name, int difficulty, int hiScore,
+            int lastScore, int totalScore, int totalPlayed) {
         ContentValues values = new ContentValues();
         values.put(PLAYER_NAME_COLUMN, name);
+        values.put(PLAYER_DIFFICULTY_COLUMN, difficulty);
         values.put(PLAYER_HI_SCORE_COLUMN, hiScore);
         values.put(PLAYER_LAST_SCORE_COLUMN, lastScore);
         values.put(PLAYER_TOTAL_SCORE_COLUMN, totalScore);
