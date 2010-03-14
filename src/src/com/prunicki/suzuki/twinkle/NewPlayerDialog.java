@@ -6,13 +6,17 @@ import android.view.View;
 import android.widget.EditText;
 
 public class NewPlayerDialog extends TwinkleDialog {
+    private final boolean mAllowCancel;
+    
     private SuzukiApplication mAppCtx;
     private EditText mName;
     private View mAdd;
     private View mCancel;
 
-    public NewPlayerDialog(Context context) {
+    public NewPlayerDialog(Context context, boolean allowCancel) {
         super(context);
+        
+        mAllowCancel = allowCancel;
     }
 
     @Override
@@ -23,13 +27,19 @@ public class NewPlayerDialog extends TwinkleDialog {
         mAppCtx = (SuzukiApplication) getContext().getApplicationContext();
         
         setTitle("New Player");
+        setCancelable(mAllowCancel);
         
         mName = (EditText) findViewById(R.id.Name);
         mAdd = findViewById(R.id.Add);
         mCancel = findViewById(R.id.Cancel);
         
         mAdd.setOnClickListener(mAddListener);
-        mCancel.setOnClickListener(mCancelListener);
+        
+        if (mAllowCancel) {
+            mCancel.setOnClickListener(mCancelListener);
+        } else {
+            mCancel.setVisibility(View.GONE);
+        }
     }
 
     @Override

@@ -79,10 +79,10 @@ public class Main extends TwinkleActivity {
         if (player == null) {
             int cnt = mDao.playerCount();
             if (cnt > 0) {
-                ChangePlayerDialog dlg = new ChangePlayerDialog(Main.this);
+                ChangePlayerDialog dlg = new ChangePlayerDialog(Main.this, false);
                 dlg.show();
             } else {
-                NewPlayerDialog dlg = new NewPlayerDialog(Main.this);
+                NewPlayerDialog dlg = new NewPlayerDialog(Main.this, false);
                 dlg.show();
             }
         } else {
@@ -152,7 +152,7 @@ public class Main extends TwinkleActivity {
     private OnClickListener mSwitchPlayerListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            ChangePlayerDialog dlg = new ChangePlayerDialog(Main.this);
+            ChangePlayerDialog dlg = new ChangePlayerDialog(Main.this, true);
             dlg.show();
         }
     };

@@ -46,8 +46,6 @@ public class ScoreDAO {
     
     private static final String[] TABLE_NAMES = {PLAYER_TABLE_NAME};
     
-//    private static final String COUNT_PLAYER_SQL = "select count(" + TABLE_KEY_NAME + ") from " + PLAYER_TABLE_NAME;
-    
     private final Context mContext;
     private ScoreDBHelper mDBHelper;
     private SQLiteDatabase mDb;

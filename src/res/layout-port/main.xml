@@ -27,15 +27,13 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:text="Welcome Anna!"
             android:textSize="25sp"/>
         <TextView
             android:id="@+id/HiScore"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/Salutation"
-            android:layout_centerHorizontal="true"
-            android:text="Hi Score: 25"/>
+            android:layout_centerHorizontal="true"/>
         <Button
             android:id="@+id/SwitchPlayer"
             android:layout_width="wrap_content"

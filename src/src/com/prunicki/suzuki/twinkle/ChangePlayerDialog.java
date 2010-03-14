@@ -9,13 +9,16 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class ChangePlayerDialog extends TwinkleDialog {
+    private final boolean mAllowCancel;
+    
     private Cursor mCursor;
     private ListView mlistView;
     private SuzukiApplication mAppCtx;
     private View mAddPlayer;
 
-    public ChangePlayerDialog(Context context) {
+    public ChangePlayerDialog(Context context, boolean allowCancel) {
         super(context);
+        mAllowCancel = allowCancel;
     }
 
     @Override
@@ -26,12 +29,18 @@ public class ChangePlayerDialog extends TwinkleDialog {
         mAppCtx = (SuzukiApplication) getContext().getApplicationContext();
         
         setTitle("Choose Player");
+        setCancelable(mAllowCancel);
         
         mlistView = (ListView) findViewById(android.R.id.list);
         mAddPlayer = findViewById(R.id.AddPlayer);
         
         mlistView.setOnItemClickListener(itemListener);
-        mAddPlayer.setOnClickListener(mAddPlayerListener);
+        
+        if (mAllowCancel) {
+            mAddPlayer.setOnClickListener(mAddPlayerListener);
+        } else {
+            mAddPlayer.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -57,7 +66,7 @@ public class ChangePlayerDialog extends TwinkleDialog {
         @Override
         public void onClick(View v) {
             dismiss();
-            NewPlayerDialog dlg = new NewPlayerDialog(getContext());
+            NewPlayerDialog dlg = new NewPlayerDialog(getContext(), mAllowCancel);
             dlg.show();
         }
     };
