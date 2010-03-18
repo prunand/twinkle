@@ -22,7 +22,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -76,16 +78,7 @@ public class Main extends TwinkleActivity {
         super.onResume();
         
         Player player = mApp.getCurrentPlayer();
-        if (player == null) {
-            int cnt = mDao.playerCount();
-            if (cnt > 0) {
-                ChangePlayerDialog dlg = new ChangePlayerDialog(Main.this, false);
-                dlg.show();
-            } else {
-                NewPlayerDialog dlg = new NewPlayerDialog(Main.this, false);
-                dlg.show();
-            }
-        } else {
+        if (player != null) {
             setPlayerWidgetValues(player);
         }
         mPlayer = player;
@@ -140,19 +133,31 @@ public class Main extends TwinkleActivity {
 
     private OnClickListener mPlayListener = new OnClickListener() {
         public void onClick(View v) {
-            boolean hard = mDifficultyButton.isChecked();
-            int level = hard ? GameScreen.DIFFICULTY_LEVEL_HARD : GameScreen.DIFFICULTY_LEVEL_EASY;
-            
-            Intent intent = new Intent(Main.this, GameScreen.class);
-            intent.putExtra(GameScreen.DIFFICULTY_LEVEL_KEY, level);
-            startActivity(intent);
+            if (mPlayer == null) {
+                int cnt = mDao.playerCount();
+                Dialog dlg = null;
+                if (cnt > 0) {
+                    dlg = new ChangePlayerDialog(Main.this);
+                } else {
+                    dlg = new NewPlayerDialog(Main.this);
+                }
+                dlg.setOnDismissListener(mDismissListener);
+                dlg.show();
+            } else {
+                boolean hard = mDifficultyButton.isChecked();
+                int level = hard ? GameScreen.DIFFICULTY_LEVEL_HARD : GameScreen.DIFFICULTY_LEVEL_EASY;
+                
+                Intent intent = new Intent(Main.this, GameScreen.class);
+                intent.putExtra(GameScreen.DIFFICULTY_LEVEL_KEY, level);
+                startActivity(intent);
+            }
         }
     };
     
     private OnClickListener mSwitchPlayerListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            ChangePlayerDialog dlg = new ChangePlayerDialog(Main.this, true);
+            ChangePlayerDialog dlg = new ChangePlayerDialog(Main.this);
             dlg.show();
         }
     };
@@ -172,6 +177,13 @@ public class Main extends TwinkleActivity {
             
             mPlayer.setDifficulty(difficulty);
             ModelHelper.savePlayer(mPlayer, mDao);
+        }
+    };
+    
+    private OnDismissListener mDismissListener = new OnDismissListener() {
+        @Override
+        public void onDismiss(DialogInterface dialog) {
+            mPlayButton.performClick();
         }
     };
     
