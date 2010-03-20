@@ -1,5 +1,7 @@
 package com.prunicki.suzuki.twinkle;
 
+import static com.prunicki.suzuki.twinkle.Score.DIFFICULTY_LEVEL_HARD;
+
 import java.util.Random;
 
 import android.app.Activity;
@@ -37,7 +39,7 @@ public abstract class GameRound {
     public int getScore(int mDifficultyLevel) {
         int score = getMaxScore();
         
-        if (mDifficultyLevel == GameScreen.DIFFICULTY_LEVEL_HARD) {
+        if (mDifficultyLevel == DIFFICULTY_LEVEL_HARD) {
             for (int i = 0; i < mMaxRandom; i++) {
                 if (mButtonListeners[i].isClickedWrong()) {
                     score--;

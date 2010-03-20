@@ -1,34 +1,36 @@
 package com.prunicki.suzuki.twinkle;
 
+import static com.prunicki.suzuki.twinkle.Score.DIFFICULTY_LEVEL_HARD;
+import static com.prunicki.suzuki.twinkle.Score.PROP_CHG_LAST_SCORE;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
 public class Player {
-    public static final String PROP_CHG_LAST_SCORE = "propChgLastScore";
     public static final String PROP_CHG_DIFFICULTY = "propChgDifficulty";
     
     private final long mId;
     private final String mName;
     private int mDifficulty;
-    private int mHiScore;
-    private int mLastScore;
-    private int mTotalScore;
-    private int mTotalPlayed;
-    private ArrayList<WeakReference<PropertyChangeListener>> mListeners;
+    private Score mEasyScore;
+    private Score mHardScore;
+    private ScoreChangeListener scoreChangeListener;
+    ArrayList<WeakReference<PropertyChangeListener>> mListeners;
     
-    public Player(long id, String name, int difficulty, int hiScore, int lastScore,
-            int totalScore, int totalPlayed) {
+    public Player(long id, String name, int difficulty, Score easyScore, Score hardScore) {
         this.mId = id;
         this.mName = name;
         this.mDifficulty = difficulty;
-        this.mHiScore = hiScore;
-        this.mLastScore = lastScore;
-        this.mTotalScore = totalScore;
-        this.mTotalPlayed = totalPlayed;
+        mEasyScore = easyScore;
+        mHardScore = hardScore;
         
+        scoreChangeListener = new ScoreChangeListener();
         mListeners = new ArrayList<WeakReference<PropertyChangeListener>>();
+        
+        mEasyScore.addPropertyChangeListener(scoreChangeListener);
+        mHardScore.addPropertyChangeListener(scoreChangeListener);
     }
     
     public long getId() {
@@ -48,37 +50,47 @@ public class Player {
         this.mDifficulty = difficulty;
         Utils.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(this, PROP_CHG_DIFFICULTY, oldDifficulty, difficulty));
     }
-
+    
     public int getHiScore() {
-        return mHiScore;
+        return getCurrentScore().getHiScore();
     }
 
     public int getLastScore() {
-        return mLastScore;
+        return getCurrentScore().getLastScore();
     }
 
     public void setLastScore(int lastScore) {
-        int oldLastScore = lastScore;
-        this.mLastScore = lastScore;
-        if (lastScore > mHiScore) {
-            mHiScore = lastScore;
-        }
-        mTotalScore += lastScore;
-        mTotalPlayed++;
-        
-        Utils.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(this, PROP_CHG_LAST_SCORE, oldLastScore, lastScore));
+        getCurrentScore().setLastScore(lastScore);
     }
 
     public int getTotalScore() {
-        return mTotalScore;
+        return getCurrentScore().getTotalScore();
     }
     
     public int getTotalPlayed() {
-        return mTotalPlayed;
+        return getCurrentScore().getTotalPlayed();
     }
     
     public float getAverage() {
-        return (float) mTotalScore / mTotalPlayed;
+        return getCurrentScore().getAverage();
+    }
+    
+    public Score getEasyScore() {
+        return mEasyScore;
+    }
+    
+    public Score getHardScore() {
+        return mHardScore;
+    }
+    
+    private Score getCurrentScore() {
+        Score score = mEasyScore;
+        
+        if (mDifficulty == DIFFICULTY_LEVEL_HARD) {
+            score = mHardScore;
+        }
+        
+        return score;
     }
     
     public void addPropertyChangeListener(PropertyChangeListener listener) {
@@ -87,5 +99,14 @@ public class Player {
     
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         Utils.removePropertyChangeListener(mListeners, listener);
+    }
+    
+    private class ScoreChangeListener implements PropertyChangeListener {
+        @Override
+        public void propertyChange(PropertyChangeEvent event) {
+            if (PROP_CHG_LAST_SCORE.equals(event.getPropertyName())) {
+                Utils.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(Player.this, PROP_CHG_DIFFICULTY, event.getOldValue(), event.getNewValue()));
+            }
+        }
     }
 }

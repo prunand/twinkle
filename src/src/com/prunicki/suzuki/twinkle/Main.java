@@ -18,6 +18,10 @@
  */
 package com.prunicki.suzuki.twinkle;
 
+import static com.prunicki.suzuki.twinkle.Score.DIFFICULTY_LEVEL_EASY;
+import static com.prunicki.suzuki.twinkle.Score.DIFFICULTY_LEVEL_HARD;
+import static com.prunicki.suzuki.twinkle.Score.PROP_CHG_LAST_SCORE;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -127,7 +131,7 @@ public class Main extends TwinkleActivity {
         //TODO Change to run setText on the UI thread.
         mSalutation.setText("Welcome " + player.getName());
         mHiScore.setText("Hi Score: " + player.getHiScore());
-        boolean hard = player.getDifficulty() == GameScreen.DIFFICULTY_LEVEL_HARD ? true : false;
+        boolean hard = player.getDifficulty() == DIFFICULTY_LEVEL_HARD ? true : false;
         mDifficultyButton.setChecked(hard);
     }
 
@@ -145,7 +149,7 @@ public class Main extends TwinkleActivity {
                 dlg.show();
             } else {
                 boolean hard = mDifficultyButton.isChecked();
-                int level = hard ? GameScreen.DIFFICULTY_LEVEL_HARD : GameScreen.DIFFICULTY_LEVEL_EASY;
+                int level = hard ? DIFFICULTY_LEVEL_HARD : DIFFICULTY_LEVEL_EASY;
                 
                 Intent intent = new Intent(Main.this, GameScreen.class);
                 intent.putExtra(GameScreen.DIFFICULTY_LEVEL_KEY, level);
@@ -173,10 +177,11 @@ public class Main extends TwinkleActivity {
     private OnCheckedChangeListener mDifficultyListener = new OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            int difficulty = isChecked ? GameScreen.DIFFICULTY_LEVEL_HARD : GameScreen.DIFFICULTY_LEVEL_EASY;
+            int difficulty = isChecked ? DIFFICULTY_LEVEL_HARD : DIFFICULTY_LEVEL_EASY;
             
             mPlayer.setDifficulty(difficulty);
             ModelHelper.savePlayer(mPlayer, mDao);
+            setPlayerWidgetValues(mPlayer);
         }
     };
     
@@ -198,10 +203,10 @@ public class Main extends TwinkleActivity {
                 mPlayer = player;
                 
                 setPlayerWidgetValues(player);
-            } else if (Player.PROP_CHG_LAST_SCORE.equals(event.getPropertyName())) {
+            } else if (PROP_CHG_LAST_SCORE.equals(event.getPropertyName())) {
                 Player player = (Player) event.getSource();
                 //TODO Change to run setText on the UI thread.
-                mHiScore.setText("Hi Score: " + player.getHiScore());
+                setPlayerWidgetValues(player);
             }
         }
     };

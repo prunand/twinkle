@@ -50,8 +50,10 @@ public class NewPlayerDialog extends TwinkleDialog {
             
             SuzukiApplication appCtx = mAppCtx;
             ScoreDAO dao = appCtx.getDAO();
-            long id = dao.createPlayer(name);
-            if (id >= 0) {
+            long id = dao.createPlayer(name, Score.DIFFICULTY_LEVEL_EASY);
+            long easyId = dao.createScore(id, Score.DIFFICULTY_LEVEL_EASY);
+            long hardId = dao.createScore(id, Score.DIFFICULTY_LEVEL_HARD);
+            if (id >= 0 && easyId >= 0 && hardId >= 0) {
                 Player player = ModelHelper.fetchPlayer(id, dao);
                 
                 appCtx.setCurrentPlayer(player);

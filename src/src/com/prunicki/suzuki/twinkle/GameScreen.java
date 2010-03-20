@@ -1,13 +1,12 @@
 package com.prunicki.suzuki.twinkle;
 
+import static com.prunicki.suzuki.twinkle.Score.DIFFICULTY_LEVEL_EASY;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
 
 public class GameScreen extends TwinkleActivity implements GameRoundCallback {
     public static final String DIFFICULTY_LEVEL_KEY = "difficultyLevel";
-    public static final int DIFFICULTY_LEVEL_EASY = 0;
-    public static final int DIFFICULTY_LEVEL_HARD = 1;
     
     private Player mPlayer;
     private ScoreDAO mDao;
