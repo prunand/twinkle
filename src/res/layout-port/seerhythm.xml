@@ -18,7 +18,7 @@
     along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
-    <com.prunicki.suzuki.twinkle.RhythmView
+    <com.prunicki.suzuki.twinkle.widget.RhythmView
         android:id="@+id/RhythmView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

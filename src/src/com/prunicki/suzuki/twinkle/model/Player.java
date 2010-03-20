@@ -1,12 +1,14 @@
-package com.prunicki.suzuki.twinkle;
+package com.prunicki.suzuki.twinkle.model;
 
-import static com.prunicki.suzuki.twinkle.Score.DIFFICULTY_LEVEL_HARD;
-import static com.prunicki.suzuki.twinkle.Score.PROP_CHG_LAST_SCORE;
+import static com.prunicki.suzuki.twinkle.model.Score.DIFFICULTY_LEVEL_HARD;
+import static com.prunicki.suzuki.twinkle.model.Score.PROP_CHG_LAST_SCORE;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+
+import com.prunicki.suzuki.twinkle.Utils;
 
 public class Player {
     public static final String PROP_CHG_DIFFICULTY = "propChgDifficulty";

@@ -1,4 +1,4 @@
-package com.prunicki.suzuki.twinkle;
+package com.prunicki.suzuki.twinkle.db;
 
 public class DdlBuilder {
     public static final int TABLE_KEY_INDEX = 0;

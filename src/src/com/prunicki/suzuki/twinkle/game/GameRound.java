@@ -1,6 +1,6 @@
-package com.prunicki.suzuki.twinkle;
+package com.prunicki.suzuki.twinkle.game;
 
-import static com.prunicki.suzuki.twinkle.Score.DIFFICULTY_LEVEL_HARD;
+import static com.prunicki.suzuki.twinkle.model.Score.DIFFICULTY_LEVEL_HARD;
 
 import java.util.Random;
 
@@ -8,6 +8,12 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import com.prunicki.suzuki.twinkle.GameButtonListener;
+import com.prunicki.suzuki.twinkle.GameRoundCallback;
+import com.prunicki.suzuki.twinkle.R;
+import com.prunicki.suzuki.twinkle.SoundPlayer;
+import com.prunicki.suzuki.twinkle.TwinkleApplication;
 
 public abstract class GameRound {
     public final int mResourceId;
@@ -50,7 +56,7 @@ public abstract class GameRound {
         return score;
     }
     
-    protected void onCreate(Activity activity) {
+    public void onCreate(Activity activity) {
         mActivity = activity;
         
         mReplayButton = activity.findViewById(R.id.Replay);
@@ -63,9 +69,9 @@ public abstract class GameRound {
         }
     }
     
-    protected void onResume() {
+    public void onResume() {
         mFirstRun++;
-        mSoundPlayer = ((SuzukiApplication) mActivity.getApplication()).getSoundPlayer();
+        mSoundPlayer = ((TwinkleApplication) mActivity.getApplication()).getSoundPlayer();
         GameButtonListener.setSoundPlayerIntoListeners(mButtonListeners, mSoundPlayer);
         
         if (isFirstRun()) {
@@ -73,7 +79,7 @@ public abstract class GameRound {
         }
     }
     
-    protected void onPause() {
+    public void onPause() {
         GameButtonListener.setSoundPlayerIntoListeners(mButtonListeners, null);
     }
     

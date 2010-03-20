@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prunicki.suzuki.twinkle;
+package com.prunicki.suzuki.twinkle.widget;
+
+import com.prunicki.suzuki.twinkle.SoundPlayer;
 
 import android.content.Context;
 import android.graphics.Canvas;

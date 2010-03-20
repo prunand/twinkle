@@ -41,7 +41,7 @@ public class SuccessDialog {
     
     public SuccessDialog(Context context, int score) {
         mActivity = (Activity) context;
-        mSoundPlayer = ((SuzukiApplication) mActivity.getApplication()).getSoundPlayer();
+        mSoundPlayer = ((TwinkleApplication) mActivity.getApplication()).getSoundPlayer();
         mTimerTask = new SuccessTimerTask();
         
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -50,7 +50,6 @@ public class SuccessDialog {
         mSuccessImage = successView.findViewById(R.id.SuccessImage);
         mSuccessText = (TextView) successView.findViewById(R.id.SuccessText);
         
-//        mSuccessImage.setBackgroundColor(0xffffffff);
         mSuccessImage.setOnClickListener(mSuccessListener);
         
         String youWon = mActivity.getResources().getString(R.string.you_won_stars);
@@ -85,7 +84,6 @@ public class SuccessDialog {
     };
     
     private View.OnClickListener mSuccessListener = new View.OnClickListener() {
-
         @Override
         public void onClick(View v) {
             mdialog.cancel();
@@ -93,7 +91,6 @@ public class SuccessDialog {
     };
     
     private DialogInterface.OnDismissListener mOnDismissListener = new DialogInterface.OnDismissListener() {
-        
         @Override
         public void onDismiss(DialogInterface dialog) {
             pausePlayer();

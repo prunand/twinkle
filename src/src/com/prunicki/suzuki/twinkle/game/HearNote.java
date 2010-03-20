@@ -16,23 +16,26 @@
  * You should have received a copy of the GNU General Public License
  * along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prunicki.suzuki.twinkle;
+package com.prunicki.suzuki.twinkle.game;
 
 import android.app.Activity;
 import android.view.View;
 
-public class SeeNote extends GameRound {
-    private NoteView mStaffView;
-    
+import com.prunicki.suzuki.twinkle.GameButtonListener;
+import com.prunicki.suzuki.twinkle.GameRoundCallback;
+import com.prunicki.suzuki.twinkle.R;
+import com.prunicki.suzuki.twinkle.SoundPlayer;
+
+public class HearNote extends GameRound {
     int mNote;
     
-    public SeeNote(GameRoundCallback callback) {
-        super(R.layout.seenote, false, 7, callback);
+    public HearNote(GameRoundCallback callback) {
+        super(R.layout.hearnote, true, 7, callback);
         nextNote();
     }
 
     @Override
-    protected void onCreate(Activity activity) {
+    public void onCreate(Activity activity) {
         super.onCreate(activity);
         
         View[] buttons = mButtons;
@@ -40,29 +43,27 @@ public class SeeNote extends GameRound {
         GameRoundCallback callback = mCallback;
         
         int x = 0;
-        buttons[x] = activity.findViewById(R.id.SeeNoteA);
+        buttons[x] = activity.findViewById(R.id.HearNoteA);
         listeners[x++] = new NoteListener(SoundPlayer.A_NOTE, callback);
-        buttons[x] = activity.findViewById(R.id.SeeNoteB);
+        buttons[x] = activity.findViewById(R.id.HearNoteB);
         listeners[x++] = new NoteListener(SoundPlayer.B_NOTE, callback);
-        buttons[x] = activity.findViewById(R.id.SeeNoteC);
+        buttons[x] = activity.findViewById(R.id.HearNoteC);
         listeners[x++] = new NoteListener(SoundPlayer.C_NOTE, callback);
-        buttons[x] = activity.findViewById(R.id.SeeNoteD);
+        buttons[x] = activity.findViewById(R.id.HearNoteD);
         listeners[x++] = new NoteListener(SoundPlayer.D_NOTE, callback);
-        buttons[x] = activity.findViewById(R.id.SeeNoteE);
+        buttons[x] = activity.findViewById(R.id.HearNoteE);
         listeners[x++] = new NoteListener(SoundPlayer.E_NOTE, callback);
-        buttons[x] = activity.findViewById(R.id.SeeNoteF);
+        buttons[x] = activity.findViewById(R.id.HearNoteF);
         listeners[x++] = new NoteListener(SoundPlayer.F_NOTE, callback);
-        buttons[x] = activity.findViewById(R.id.SeeNoteG);
-        listeners[x] = new NoteListener(SoundPlayer.G_NOTE, callback);
+        buttons[x] = activity.findViewById(R.id.HearNoteG);
+        listeners[x++] = new NoteListener(SoundPlayer.G_NOTE, callback);
         
         setListenersIntoButtons(buttons, listeners);
-        
-        mStaffView = (NoteView) activity.findViewById(R.id.NoteView);
-        changeNoteInView();
     }
-    
-    void changeNoteInView() {
-        mStaffView.setNote(mNote);
+
+    @Override
+    protected void playNotes(SoundPlayer.PlayerCallback soundPlayerCallback) {
+        mSoundPlayer.playNote(mNote, soundPlayerCallback);
     }
 
     void nextNote() {
@@ -72,14 +73,14 @@ public class SeeNote extends GameRound {
     private class NoteListener extends GameButtonListener {
         private int mNote;
         
-        private NoteListener (int note, GameRoundCallback callback) {
+        private NoteListener(int note, GameRoundCallback callback) {
             super(callback);
             mNote = note;
         }
 
         @Override
-        protected boolean checkSuccess() {
-            return mNote == SeeNote.this.mNote;
+        public boolean checkSuccess() {
+            return mNote == HearNote.this.mNote;
         }
     }
 }

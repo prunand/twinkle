@@ -1,10 +1,10 @@
-package com.prunicki.suzuki.twinkle;
+package com.prunicki.suzuki.twinkle.db;
 
-import static com.prunicki.suzuki.twinkle.DdlBuilder.INTEGER_TYPE;
-import static com.prunicki.suzuki.twinkle.DdlBuilder.TEXT_TYPE;
-import static com.prunicki.suzuki.twinkle.DdlBuilder.TABLE_KEY_NAME;
-import static com.prunicki.suzuki.twinkle.DdlBuilder.createColumnDef;
-import static com.prunicki.suzuki.twinkle.DdlBuilder.createDDL;
+import static com.prunicki.suzuki.twinkle.db.DdlBuilder.INTEGER_TYPE;
+import static com.prunicki.suzuki.twinkle.db.DdlBuilder.TABLE_KEY_NAME;
+import static com.prunicki.suzuki.twinkle.db.DdlBuilder.TEXT_TYPE;
+import static com.prunicki.suzuki.twinkle.db.DdlBuilder.createColumnDef;
+import static com.prunicki.suzuki.twinkle.db.DdlBuilder.createDDL;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,7 +13,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.prunicki.suzuki.twinkle.DdlBuilder.ColumnDef;
+import com.prunicki.suzuki.twinkle.Main;
+import com.prunicki.suzuki.twinkle.db.DdlBuilder.ColumnDef;
 
 public class ScoreDAO {
     private static final String DATABASE_NAME = "score";
@@ -64,14 +65,11 @@ public class ScoreDAO {
     
     public ScoreDAO(Context context) {
         mContext = context;
-        Log.d(Main.TAG, createDDL("player", PLAYER_COLUMN_DEF));
     }
     
     public void open() throws SQLException {
         mDBHelper = new ScoreDBHelper(mContext);
         mDb = mDBHelper.getWritableDatabase();
-//        mDBHelper.dropTables(mDb);
-//        mDBHelper.onCreate(mDb);
     }
     
     public void release() {

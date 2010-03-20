@@ -23,7 +23,6 @@ import android.content.Context;
 import android.media.AudioManager;
 
 public class TwinkleDialog extends Dialog {
-
     public TwinkleDialog(Context context) {
         super(context);
     }

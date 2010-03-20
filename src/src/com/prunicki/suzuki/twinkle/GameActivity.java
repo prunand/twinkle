@@ -37,7 +37,7 @@ public abstract class GameActivity extends TwinkleActivity {
     protected void onResume() {
         super.onResume();
         
-        mSoundPlayer = ((SuzukiApplication) getApplication()).getSoundPlayer();
+        mSoundPlayer = ((TwinkleApplication) getApplication()).getSoundPlayer();
     }
 
     @Override

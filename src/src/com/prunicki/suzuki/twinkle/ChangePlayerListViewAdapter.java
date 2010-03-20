@@ -1,5 +1,7 @@
 package com.prunicki.suzuki.twinkle;
 
+import com.prunicki.suzuki.twinkle.db.ScoreDAO;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;

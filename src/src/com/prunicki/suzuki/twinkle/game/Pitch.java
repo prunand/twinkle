@@ -16,10 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.prunicki.suzuki.twinkle;
+package com.prunicki.suzuki.twinkle.game;
 
 import android.app.Activity;
 import android.view.View;
+
+import com.prunicki.suzuki.twinkle.GameButtonListener;
+import com.prunicki.suzuki.twinkle.GameRoundCallback;
+import com.prunicki.suzuki.twinkle.R;
+import com.prunicki.suzuki.twinkle.SoundPlayer;
 
 public class Pitch extends GameRound {
     int[] mNotes;
@@ -34,7 +39,7 @@ public class Pitch extends GameRound {
     }
 
     @Override
-    protected void onCreate(Activity activity) {
+    public void onCreate(Activity activity) {
         super.onCreate(activity);
         
         View[] buttons = mButtons;

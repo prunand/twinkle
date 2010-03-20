@@ -1,4 +1,7 @@
-package com.prunicki.suzuki.twinkle;
+package com.prunicki.suzuki.twinkle.model;
+
+import com.prunicki.suzuki.twinkle.db.DdlBuilder;
+import com.prunicki.suzuki.twinkle.db.ScoreDAO;
 
 import android.database.Cursor;
 

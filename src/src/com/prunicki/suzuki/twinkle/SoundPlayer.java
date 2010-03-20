@@ -30,7 +30,6 @@ import android.media.JetPlayer.OnJetEventListener;
 import android.util.Log;
 
 public class SoundPlayer {
-    
     public static final int E_NOTE = 0;
     public static final int D_NOTE = 1;
     public static final int C_NOTE = 2;

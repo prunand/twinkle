@@ -1,9 +1,11 @@
-package com.prunicki.suzuki.twinkle;
+package com.prunicki.suzuki.twinkle.model;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+
+import com.prunicki.suzuki.twinkle.Utils;
 
 public class Score {
     public static final int DIFFICULTY_LEVEL_EASY = 0;

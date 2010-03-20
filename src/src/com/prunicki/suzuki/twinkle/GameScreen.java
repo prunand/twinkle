@@ -1,6 +1,17 @@
 package com.prunicki.suzuki.twinkle;
 
-import static com.prunicki.suzuki.twinkle.Score.DIFFICULTY_LEVEL_EASY;
+import static com.prunicki.suzuki.twinkle.model.Score.DIFFICULTY_LEVEL_EASY;
+
+import com.prunicki.suzuki.twinkle.db.ScoreDAO;
+import com.prunicki.suzuki.twinkle.game.GameRound;
+import com.prunicki.suzuki.twinkle.game.HearNote;
+import com.prunicki.suzuki.twinkle.game.HearRhythm;
+import com.prunicki.suzuki.twinkle.game.Pitch;
+import com.prunicki.suzuki.twinkle.game.SeeNote;
+import com.prunicki.suzuki.twinkle.game.SeeRhythm;
+import com.prunicki.suzuki.twinkle.model.ModelHelper;
+import com.prunicki.suzuki.twinkle.model.Player;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -31,7 +42,7 @@ public class GameScreen extends TwinkleActivity implements GameRoundCallback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
         
-        SuzukiApplication app = (SuzukiApplication) getApplication();
+        TwinkleApplication app = (TwinkleApplication) getApplication();
         mPlayer = app.getCurrentPlayer();
         mDao = app.getDAO();
         

@@ -18,12 +18,16 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import static com.prunicki.suzuki.twinkle.Score.DIFFICULTY_LEVEL_EASY;
-import static com.prunicki.suzuki.twinkle.Score.DIFFICULTY_LEVEL_HARD;
-import static com.prunicki.suzuki.twinkle.Score.PROP_CHG_LAST_SCORE;
+import static com.prunicki.suzuki.twinkle.model.Score.DIFFICULTY_LEVEL_EASY;
+import static com.prunicki.suzuki.twinkle.model.Score.DIFFICULTY_LEVEL_HARD;
+import static com.prunicki.suzuki.twinkle.model.Score.PROP_CHG_LAST_SCORE;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
+import com.prunicki.suzuki.twinkle.db.ScoreDAO;
+import com.prunicki.suzuki.twinkle.model.ModelHelper;
+import com.prunicki.suzuki.twinkle.model.Player;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -43,9 +47,9 @@ import android.widget.ToggleButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class Main extends TwinkleActivity {
-    static final String TAG = "SuzukiTwinkle";
+    public static final String TAG = "SuzukiTwinkle";
     
-    private SuzukiApplication mApp;
+    private TwinkleApplication mApp;
     private ScoreDAO mDao;
     private Player mPlayer;
     private TextView mSalutation;
@@ -60,7 +64,7 @@ public class Main extends TwinkleActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
-        mApp = (SuzukiApplication) getApplication();
+        mApp = (TwinkleApplication) getApplication();
         mApp.addPropertyChangeListener(mPropChgListener);
         mDao = mApp.getDAO();
         
@@ -195,7 +199,7 @@ public class Main extends TwinkleActivity {
     private PropertyChangeListener mPropChgListener = new PropertyChangeListener() {
         @Override
         public void propertyChange(PropertyChangeEvent event) {
-            if (SuzukiApplication.PROP_CHG_PLAYER.equals(event.getPropertyName())) {
+            if (TwinkleApplication.PROP_CHG_PLAYER.equals(event.getPropertyName())) {
                 Player oldPlayer = (Player) event.getOldValue();
                 oldPlayer.removePropertyChangeListener(this);
                 Player player = (Player) event.getNewValue();
@@ -205,7 +209,6 @@ public class Main extends TwinkleActivity {
                 setPlayerWidgetValues(player);
             } else if (PROP_CHG_LAST_SCORE.equals(event.getPropertyName())) {
                 Player player = (Player) event.getSource();
-                //TODO Change to run setText on the UI thread.
                 setPlayerWidgetValues(player);
             }
         }

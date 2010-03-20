@@ -23,10 +23,13 @@ import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
+import com.prunicki.suzuki.twinkle.db.ScoreDAO;
+import com.prunicki.suzuki.twinkle.model.Player;
+
 import android.app.Application;
 
 //TODO Consider creating a "listenable" annotation or interface.
-public class SuzukiApplication extends Application {
+public class TwinkleApplication extends Application {
     public static final String PROP_CHG_PLAYER = "propChgPlyr";
     
     private Player mCurrentPlayer;

@@ -1,5 +1,9 @@
 package com.prunicki.suzuki.twinkle;
 
+import com.prunicki.suzuki.twinkle.db.ScoreDAO;
+import com.prunicki.suzuki.twinkle.model.ModelHelper;
+import com.prunicki.suzuki.twinkle.model.Player;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -11,7 +15,7 @@ import android.widget.AdapterView.OnItemClickListener;
 public class ChangePlayerDialog extends TwinkleDialog {
     private Cursor mCursor;
     private ListView mlistView;
-    private SuzukiApplication mAppCtx;
+    private TwinkleApplication mAppCtx;
     private View mAddPlayer;
 
     public ChangePlayerDialog(Context context) {
@@ -23,7 +27,7 @@ public class ChangePlayerDialog extends TwinkleDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.changeplayer);
         
-        mAppCtx = (SuzukiApplication) getContext().getApplicationContext();
+        mAppCtx = (TwinkleApplication) getContext().getApplicationContext();
         
         setTitle("Choose Player");
         
@@ -39,7 +43,7 @@ public class ChangePlayerDialog extends TwinkleDialog {
     protected void onStart() {
         super.onStart();
         
-        SuzukiApplication appCtx = mAppCtx;
+        TwinkleApplication appCtx = mAppCtx;
         
         ScoreDAO dao = appCtx.getDAO();
         mCursor = dao.fetchAllPlayers();
@@ -66,7 +70,7 @@ public class ChangePlayerDialog extends TwinkleDialog {
     private OnItemClickListener itemListener = new OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> listView, View view, int position, long id) {
-            SuzukiApplication appCtx = mAppCtx;
+            TwinkleApplication appCtx = mAppCtx;
             
             ScoreDAO dao = appCtx.getDAO();
             Player player = ModelHelper.fetchPlayer(id, dao);

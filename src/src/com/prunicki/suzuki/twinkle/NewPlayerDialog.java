@@ -1,12 +1,17 @@
 package com.prunicki.suzuki.twinkle;
 
+import com.prunicki.suzuki.twinkle.db.ScoreDAO;
+import com.prunicki.suzuki.twinkle.model.ModelHelper;
+import com.prunicki.suzuki.twinkle.model.Player;
+import com.prunicki.suzuki.twinkle.model.Score;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
 public class NewPlayerDialog extends TwinkleDialog {
-    private SuzukiApplication mAppCtx;
+    private TwinkleApplication mAppCtx;
     private EditText mName;
     private View mAdd;
     private View mCancel;
@@ -20,7 +25,7 @@ public class NewPlayerDialog extends TwinkleDialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.newplayer);
         
-        mAppCtx = (SuzukiApplication) getContext().getApplicationContext();
+        mAppCtx = (TwinkleApplication) getContext().getApplicationContext();
         
         setTitle("New Player");
         
@@ -48,7 +53,7 @@ public class NewPlayerDialog extends TwinkleDialog {
         public void onClick(View v) {
             String name = mName.getText().toString();
             
-            SuzukiApplication appCtx = mAppCtx;
+            TwinkleApplication appCtx = mAppCtx;
             ScoreDAO dao = appCtx.getDAO();
             long id = dao.createPlayer(name, Score.DIFFICULTY_LEVEL_EASY);
             long easyId = dao.createScore(id, Score.DIFFICULTY_LEVEL_EASY);
