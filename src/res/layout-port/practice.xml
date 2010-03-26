@@ -39,14 +39,14 @@
         android:layout_gravity="center">
         <TableRow>
             <Button
-                android:id="@+id/MainSeeNote"
+                android:id="@+id/SeeNote"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_margin="10dip"
                 android:drawableBottom="@drawable/see_note"
                 android:text="@string/btn_see_note"/>
             <Button
-                android:id="@+id/MainHearNote"
+                android:id="@+id/HearNote"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_margin="10dip"
@@ -55,14 +55,14 @@
         </TableRow>
         <TableRow>
             <Button
-                android:id="@+id/MainSeeRhythm"
+                android:id="@+id/SeeRhythm"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_margin="10dip"
                 android:drawableBottom="@drawable/see_rhythm"
                 android:text="@string/btn_see_rhythm"/>
             <Button
-                android:id="@+id/MainHearRhythm"
+                android:id="@+id/HearRhythm"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
                 android:layout_margin="10dip"

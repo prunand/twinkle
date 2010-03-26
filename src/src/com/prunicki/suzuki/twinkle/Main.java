@@ -173,8 +173,8 @@ public class Main extends TwinkleActivity {
     private OnClickListener mPracticeListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            SuccessDialog dlg = new SuccessDialog(Main.this, 22);
-            dlg.show();
+            Intent intent = new Intent(Main.this, PracticeStartScreen.class);
+            startActivity(intent);
         }
     };
     

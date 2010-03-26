@@ -52,9 +52,14 @@ public class SuccessDialog {
         
         mSuccessImage.setOnClickListener(mSuccessListener);
         
-        String youWon = mActivity.getResources().getString(R.string.you_won_stars);
-
-        mSuccessText.setText(String.format(youWon, score));
+        String text;
+        if (score < 0) {
+            text = mActivity.getResources().getString(R.string.great_job);
+        } else {
+            text = mActivity.getResources().getString(R.string.you_won_stars);
+            text = String.format(text, score);
+        }
+        mSuccessText.setText(text);
         
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
         dialogBuilder.setView(successView);

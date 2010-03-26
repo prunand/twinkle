@@ -33,6 +33,7 @@
     <string name="note_desc">What note do you hear?</string>
     <string name="rhythm_desc">What rhythm do you hear?</string>
     <string name="you_won_stars">You won %1$d stars!</string>
+    <string name="great_job">Great Job!</string>
     <string name="about_label">About...</string>
     <string name="about_shortcut">s</string>
     <string name="player_name">Player Name</string>
