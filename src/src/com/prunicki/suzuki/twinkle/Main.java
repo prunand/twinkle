@@ -231,9 +231,12 @@ public class Main extends TwinkleActivity {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             int difficulty = isChecked ? DIFFICULTY_LEVEL_HARD : DIFFICULTY_LEVEL_EASY;
             
-            mPlayer.setDifficulty(difficulty);
-            ModelHelper.savePlayer(mPlayer, mDao);
-            setPlayerWidgetValues(mPlayer);
+            Player player = mPlayer;
+            if (player != null) {
+                player.setDifficulty(difficulty);
+                ModelHelper.savePlayer(player, mDao);
+                setPlayerWidgetValues(player);
+            }
         }
     };
     
@@ -248,18 +251,19 @@ public class Main extends TwinkleActivity {
         @Override
         public void propertyChange(PropertyChangeEvent event) {
             if (TwinkleApplication.PROP_CHG_PLAYER.equals(event.getPropertyName())) {
-                Player oldPlayer = (Player) event.getOldValue();
+                Player oldPlayer = mPlayer;
                 if (oldPlayer != null) {
                     oldPlayer.removePropertyChangeListener(this);
                 }
                 
                 Player player = (Player) event.getNewValue();
+                mPlayer = null;
+                setPlayerWidgetValues(player);
+                mPlayer = player;
+                
                 if (player != null) {
                     player.addPropertyChangeListener(this);
                 }
-                setPlayerWidgetValues(player);
-                
-                mPlayer = player;
             } else if (PROP_CHG_LAST_SCORE.equals(event.getPropertyName())) {
                 Player player = (Player) event.getSource();
                 setPlayerWidgetValues(player);
