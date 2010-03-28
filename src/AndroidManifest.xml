@@ -39,6 +39,12 @@
                   android:screenOrientation="portrait"/>
         <activity android:name=".PracticeScreen"
                   android:screenOrientation="portrait"/>
+        <activity android:name=".ChangePlayerScreen"
+                  android:theme="@android:style/Theme.Dialog"
+                  android:screenOrientation="portrait"/>
+        <activity android:name=".PlayerInfoScreen"
+                  android:theme="@android:style/Theme.Dialog"
+                  android:screenOrientation="portrait"/>
     </application>
     <uses-sdk android:minSdkVersion="4" />
 </manifest> 

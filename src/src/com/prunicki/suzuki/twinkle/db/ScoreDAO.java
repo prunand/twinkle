@@ -70,6 +70,8 @@ public class ScoreDAO {
     public void open() throws SQLException {
         mDBHelper = new ScoreDBHelper(mContext);
         mDb = mDBHelper.getWritableDatabase();
+//        mDBHelper.dropTables(mDb);
+//        mDBHelper.onCreate(mDb);
     }
     
     public void release() {
@@ -106,6 +108,20 @@ public class ScoreDAO {
         return cursor;
     }
     
+    public Cursor fetchPlayer(String name) {
+        Cursor cursor = mDb.query(PLAYER_TABLE_NAME, PLAYER_TABLE_COLUMNS,
+                PLAYER_NAME_COLUMN + "='" + name + "'", null, null, null, null);
+        
+        int count = cursor.getCount();
+        if (count == 0) {
+            cursor.close();
+            return null;
+        }
+        cursor.moveToFirst();
+        
+        return cursor;
+    }
+    
     public Cursor fetchAllPlayers() {
         Cursor cursor = mDb.query(PLAYER_TABLE_NAME, PLAYER_TABLE_COLUMNS,
                 null, null, null, null, PLAYER_NAME_COLUMN);
@@ -128,6 +144,10 @@ public class ScoreDAO {
         
         mDb.update(PLAYER_TABLE_NAME, values, createKeyCriteria(id), null);
     }
+
+    public int deletePlayer(long id) {
+        return mDb.delete(PLAYER_TABLE_NAME, createKeyCriteria(id), null);
+    }
     
     public Cursor fetchScoresForPlayer(long playerId) {
         Cursor cursor = mDb.query(SCORE_TABLE_NAME, SCORE_TABLE_COLUMNS,
@@ -143,6 +163,10 @@ public class ScoreDAO {
         cursor.moveToFirst();
         
         return cursor;
+    }
+    
+    public int deleteScoresForPlayer(long playerId) {
+        return mDb.delete(SCORE_TABLE_NAME, SCORE_PLAYER_ID_COLUMN + '=' + playerId, null);
     }
     
     public long createScore(long playerId, int difficulty) {

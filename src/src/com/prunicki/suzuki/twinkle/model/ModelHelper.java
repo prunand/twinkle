@@ -26,6 +26,28 @@ public class ModelHelper {
             cursor.close();
         }
     }
+
+    public static void savePlayer(Player player, ScoreDAO dao) {
+        dao.savePlayer(player.getId(), player.getName(), player.getDifficulty());
+        Score easyScore = player.getEasyScore();
+        dao.saveScore(easyScore.getId(), easyScore.getPlayerId(), easyScore.getDifficulty(),
+                easyScore.getHiScore(), easyScore.getLastScore(), easyScore.getTotalScore(),
+                easyScore.getTotalPlayed());
+        Score hardScore = player.getHardScore();
+        dao.saveScore(hardScore.getId(), hardScore.getPlayerId(), hardScore.getDifficulty(),
+                hardScore.getHiScore(), hardScore.getLastScore(), hardScore.getTotalScore(),
+                hardScore.getTotalPlayed());
+    }
+
+    public static void deletePlayer(Player player, ScoreDAO dao) {
+        long playerId = player.getId();
+        dao.deleteScoresForPlayer(playerId);
+        dao.deletePlayer(playerId);
+    }
+    
+    public static String getDifficultyString(int difficulty) {
+        return difficulty == Score.DIFFICULTY_LEVEL_EASY ? "Easy" : "Hard";
+    }
     
     private static Score[] fetchScores(long id, ScoreDAO dao) {
         Cursor cursor = dao.fetchScoresForPlayer(id);
@@ -57,17 +79,5 @@ public class ModelHelper {
         int totalPlayed = cursor.getInt(ScoreDAO.SCORE_TOTAL_PLAYED_COLUMN_INDEX);
         
         return new Score(scoreId, playerId, difficulty, hiScore, lastScore, totalScore, totalPlayed);
-    }
-
-    public static void savePlayer(Player player, ScoreDAO dao) {
-        dao.savePlayer(player.getId(), player.getName(), player.getDifficulty());
-        Score easyScore = player.getEasyScore();
-        dao.saveScore(easyScore.getId(), easyScore.getPlayerId(), easyScore.getDifficulty(),
-                easyScore.getHiScore(), easyScore.getLastScore(), easyScore.getTotalScore(),
-                easyScore.getTotalPlayed());
-        Score hardScore = player.getHardScore();
-        dao.saveScore(hardScore.getId(), hardScore.getPlayerId(), hardScore.getDifficulty(),
-                hardScore.getHiScore(), hardScore.getLastScore(), hardScore.getTotalScore(),
-                hardScore.getTotalPlayed());
     }
 }

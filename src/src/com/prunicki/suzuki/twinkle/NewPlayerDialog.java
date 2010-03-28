@@ -1,23 +1,24 @@
 package com.prunicki.suzuki.twinkle;
 
-import com.prunicki.suzuki.twinkle.db.ScoreDAO;
-import com.prunicki.suzuki.twinkle.model.ModelHelper;
-import com.prunicki.suzuki.twinkle.model.Player;
-import com.prunicki.suzuki.twinkle.model.Score;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
+import com.prunicki.suzuki.twinkle.db.ScoreDAO;
+import com.prunicki.suzuki.twinkle.model.Score;
 
 public class NewPlayerDialog extends TwinkleDialog {
     private TwinkleApplication mAppCtx;
     private EditText mName;
     private View mAdd;
     private View mCancel;
+    long mNewPlayerId;
 
     public NewPlayerDialog(Context context) {
         super(context);
+        
+        mNewPlayerId = -1;
     }
 
     @Override
@@ -48,6 +49,10 @@ public class NewPlayerDialog extends TwinkleDialog {
         super.onStop();
     }
     
+    public long getNewPlayerId() {
+        return mNewPlayerId;
+    }
+    
     private View.OnClickListener mAddListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -56,14 +61,10 @@ public class NewPlayerDialog extends TwinkleDialog {
             TwinkleApplication appCtx = mAppCtx;
             ScoreDAO dao = appCtx.getDAO();
             long id = dao.createPlayer(name, Score.DIFFICULTY_LEVEL_EASY);
-            long easyId = dao.createScore(id, Score.DIFFICULTY_LEVEL_EASY);
-            long hardId = dao.createScore(id, Score.DIFFICULTY_LEVEL_HARD);
-            if (id >= 0 && easyId >= 0 && hardId >= 0) {
-                Player player = ModelHelper.fetchPlayer(id, dao);
-                
-                appCtx.setCurrentPlayer(player);
-                dismiss();
-            }
+            dao.createScore(id, Score.DIFFICULTY_LEVEL_EASY);
+            dao.createScore(id, Score.DIFFICULTY_LEVEL_HARD);
+            mNewPlayerId = id;
+            dismiss();
         }
     };
     

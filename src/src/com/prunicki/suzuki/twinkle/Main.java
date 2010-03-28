@@ -21,13 +21,10 @@ package com.prunicki.suzuki.twinkle;
 import static com.prunicki.suzuki.twinkle.model.Score.DIFFICULTY_LEVEL_EASY;
 import static com.prunicki.suzuki.twinkle.model.Score.DIFFICULTY_LEVEL_HARD;
 import static com.prunicki.suzuki.twinkle.model.Score.PROP_CHG_LAST_SCORE;
+import static com.prunicki.suzuki.twinkle.Constants.PLAYER_ID_KEY;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
-import com.prunicki.suzuki.twinkle.db.ScoreDAO;
-import com.prunicki.suzuki.twinkle.model.ModelHelper;
-import com.prunicki.suzuki.twinkle.model.Player;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -46,14 +43,20 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
+import com.prunicki.suzuki.twinkle.db.ScoreDAO;
+import com.prunicki.suzuki.twinkle.model.ModelHelper;
+import com.prunicki.suzuki.twinkle.model.Player;
+
 public class Main extends TwinkleActivity {
     public static final String TAG = "SuzukiTwinkle";
+    private static final int SELECT_PLAYER_FOR_PLAY = 1;
     
     private TwinkleApplication mApp;
     private ScoreDAO mDao;
     private Player mPlayer;
     private TextView mSalutation;
     private TextView mHiScore;
+    private View mPlayerInfo;
     private Button mPlayButton;
     private Button mPracticeButton;
     private Button mSwitchPlayerButton;
@@ -70,11 +73,13 @@ public class Main extends TwinkleActivity {
         
         mSalutation = (TextView) findViewById(R.id.Salutation);
         mHiScore = (TextView) findViewById(R.id.HiScore);
+        mPlayerInfo = findViewById(R.id.PlayerInfo);
         mPlayButton = (Button) findViewById(R.id.MainPlay);
         mSwitchPlayerButton = (Button) findViewById(R.id.SwitchPlayer);
         mPracticeButton = (Button) findViewById(R.id.MainPractice);
         mDifficultyButton = (ToggleButton) findViewById(R.id.MainDifficultyLevel);
         
+        mPlayerInfo.setOnClickListener(mPlayerInfoListener);
         mPlayButton.setOnClickListener(mPlayListener);
         mSwitchPlayerButton.setOnClickListener(mSwitchPlayerListener);
         mPracticeButton.setOnClickListener(mPracticeListener);
@@ -82,21 +87,37 @@ public class Main extends TwinkleActivity {
     }
     
     @Override
-    protected void onResume() {
-        super.onResume();
-        
-        Player player = mApp.getCurrentPlayer();
-        if (player != null) {
-            setPlayerWidgetValues(player);
-        }
-        mPlayer = player;
-    }
-    
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         
         mApp.removePropertyChangeListener(mPropChgListener);
+    }
+    
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        
+        if (requestCode == SELECT_PLAYER_FOR_PLAY) {
+            startGame();
+        }
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        Player player = mApp.getCurrentPlayer();
+        setPlayerWidgetValues(player);
+        if (player != null) {
+            player.addPropertyChangeListener(mPropChgListener);
+        }
+        mPlayer = player;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        
         if (mPlayer != null) {
             mPlayer.removePropertyChangeListener(mPropChgListener);
         }
@@ -133,31 +154,44 @@ public class Main extends TwinkleActivity {
     
     void setPlayerWidgetValues(Player player) {
         //TODO Change to run setText on the UI thread.
-        mSalutation.setText("Welcome " + player.getName());
-        mHiScore.setText("Hi Score: " + player.getHiScore());
-        boolean hard = player.getDifficulty() == DIFFICULTY_LEVEL_HARD ? true : false;
-        mDifficultyButton.setChecked(hard);
+        if (player == null) {
+            mPlayerInfo.setVisibility(View.INVISIBLE);
+        } else {
+            mPlayerInfo.setVisibility(View.VISIBLE);
+            mSalutation.setText(player.getName());
+            //TODO Move text to strings.xml
+            mHiScore.setText("Hi Score: " + player.getHiScore());
+            boolean hard = player.getDifficulty() == DIFFICULTY_LEVEL_HARD ? true : false;
+            mDifficultyButton.setChecked(hard);
+        }
+    }
+
+    void startGame() {
+        if (mPlayer != null) {
+            boolean hard = mDifficultyButton.isChecked();
+            int level = hard ? DIFFICULTY_LEVEL_HARD : DIFFICULTY_LEVEL_EASY;
+            
+            Intent intent = new Intent(Main.this, GameScreen.class);
+            intent.putExtra(GameScreen.DIFFICULTY_LEVEL_KEY, level);
+            startActivity(intent);
+        }
     }
 
     private OnClickListener mPlayListener = new OnClickListener() {
         public void onClick(View v) {
             if (mPlayer == null) {
                 int cnt = mDao.playerCount();
-                Dialog dlg = null;
                 if (cnt > 0) {
-                    dlg = new ChangePlayerDialog(Main.this);
+                    Intent intent = new Intent(Main.this, ChangePlayerScreen.class);
+                    startActivityForResult(intent, SELECT_PLAYER_FOR_PLAY);
                 } else {
+                    Dialog dlg = null;
                     dlg = new NewPlayerDialog(Main.this);
+                    dlg.setOnDismissListener(mDismissListener);
+                    dlg.show();
                 }
-                dlg.setOnDismissListener(mDismissListener);
-                dlg.show();
             } else {
-                boolean hard = mDifficultyButton.isChecked();
-                int level = hard ? DIFFICULTY_LEVEL_HARD : DIFFICULTY_LEVEL_EASY;
-                
-                Intent intent = new Intent(Main.this, GameScreen.class);
-                intent.putExtra(GameScreen.DIFFICULTY_LEVEL_KEY, level);
-                startActivity(intent);
+                startGame();
             }
         }
     };
@@ -165,8 +199,22 @@ public class Main extends TwinkleActivity {
     private OnClickListener mSwitchPlayerListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            ChangePlayerDialog dlg = new ChangePlayerDialog(Main.this);
-            dlg.show();
+            Intent intent = new Intent(Main.this, ChangePlayerScreen.class);
+            startActivity(intent);
+        }
+    };
+    
+    private OnClickListener mPlayerInfoListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //TODO Launch the player info screen.
+            //Also add the player info screen to the long click of the player select dialog
+            //This dialog should show the preferred difficulty, score, as well as
+            //have the ability to rename the player and delete the player.
+            //With delete, there will need to be a change to the event listening.
+            Intent intent = new Intent(Main.this, PlayerInfoScreen.class);
+            intent.putExtra(PLAYER_ID_KEY, mPlayer.getId());
+            startActivity(intent);
         }
     };
     
@@ -192,7 +240,7 @@ public class Main extends TwinkleActivity {
     private OnDismissListener mDismissListener = new OnDismissListener() {
         @Override
         public void onDismiss(DialogInterface dialog) {
-            mPlayButton.performClick();
+            startGame();
         }
     };
     
@@ -201,12 +249,17 @@ public class Main extends TwinkleActivity {
         public void propertyChange(PropertyChangeEvent event) {
             if (TwinkleApplication.PROP_CHG_PLAYER.equals(event.getPropertyName())) {
                 Player oldPlayer = (Player) event.getOldValue();
-                oldPlayer.removePropertyChangeListener(this);
-                Player player = (Player) event.getNewValue();
-                player.addPropertyChangeListener(this);
-                mPlayer = player;
+                if (oldPlayer != null) {
+                    oldPlayer.removePropertyChangeListener(this);
+                }
                 
+                Player player = (Player) event.getNewValue();
+                if (player != null) {
+                    player.addPropertyChangeListener(this);
+                }
                 setPlayerWidgetValues(player);
+                
+                mPlayer = player;
             } else if (PROP_CHG_LAST_SCORE.equals(event.getPropertyName())) {
                 Player player = (Player) event.getSource();
                 setPlayerWidgetValues(player);

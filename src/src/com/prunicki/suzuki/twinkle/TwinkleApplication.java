@@ -73,7 +73,7 @@ public class TwinkleApplication extends Application {
     
     public void setCurrentPlayer(Player player) {
         if (player != mCurrentPlayer) {
-            Player oldPlayer = player;
+            Player oldPlayer = mCurrentPlayer;
             mCurrentPlayer = player;
             
             Utils.firePropertyChangeEvent(listeners, new PropertyChangeEvent(this, PROP_CHG_PLAYER, oldPlayer, player));

@@ -75,7 +75,7 @@ public class Score {
     }
     
     public float getAverage() {
-        return (float) mTotalScore / mTotalPlayed;
+        return mTotalPlayed == 0 ? 0f :(float) mTotalScore / mTotalPlayed;
     }
     
     public void addPropertyChangeListener(PropertyChangeListener listener) {

@@ -11,10 +11,12 @@ import java.util.ArrayList;
 import com.prunicki.suzuki.twinkle.Utils;
 
 public class Player {
+    public static final String PROP_CHG_NAME = "propChgName";
     public static final String PROP_CHG_DIFFICULTY = "propChgDifficulty";
+    private static final int MAX_NAME_LENGTH = 15;
     
     private final long mId;
-    private final String mName;
+    private String mName;
     private int mDifficulty;
     private Score mEasyScore;
     private Score mHardScore;
@@ -23,7 +25,7 @@ public class Player {
     
     public Player(long id, String name, int difficulty, Score easyScore, Score hardScore) {
         this.mId = id;
-        this.mName = name;
+        this.mName = clipName(name);
         this.mDifficulty = difficulty;
         mEasyScore = easyScore;
         mHardScore = hardScore;
@@ -42,9 +44,19 @@ public class Player {
     public String getName() {
         return mName;
     }
+    
+    public void setName(String name) {
+        String oldName = this.mName;
+        this.mName = clipName(name);
+        Utils.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(this, PROP_CHG_NAME, oldName, name));
+    }
 
     public int getDifficulty() {
         return mDifficulty;
+    }
+    
+    public String getDifficultyAsString() {
+        return ModelHelper.getDifficultyString(mDifficulty);
     }
 
     public void setDifficulty(int difficulty) {
@@ -93,6 +105,14 @@ public class Player {
         }
         
         return score;
+    }
+    
+    private static String clipName(String name) {
+        if (name.length() > MAX_NAME_LENGTH) {
+            name = name.substring(0, MAX_NAME_LENGTH);
+        }
+        
+        return name;
     }
     
     public void addPropertyChangeListener(PropertyChangeListener listener) {
