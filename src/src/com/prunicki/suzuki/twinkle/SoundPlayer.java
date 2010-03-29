@@ -56,7 +56,7 @@ public class SoundPlayer {
     private static final int[] ZERO_NOTE = new int[] {0};
     
     private AtomicBoolean mInitialized;
-    private AtomicBoolean mEverPlayedMidi;
+    private AtomicBoolean mPlayingMidi;
     private JetPlayer mSuzukiJetPlayer;
     private SoundPool mSoundPool;
     private int mSuccessSoundID;
@@ -66,7 +66,7 @@ public class SoundPlayer {
     
     public SoundPlayer() {
         mInitialized = new AtomicBoolean();
-        mEverPlayedMidi = new AtomicBoolean();
+        mPlayingMidi = new AtomicBoolean();
         mCallback = new AtomicReference<PlayerCallback>();
     }
     
@@ -120,7 +120,8 @@ public class SoundPlayer {
     
     public synchronized void pause() {
         if (mInitialized.get()) {
-            if (mEverPlayedMidi.get()) {
+            if (mPlayingMidi.get()) {
+                mPlayingMidi.set(false);
                 if (mSuzukiJetPlayer.pause()) {
                     mSuzukiJetPlayer.clearQueue();
                 } else {
@@ -144,7 +145,6 @@ public class SoundPlayer {
     private void playSuzukiJet(int segment, int[] tracks, PlayerCallback callback) {
         if (mInitialized.get()) {
             pause();
-            mEverPlayedMidi.set(true);
             
             int trackBit = 0;
             int trackMask = 0;
@@ -167,6 +167,7 @@ public class SoundPlayer {
                 if (Log.isLoggable(Main.TAG, Log.DEBUG)) {
                     Log.d(Main.TAG, "Segment " + segment + " queued.");
                 }
+                mPlayingMidi.set(true);
                 mSuzukiJetPlayer.play();
             } else {
                 if (Log.isLoggable(Main.TAG, Log.DEBUG)) {
@@ -203,7 +204,7 @@ public class SoundPlayer {
             }
         } catch (Exception e) {}
         
-        mEverPlayedMidi.set(false);
+        mPlayingMidi.set(false);
         mInitialized.set(false);
     }
     
@@ -217,10 +218,12 @@ public class SoundPlayer {
         @Override
         public void onJetNumQueuedSegmentUpdate(JetPlayer player, int nbSegments) {
             Log.d(Main.TAG, "Number of queued segments updated: " + nbSegments);
-            PlayerCallback callback = mCallback.get();
-            if (callback != null && nbSegments == 0) {
-                callback.playbackComplete();
-                mCallback.set(null);
+            if (nbSegments == 0 && mPlayingMidi.get()) {
+                PlayerCallback callback = mCallback.get();
+                if (callback != null) {
+                    callback.playbackComplete();
+                    mCallback.set(null);
+                }
             }
         }
 
