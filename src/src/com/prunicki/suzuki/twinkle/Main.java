@@ -207,11 +207,6 @@ public class Main extends TwinkleActivity {
     private OnClickListener mPlayerInfoListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            //TODO Launch the player info screen.
-            //Also add the player info screen to the long click of the player select dialog
-            //This dialog should show the preferred difficulty, score, as well as
-            //have the ability to rename the player and delete the player.
-            //With delete, there will need to be a change to the event listening.
             Intent intent = new Intent(Main.this, PlayerInfoScreen.class);
             intent.putExtra(PLAYER_ID_KEY, mPlayer.getId());
             startActivity(intent);
@@ -251,22 +246,24 @@ public class Main extends TwinkleActivity {
         @Override
         public void propertyChange(PropertyChangeEvent event) {
             if (TwinkleApplication.PROP_CHG_PLAYER.equals(event.getPropertyName())) {
-                Player oldPlayer = mPlayer;
-                if (oldPlayer != null) {
-                    oldPlayer.removePropertyChangeListener(this);
+                Player player = mPlayer;
+                if (player != null) {
+                    player.removePropertyChangeListener(this);
                 }
                 
-                Player player = (Player) event.getNewValue();
+                Player newPlayer = (Player) event.getNewValue();
                 mPlayer = null;
-                setPlayerWidgetValues(player);
-                mPlayer = player;
+                setPlayerWidgetValues(newPlayer);
+                mPlayer = newPlayer;
                 
-                if (player != null) {
-                    player.addPropertyChangeListener(this);
+                if (newPlayer != null) {
+                    newPlayer.addPropertyChangeListener(this);
                 }
             } else if (PROP_CHG_LAST_SCORE.equals(event.getPropertyName())) {
                 Player player = (Player) event.getSource();
-                setPlayerWidgetValues(player);
+                if (player == mPlayer) {
+                    setPlayerWidgetValues(player);
+                }
             }
         }
     };

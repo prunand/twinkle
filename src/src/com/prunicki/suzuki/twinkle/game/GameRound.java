@@ -6,11 +6,13 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.prunicki.suzuki.twinkle.GameButtonListener;
 import com.prunicki.suzuki.twinkle.GameRoundCallback;
+import com.prunicki.suzuki.twinkle.Main;
 import com.prunicki.suzuki.twinkle.R;
 import com.prunicki.suzuki.twinkle.SoundPlayer;
 import com.prunicki.suzuki.twinkle.TwinkleApplication;
@@ -121,10 +123,12 @@ public abstract class GameRound {
             dialog.setCanceledOnTouchOutside(true);
             dialog.show();
             
+            //FIXME Hook dialog into soundplayer so it cancels the playback on dialog cancel.
+            
             playNotes(new SoundPlayer.PlayerCallback() {
-                
                 @Override
                 public void playbackComplete() {
+                    Log.d(Main.TAG, "Cancelling playback dialog.");
                     dialog.cancel();
                 }
             });

@@ -20,6 +20,8 @@ package com.prunicki.suzuki.twinkle;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
@@ -51,17 +53,25 @@ public class SoundPlayer {
     private static final int NOTES_SEGMENT = 2;
     private static final int FIRST_RHYTHM_SEGMENT = 3;
     
-    private boolean mInitialized;
+    private static final int[] ZERO_NOTE = new int[] {0};
+    
+    private AtomicBoolean mInitialized;
+    private AtomicBoolean mEverPlayedMidi;
     private JetPlayer mSuzukiJetPlayer;
     private SoundPool mSoundPool;
-    private int[] mSingleInt;
     private int mSuccessSoundID;
     private int mSoundStream;
     private Timer mTimer;
-    private PlayerCallback mCallback;
+    private AtomicReference<PlayerCallback> mCallback;
+    
+    public SoundPlayer() {
+        mInitialized = new AtomicBoolean();
+        mEverPlayedMidi = new AtomicBoolean();
+        mCallback = new AtomicReference<PlayerCallback>();
+    }
     
     public synchronized void initialize(Context context) {
-        if (!mInitialized) {
+        if (!mInitialized.get()) {
             mSuzukiJetPlayer = JetPlayer.getJetPlayer();
             mSoundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
             mSuccessSoundID = mSoundPool.load(context, R.raw.good_job, 1);
@@ -70,23 +80,21 @@ public class SoundPlayer {
             mSuzukiJetPlayer.loadJetFile(piano);
             mSuzukiJetPlayer.setEventListener(new NoteMidiEventListener());
             
-            mInitialized = true;
-            mSingleInt = new int[1];
-            
             mTimer = new Timer(SoundPlayer.class.getSimpleName(), true);
+            
+            mInitialized.set(true);
         }
     }
 
     public synchronized void release() {
-        if (mInitialized) {
+        if (mInitialized.get()) {
             pause();
             doRelease();
         }
     }
 
     public synchronized void playNote(int note, PlayerCallback callback) {
-        mSingleInt[0] = note;
-        playSuzukiJet(NOTES_SEGMENT, mSingleInt, callback);
+        playSuzukiJet(NOTES_SEGMENT, new int[] {note}, callback);
     }
 
     public synchronized void playNote(int notes[], PlayerCallback callback) {
@@ -94,33 +102,33 @@ public class SoundPlayer {
     }
 
     public synchronized void playThump() {
-        mSingleInt[0] = 0;
-        playSuzukiJet(THUMP_SEGMENT, mSingleInt, null);
+        playSuzukiJet(THUMP_SEGMENT, ZERO_NOTE , null);
     }
 
     public synchronized void playRhythm(int rhythm, PlayerCallback callback) {
-        mSingleInt[0] = 0;
-        playSuzukiJet(rhythm + FIRST_RHYTHM_SEGMENT, mSingleInt, callback);
+        playSuzukiJet(rhythm + FIRST_RHYTHM_SEGMENT, ZERO_NOTE, callback);
     }
     
-    public synchronized void playSuccess(TimerTask timerTask) {
-        if (mInitialized) {
+    public synchronized void playSuccess(PlayerCallback callback) {
+        if (mInitialized.get()) {
             pause();
             
             mSoundStream = mSoundPool.play(mSuccessSoundID, 0.2f, 0.2f, 0, 0, 1.0f);
-            mTimer.schedule(timerTask, 3000);
+            mTimer.schedule(new SoundPlayerTimerTask(callback), 3000);
         }
     }
     
     public synchronized void pause() {
-        if (mInitialized) {
-            if (mSuzukiJetPlayer.pause()) {
-                mSuzukiJetPlayer.clearQueue();
-            } else {
-                Log.w(Main.TAG, "Could not pause the jet player.");
+        if (mInitialized.get()) {
+            if (mEverPlayedMidi.get()) {
+                if (mSuzukiJetPlayer.pause()) {
+                    mSuzukiJetPlayer.clearQueue();
+                } else {
+                    Log.d(Main.TAG, "Could not pause the jet player.");
+                }
             }
             mSoundPool.stop(mSoundStream);
-            mCallback = null;
+            mCallback.set(null);
         }
     }
     
@@ -134,18 +142,20 @@ public class SoundPlayer {
     }
 
     private void playSuzukiJet(int segment, int[] tracks, PlayerCallback callback) {
-        if (mInitialized) {
+        if (mInitialized.get()) {
             pause();
+            mEverPlayedMidi.set(true);
             
             int trackBit = 0;
             int trackMask = 0;
             boolean queued = false;
-            for (int i = 0; i < tracks.length; i++) {
+            int trakLen = tracks.length;
+            for (int i = 0; i < trakLen; i++) {
                 trackBit = STARTING_TRACK << tracks[i];
                 trackMask = MUTE_MASK ^ trackBit;
                 queued = mSuzukiJetPlayer.queueJetSegment(segment, -1, 0, 0, trackMask, (byte) 0);
                 if (queued) {
-                    if (i < tracks.length - 1) {
+                    if (i < trakLen - 1) {
                         mSuzukiJetPlayer.queueJetSegment(QUARTER_NOTE_SEGMENT, -1, 0, 0, MUTE_MASK, (byte) 0);
                     }
                 } else {
@@ -163,7 +173,7 @@ public class SoundPlayer {
                     Log.d(Main.TAG, "Segment " + segment + " _NOT_ queued.");
                 }
             }
-            mCallback = callback;
+            mCallback.set(callback);
         } else {
             if (Log.isLoggable(Main.TAG, Log.WARN)) {
                 Log.w(Main.TAG, "Attempting to play Segment " + segment + " when not initialized.");
@@ -193,11 +203,11 @@ public class SoundPlayer {
             }
         } catch (Exception e) {}
         
-        mInitialized = false;
+        mEverPlayedMidi.set(false);
+        mInitialized.set(false);
     }
     
     private class NoteMidiEventListener implements OnJetEventListener {
-
         @Override
         public void onJetEvent(JetPlayer player, short segment, byte track,
                 byte channel, byte controller, byte value) {
@@ -207,8 +217,10 @@ public class SoundPlayer {
         @Override
         public void onJetNumQueuedSegmentUpdate(JetPlayer player, int nbSegments) {
             Log.d(Main.TAG, "Number of queued segments updated: " + nbSegments);
-            if (mCallback != null && nbSegments == 0) {
-                mCallback.playbackComplete();
+            PlayerCallback callback = mCallback.get();
+            if (callback != null && nbSegments == 0) {
+                callback.playbackComplete();
+                mCallback.set(null);
             }
         }
 
@@ -221,6 +233,19 @@ public class SoundPlayer {
         public void onJetUserIdUpdate(JetPlayer player, int userId,
                 int repeatCount) {
             Log.d(Main.TAG, "User id updated: " + userId);
+        }
+    }
+    
+    private static class SoundPlayerTimerTask extends TimerTask {
+        private final PlayerCallback callback;
+        
+        private SoundPlayerTimerTask(PlayerCallback callback) {
+            this.callback = callback;
+        }
+
+        @Override
+        public void run() {
+            callback.playbackComplete();
         }
     }
     

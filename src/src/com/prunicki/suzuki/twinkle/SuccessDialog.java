@@ -18,7 +18,6 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import android.app.Activity;
@@ -30,10 +29,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
 
+import com.prunicki.suzuki.twinkle.SoundPlayer.PlayerCallback;
+
 public class SuccessDialog {
     private View mSuccessImage;
     private SoundPlayer mSoundPlayer;
-    private SuccessTimerTask mTimerTask;
+    private SuccessPlayerCallback mPlayerCallback;
     private TextView mSuccessText;
     private Activity mActivity;
     AtomicBoolean stopped = new AtomicBoolean(false);
@@ -42,7 +43,7 @@ public class SuccessDialog {
     public SuccessDialog(Context context, int score) {
         mActivity = (Activity) context;
         mSoundPlayer = ((TwinkleApplication) mActivity.getApplication()).getSoundPlayer();
-        mTimerTask = new SuccessTimerTask();
+        mPlayerCallback = new SuccessPlayerCallback();
         
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View successView = inflater.inflate(R.layout.success, null);
@@ -72,7 +73,7 @@ public class SuccessDialog {
     
     protected void show() {
         mdialog.show();
-        mSoundPlayer.playSuccess(mTimerTask);
+        mSoundPlayer.playSuccess(mPlayerCallback);
     }
     
     void pausePlayer() {
@@ -102,9 +103,9 @@ public class SuccessDialog {
         }
     };
     
-    private class SuccessTimerTask extends TimerTask {
+    private class SuccessPlayerCallback implements PlayerCallback {
         @Override
-        public void run() {
+        public void playbackComplete() {
             if (!stopped.get()) {
                 pausePlayer();
                 mdialog.cancel();
