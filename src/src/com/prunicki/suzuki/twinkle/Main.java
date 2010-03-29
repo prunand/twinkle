@@ -50,6 +50,10 @@ import com.prunicki.suzuki.twinkle.model.Player;
 public class Main extends TwinkleActivity {
     public static final String TAG = "SuzukiTwinkle";
     private static final int SELECT_PLAYER_FOR_PLAY = 1;
+    private static final int SALUTATION_WIDGET = 1;
+    private static final int HISCORE_WIDGET = 2;
+    private static final int DIFFICULTY_WIDGET = 4;
+    private static final int ALL_WIDGETS = SALUTATION_WIDGET | HISCORE_WIDGET | DIFFICULTY_WIDGET;
     
     private TwinkleApplication mApp;
     private ScoreDAO mDao;
@@ -107,7 +111,7 @@ public class Main extends TwinkleActivity {
         super.onResume();
         
         Player player = mApp.getCurrentPlayer();
-        setPlayerWidgetValues(player);
+        setPlayerWidgetValues(player, ALL_WIDGETS);
         if (player != null) {
             player.addPropertyChangeListener(mPropChgListener);
         }
@@ -152,17 +156,22 @@ public class Main extends TwinkleActivity {
         return super.onOptionsItemSelected(item);
     }
     
-    void setPlayerWidgetValues(Player player) {
-        //TODO Change to run setText on the UI thread.
+    void setPlayerWidgetValues(Player player, int flags) {
         if (player == null) {
             mPlayerInfo.setVisibility(View.INVISIBLE);
         } else {
             mPlayerInfo.setVisibility(View.VISIBLE);
-            mSalutation.setText(player.getName());
-            //TODO Move text to strings.xml
-            mHiScore.setText("Hi Score: " + player.getHiScore());
-            boolean hard = player.getDifficulty() == DIFFICULTY_LEVEL_HARD ? true : false;
-            mDifficultyButton.setChecked(hard);
+            if ((flags & SALUTATION_WIDGET) > 0) {
+                mSalutation.setText(player.getName());
+            }
+            if ((flags & HISCORE_WIDGET) > 0) {
+                //TODO Move text to strings.xml
+                mHiScore.setText("Hi Score: " + player.getHiScore());
+            }
+            if ((flags & DIFFICULTY_WIDGET) > 0) {
+                boolean hard = player.getDifficulty() == DIFFICULTY_LEVEL_HARD ? true : false;
+                mDifficultyButton.setChecked(hard);
+            }
         }
     }
 
@@ -196,6 +205,14 @@ public class Main extends TwinkleActivity {
         }
     };
     
+    private OnClickListener mPracticeListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Main.this, PracticeStartScreen.class);
+            startActivity(intent);
+        }
+    };
+    
     private OnClickListener mSwitchPlayerListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -213,11 +230,10 @@ public class Main extends TwinkleActivity {
         }
     };
     
-    private OnClickListener mPracticeListener = new OnClickListener() {
+    private OnDismissListener mDismissListener = new OnDismissListener() {
         @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(Main.this, PracticeStartScreen.class);
-            startActivity(intent);
+        public void onDismiss(DialogInterface dialog) {
+            startGame();
         }
     };
     
@@ -230,15 +246,7 @@ public class Main extends TwinkleActivity {
             if (player != null) {
                 player.setDifficulty(difficulty);
                 ModelHelper.savePlayer(player, mDao);
-                setPlayerWidgetValues(player);
             }
-        }
-    };
-    
-    private OnDismissListener mDismissListener = new OnDismissListener() {
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            startGame();
         }
     };
     
@@ -253,7 +261,7 @@ public class Main extends TwinkleActivity {
                 
                 Player newPlayer = (Player) event.getNewValue();
                 mPlayer = null;
-                setPlayerWidgetValues(newPlayer);
+                setPlayerWidgetValues(newPlayer, ALL_WIDGETS);
                 mPlayer = newPlayer;
                 
                 if (newPlayer != null) {
@@ -262,7 +270,7 @@ public class Main extends TwinkleActivity {
             } else if (PROP_CHG_LAST_SCORE.equals(event.getPropertyName())) {
                 Player player = (Player) event.getSource();
                 if (player == mPlayer) {
-                    setPlayerWidgetValues(player);
+                    setPlayerWidgetValues(player, HISCORE_WIDGET);
                 }
             }
         }
