@@ -48,7 +48,7 @@ public class PlayerInfoScreen extends TwinkleActivity {
         
         levelView.setText("Level: " + player.getDifficultyAsString());
         hiScoreView.setText("Hi Score: " + player.getHiScore());
-        avgScoreView.setText("Average Score: " + player.getAverage());
+        avgScoreView.setText("Average Score: " + Math.round(player.getAverage() * 10) / 10f);
         lastScoreView.setText("Last Score: " + player.getLastScore());
         
         mNameField.setText(player.getName());
