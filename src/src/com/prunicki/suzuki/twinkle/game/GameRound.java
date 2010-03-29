@@ -121,7 +121,7 @@ public abstract class GameRound {
             final ProgressDialog dialog = new ProgressDialog(mActivity);
             dialog.setMessage("Listen...");
             dialog.setIndeterminate(true);
-            dialog.setCanceledOnTouchOutside(true);
+            dialog.setCancelable(true);
             dialog.setOnCancelListener(new OnCancelListener() {
                 @Override
                 public void onCancel(DialogInterface dialog) {
