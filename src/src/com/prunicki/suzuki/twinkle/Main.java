@@ -246,6 +246,7 @@ public class Main extends TwinkleActivity {
             if (player != null) {
                 player.setDifficulty(difficulty);
                 ModelHelper.savePlayer(player, mDao);
+                setPlayerWidgetValues(player, HISCORE_WIDGET);
             }
         }
     };
