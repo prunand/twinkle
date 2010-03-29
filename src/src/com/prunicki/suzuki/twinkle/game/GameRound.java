@@ -6,6 +6,8 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -119,17 +121,21 @@ public abstract class GameRound {
             final ProgressDialog dialog = new ProgressDialog(mActivity);
             dialog.setMessage("Listen...");
             dialog.setIndeterminate(true);
-            dialog.setCancelable(true);
             dialog.setCanceledOnTouchOutside(true);
+            dialog.setOnCancelListener(new OnCancelListener() {
+                @Override
+                public void onCancel(DialogInterface dialog) {
+                    Log.d(Main.TAG, "Dialog cancelled.");
+                    mSoundPlayer.pause();
+                }
+            });
             dialog.show();
-            
-            //FIXME Hook dialog into soundplayer so it cancels the playback on dialog cancel.
             
             playNotes(new SoundPlayer.PlayerCallback() {
                 @Override
                 public void playbackComplete() {
-                    Log.d(Main.TAG, "Cancelling playback dialog.");
-                    dialog.cancel();
+                    Log.d(Main.TAG, "Dismissing playback dialog.");
+                    dialog.dismiss();
                 }
             });
         }
