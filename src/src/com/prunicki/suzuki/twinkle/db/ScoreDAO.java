@@ -89,7 +89,6 @@ public class ScoreDAO {
         } finally {
             cursor.close();
         }
-        
     }
     
     public Cursor fetchPlayer(long id) {
