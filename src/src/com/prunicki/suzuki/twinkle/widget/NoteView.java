@@ -75,7 +75,7 @@ public class NoteView extends StaffView {
                 break;
         }
         
-        canvas.drawText(WHOLE_NOTE, mStartNoteX, y, mFontPaint);
+        canvas.drawText(Character.toString(WHOLE_NOTE), mStartNoteX, y, mFontPaint);
     }
 
 }

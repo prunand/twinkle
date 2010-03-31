@@ -37,20 +37,20 @@ public abstract class StaffView extends View {
     private static final String TIME_4 = "#";
     private static final String TREBLE_CLEF = "$";
     
-    public static final String DOUBLE_WHOLE_NOTE = "0";
-    public static final String WHOLE_NOTE = "1";
-    public static final String HALF_NOTE = "2";
-    public static final String QUARTER_NOTE = "3";
-    public static final String EIGHTH_NOTE = "4";
-    public static final String SIXTEENTH_NOTE = "5";
-    public static final String EIGHTH_START_NOTE = "6";
-    public static final String SIXTEENTH_START_NOTE = "7";
-    public static final String EIGHTH_MIDDLE_NOTE = "8";
-    public static final String SIXTEENTH_MIDDLE_NOTE = "9";
-    public static final String EIGHTH_TO_SIXTEENTH_MIDDLE_NOTE = ":";
-    public static final String SIXTEENTH_TO_EIGHTH_MIDDLE_NOTE = ";";
-    public static final String EIGHTH_END_NOTE = "<";
-    public static final String SIXTEENTH_END_NOTE = "=";
+    public static final char DOUBLE_WHOLE_NOTE = '0';
+    public static final char WHOLE_NOTE = '1';
+    public static final char HALF_NOTE = '2';
+    public static final char QUARTER_NOTE = '3';
+    public static final char EIGHTH_NOTE = '4';
+    public static final char SIXTEENTH_NOTE = '5';
+    public static final char EIGHTH_START_NOTE = '6';
+    public static final char SIXTEENTH_START_NOTE = '7';
+    public static final char EIGHTH_MIDDLE_NOTE = '8';
+    public static final char SIXTEENTH_MIDDLE_NOTE = '9';
+    public static final char EIGHTH_TO_SIXTEENTH_MIDDLE_NOTE = ':';
+    public static final char SIXTEENTH_TO_EIGHTH_MIDDLE_NOTE = ';';
+    public static final char EIGHTH_END_NOTE = '<';
+    public static final char SIXTEENTH_END_NOTE = '=';
     
     public static final String EIGHTH_REST = "A";
     public static final String SIXTEENTH_REST = "B";
@@ -175,8 +175,8 @@ public abstract class StaffView extends View {
             startY = (paddedHeight - drawHeight) / 2;
         }
         
-        float staffHeight = (3 * drawHeight) / 5;
-        float staffStartY = startY + ((drawHeight - staffHeight) / 2);
+        float staffHeight = 3 * drawHeight / 5;
+        float staffStartY = startY + (drawHeight - staffHeight) / 2;
         
         float lineHeight = staffHeight / 4;
         float endX = startX + drawWidth;

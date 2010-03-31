@@ -26,11 +26,11 @@ import android.util.AttributeSet;
 
 public class RhythmView extends StaffView {
     
-    private static final String MISSISSIPPI = SIXTEENTH_START_NOTE + SIXTEENTH_MIDDLE_NOTE +
-        SIXTEENTH_MIDDLE_NOTE + SIXTEENTH_END_NOTE;
-    private static final String PONY = EIGHTH_START_NOTE + EIGHTH_TO_SIXTEENTH_MIDDLE_NOTE +
-        SIXTEENTH_END_NOTE;
-    private static final String STOP_STOP = EIGHTH_START_NOTE + EIGHTH_END_NOTE;
+    private static final String MISSISSIPPI = Character.toString(SIXTEENTH_START_NOTE) + Character.toString(SIXTEENTH_MIDDLE_NOTE) +
+        Character.toString(SIXTEENTH_MIDDLE_NOTE) + Character.toString(SIXTEENTH_END_NOTE);
+    private static final String PONY = Character.toString(EIGHTH_START_NOTE) + Character.toString(EIGHTH_TO_SIXTEENTH_MIDDLE_NOTE) +
+        Character.toString(SIXTEENTH_END_NOTE);
+    private static final String STOP_STOP = Character.toString(EIGHTH_START_NOTE) + Character.toString(EIGHTH_END_NOTE);
     
     private static final String MISSISSIPPI_STOP_STOP = MISSISSIPPI + " " + STOP_STOP;
     private static final String MISSISSIPPI_ALLIGATOR = MISSISSIPPI + " " + MISSISSIPPI;
