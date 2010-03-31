@@ -37,7 +37,7 @@ public abstract class StaffView extends View {
     private static final String TIME_4 = "#";
     private static final String TREBLE_CLEF = "$";
     
-    public static final String DOUBlE_WHOLE_NOTE = "0";
+    public static final String DOUBLE_WHOLE_NOTE = "0";
     public static final String WHOLE_NOTE = "1";
     public static final String HALF_NOTE = "2";
     public static final String QUARTER_NOTE = "3";
