@@ -96,9 +96,10 @@ public abstract class GameRound {
     
     protected int nextRandom(int prev) {
         Random random = mRandom;
+        int maxRandom = mMaxRandom;
         
         while (true) {
-            int nextInt = random.nextInt(mMaxRandom);
+            int nextInt = random.nextInt(maxRandom);
             if (prev != nextInt) {
                 return nextInt;
             }

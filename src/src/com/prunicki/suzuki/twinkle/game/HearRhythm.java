@@ -38,6 +38,7 @@ public class HearRhythm extends GameRound {
     public void onCreate(Activity activity) {
         super.onCreate(activity);
         
+        mRhythm = -1;
         View[] buttons = mButtons;
         GameButtonListener[] listeners = mButtonListeners;
         GameRoundCallback callback = mCallback;

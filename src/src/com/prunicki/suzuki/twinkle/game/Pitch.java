@@ -35,6 +35,8 @@ public class Pitch extends GameRound {
         super(R.layout.pitch, true, 3, callback);
         
         mNotes = new int[2];
+        mNotes[0] = -1;
+        mNotes[1] = -1;
         generateNotes();
     }
 

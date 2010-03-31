@@ -34,6 +34,8 @@ public class SeeNote extends GameRound {
     
     public SeeNote(GameRoundCallback callback) {
         super(R.layout.seenote, false, 7, callback);
+        
+        mNote = -1;
         nextNote();
     }
 

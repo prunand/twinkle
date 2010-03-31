@@ -38,6 +38,7 @@ public class HearNote extends GameRound {
     public void onCreate(Activity activity) {
         super.onCreate(activity);
         
+        mNote = -1;
         View[] buttons = mButtons;
         GameButtonListener[] listeners = mButtonListeners;
         GameRoundCallback callback = mCallback;

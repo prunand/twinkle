@@ -33,6 +33,8 @@ public class SeeRhythm extends GameRound {
     
     public SeeRhythm(GameRoundCallback callback) {
         super(R.layout.seerhythm, false, 4, callback);
+        
+        mRhythm = -1;
         nextRhythm();
     }
 
