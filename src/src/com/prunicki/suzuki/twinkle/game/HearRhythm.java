@@ -31,6 +31,8 @@ public class HearRhythm extends GameRound {
     
     public HearRhythm(GameRoundCallback callback) {
         super(R.layout.hearrhythm, true, 4, callback);
+        
+        mRhythm = -1;
         nextRhythm();
     }
 
@@ -38,7 +40,6 @@ public class HearRhythm extends GameRound {
     public void onCreate(Activity activity) {
         super.onCreate(activity);
         
-        mRhythm = -1;
         View[] buttons = mButtons;
         GameButtonListener[] listeners = mButtonListeners;
         GameRoundCallback callback = mCallback;

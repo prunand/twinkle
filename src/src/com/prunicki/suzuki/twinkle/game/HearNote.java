@@ -31,6 +31,7 @@ public class HearNote extends GameRound {
     
     public HearNote(GameRoundCallback callback) {
         super(R.layout.hearnote, true, 7, callback);
+        mNote = -1;
         nextNote();
     }
 
@@ -38,7 +39,6 @@ public class HearNote extends GameRound {
     public void onCreate(Activity activity) {
         super.onCreate(activity);
         
-        mNote = -1;
         View[] buttons = mButtons;
         GameButtonListener[] listeners = mButtonListeners;
         GameRoundCallback callback = mCallback;
