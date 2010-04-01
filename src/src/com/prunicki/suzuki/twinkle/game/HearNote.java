@@ -32,7 +32,7 @@ public class HearNote extends GameRound {
     public HearNote(GameRoundCallback callback) {
         super(R.layout.hearnote, true, 7, callback);
         mNote = -1;
-        nextNote();
+        prepareNext();
     }
 
     @Override
@@ -67,7 +67,8 @@ public class HearNote extends GameRound {
         mSoundPlayer.playNote(mNote, soundPlayerCallback);
     }
 
-    void nextNote() {
+    @Override
+    protected void prepareNext() {
         mNote = nextRandom(mNote);
     }
     

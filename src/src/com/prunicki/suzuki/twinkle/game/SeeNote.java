@@ -36,7 +36,7 @@ public class SeeNote extends GameRound {
         super(R.layout.seenote, false, 7, callback);
         
         mNote = -1;
-        nextNote();
+        prepareNext();
     }
 
     @Override
@@ -66,14 +66,16 @@ public class SeeNote extends GameRound {
         setListenersIntoButtons(buttons, listeners);
         
         mStaffView = (NoteView) activity.findViewById(R.id.NoteView);
-        changeNoteInView();
+        showNextView();
     }
     
-    void changeNoteInView() {
+    @Override
+    protected void showNextView() {
         mStaffView.setNote(mNote);
     }
 
-    void nextNote() {
+    @Override
+    protected void prepareNext() {
         mNote = nextRandom(mNote);
     }
     

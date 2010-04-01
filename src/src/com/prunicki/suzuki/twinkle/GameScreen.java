@@ -1,6 +1,9 @@
 package com.prunicki.suzuki.twinkle;
 
 import static com.prunicki.suzuki.twinkle.model.Score.DIFFICULTY_LEVEL_EASY;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.ViewGroup;
 
 import com.prunicki.suzuki.twinkle.db.ScoreDAO;
 import com.prunicki.suzuki.twinkle.game.GameRound;
@@ -12,10 +15,6 @@ import com.prunicki.suzuki.twinkle.game.SeeNote;
 import com.prunicki.suzuki.twinkle.game.SeeRhythm;
 import com.prunicki.suzuki.twinkle.model.ModelHelper;
 import com.prunicki.suzuki.twinkle.model.Player;
-
-import android.os.Bundle;
-import android.util.Log;
-import android.view.ViewGroup;
 
 public class GameScreen extends TwinkleActivity implements GameRoundCallback {
     public static final String DIFFICULTY_LEVEL_KEY = "difficultyLevel";

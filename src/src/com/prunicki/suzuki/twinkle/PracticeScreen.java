@@ -1,7 +1,9 @@
 package com.prunicki.suzuki.twinkle;
 
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 
 import com.prunicki.suzuki.twinkle.game.GameRound;
 import com.prunicki.suzuki.twinkle.game.HearNote;
@@ -22,6 +24,7 @@ public class PracticeScreen extends TwinkleActivity implements GameRoundCallback
     
     private ViewGroup mGameView;
     private GameRound mGameRound;
+    private View mNextButton;
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +54,13 @@ public class PracticeScreen extends TwinkleActivity implements GameRoundCallback
                 throw new IllegalArgumentException("Unkown practice type " + practiceType);
         }
         
-        mGameRound = gameRound;
         mGameView = (ViewGroup) findViewById(R.id.GameView);
+        
+        mGameRound = gameRound;
         initCurrentGameRound(gameRound);
+        mNextButton = mGameView.findViewById(R.id.Next);
+        
+        mNextButton.setOnClickListener(mNextListener);
     }
 
     @Override
@@ -78,7 +85,14 @@ public class PracticeScreen extends TwinkleActivity implements GameRoundCallback
     
     private void initCurrentGameRound(GameRound gameRound) {
         this.getLayoutInflater().inflate(gameRound.mResourceId, mGameView);
-        this.getLayoutInflater().inflate(R.layout.replay_button, mGameView);
+        this.getLayoutInflater().inflate(R.layout.replay_next, mGameView);
         gameRound.onCreate(PracticeScreen.this);
     }
+    
+    private OnClickListener mNextListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            mGameRound.next();
+        }
+    };
 }

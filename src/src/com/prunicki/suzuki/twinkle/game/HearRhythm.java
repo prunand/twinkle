@@ -33,7 +33,7 @@ public class HearRhythm extends GameRound {
         super(R.layout.hearrhythm, true, 4, callback);
         
         mRhythm = -1;
-        nextRhythm();
+        prepareNext();
     }
 
     @Override
@@ -62,7 +62,8 @@ public class HearRhythm extends GameRound {
         mSoundPlayer.playRhythm(mRhythm, soundPlayerCallback);
     }
 
-    void nextRhythm() {
+    @Override
+    protected void prepareNext() {
         mRhythm = nextRandom(mRhythm);
     }
     

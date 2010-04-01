@@ -35,7 +35,7 @@ public class SeeRhythm extends GameRound {
         super(R.layout.seerhythm, false, 4, callback);
         
         mRhythm = -1;
-        nextRhythm();
+        prepareNext();
     }
 
     @Override
@@ -59,14 +59,16 @@ public class SeeRhythm extends GameRound {
         setListenersIntoButtons(buttons, listeners);
         
         mStaffView = (RhythmView) activity.findViewById(R.id.RhythmView);
-        changeRhythmInView();
+        showNextView();
     }
 
-    void nextRhythm() {
+    @Override
+    protected void prepareNext() {
         mRhythm = nextRandom(mRhythm);
     }
     
-    void changeRhythmInView() {
+    @Override
+    protected void showNextView() {
         mStaffView.setRhythm(mRhythm);
     }
     

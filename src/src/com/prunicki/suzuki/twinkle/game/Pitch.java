@@ -37,7 +37,7 @@ public class Pitch extends GameRound {
         mNotes = new int[2];
         mNotes[0] = -1;
         mNotes[1] = -1;
-        generateNotes();
+        prepareNext();
     }
 
     @Override
@@ -64,7 +64,8 @@ public class Pitch extends GameRound {
         mSoundPlayer.playNote(mNotes, soundPlayerCallback);
     }
 
-    private void generateNotes() {
+    @Override
+    protected void prepareNext() {
         mNotes[0] = nextRandom(mNotes[0]);
         mNotes[1] = nextRandom(mNotes[1]);
         

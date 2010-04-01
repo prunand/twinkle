@@ -42,7 +42,7 @@ public class NoteLength extends GameRound {
         super(R.layout.notelength, false, 5, callback);
         
         mNote = -1;
-        nextNote();
+        prepareNext();
     }
 
     @Override
@@ -68,10 +68,11 @@ public class NoteLength extends GameRound {
         setListenersIntoButtons(buttons, listeners);
 
         mStaffView = (SimpleNoteView) activity.findViewById(R.id.StaffView);
-        changeNoteInView();
+        showNextView();
     }
     
-    void changeNoteInView() {
+    @Override
+    protected void showNextView() {
         char noteChar;
         
         switch(mNote) {
@@ -97,7 +98,8 @@ public class NoteLength extends GameRound {
         mStaffView.setNote(noteChar);
     }
 
-    void nextNote() {
+    @Override
+    protected void prepareNext() {
         mNote = nextRandom(mNote);
         Log.d(Main.TAG, "Next Random " + mNote);
     }

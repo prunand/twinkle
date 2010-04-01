@@ -1,3 +1,21 @@
+/*
+ * Copyright 2010 Andrew Prunicki
+ * 
+ * This file is part of Twinkle.
+ * 
+ * Twinkle is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Twinkle is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.prunicki.suzuki.twinkle.game;
 
 import static com.prunicki.suzuki.twinkle.model.Score.DIFFICULTY_LEVEL_HARD;
@@ -22,10 +40,10 @@ import com.prunicki.suzuki.twinkle.TwinkleApplication;
 public abstract class GameRound {
     public final int mResourceId;
     private final boolean mSound;
-    
+
     private final Random mRandom;
     private final int mMaxRandom;
-    
+
     protected Activity mActivity;
     protected SoundPlayer mSoundPlayer;
     protected View[] mButtons;
@@ -34,70 +52,71 @@ public abstract class GameRound {
     protected GameRoundCallback mCallback;
 
     private View mReplayButton;
-    
+
     public GameRound(int resourceId, boolean sound, int numGameButtons, GameRoundCallback callback) {
         this.mResourceId = resourceId;
         mSound = sound;
         mMaxRandom = numGameButtons;
         mCallback = callback;
-        
+
         mButtons = new View[numGameButtons];
         mButtonListeners = new GameButtonListener[numGameButtons];
         mRandom = new Random();
     }
-    
-    public int getScore(int mDifficultyLevel) {
-        int score = getMaxScore();
-        
-        if (mDifficultyLevel == DIFFICULTY_LEVEL_HARD) {
-            for (int i = 0; i < mMaxRandom; i++) {
-                if (mButtonListeners[i].isClickedWrong()) {
-                    score--;
-                }
-            }
-        }
-        
-        return score;
-    }
-    
+
     public void onCreate(Activity activity) {
         mActivity = activity;
-        
+
         mReplayButton = activity.findViewById(R.id.Replay);
         if (mSound) {
             mReplayButton.setVisibility(View.VISIBLE);
             mReplayButton.setOnClickListener(mReplayListener);
         } else {
-            mReplayButton.setVisibility(View.INVISIBLE);
+            mReplayButton.setVisibility(View.GONE);
             mReplayButton.setOnClickListener(null);
         }
     }
-    
+
     public void onResume() {
         mFirstRun++;
         mSoundPlayer = ((TwinkleApplication) mActivity.getApplication()).getSoundPlayer();
         GameButtonListener.setSoundPlayerIntoListeners(mButtonListeners, mSoundPlayer);
-        
+
         if (isFirstRun()) {
-            performPlayNotes();
+            playNotes();
         }
     }
-    
+
     public void onPause() {
         GameButtonListener.setSoundPlayerIntoListeners(mButtonListeners, null);
     }
+
+    public final void next() {
+        prepareNext();
+        
+        if (mSound) {
+            playNotes();
+        } else {
+            showNextView();
+        }
+    }
     
+    protected abstract void prepareNext();
+
     protected void playNotes(SoundPlayer.PlayerCallback soundPlayerCallback) {
     }
     
+    protected void showNextView() {
+    }
+
     protected final boolean isFirstRun() {
         return mFirstRun <= 1;
     }
-    
+
     protected int nextRandom(int prev) {
         Random random = mRandom;
         int maxRandom = mMaxRandom;
-        
+
         while (true) {
             int nextInt = random.nextInt(maxRandom);
             if (prev != nextInt) {
@@ -105,19 +124,26 @@ public abstract class GameRound {
             }
         }
     }
-    
+
     protected int getMaxScore() {
         return mMaxRandom;
     }
-    
-    protected static void setListenersIntoButtons(View[] buttons, OnClickListener[] listeners) {
-        int count = buttons.length;
-        for (int i = 0; i < count; i++) {
-            buttons[i].setOnClickListener(listeners[i]);
+
+    public int getScore(int mDifficultyLevel) {
+        int score = getMaxScore();
+
+        if (mDifficultyLevel == DIFFICULTY_LEVEL_HARD) {
+            for (int i = 0; i < mMaxRandom; i++) {
+                if (mButtonListeners[i].isClickedWrong()) {
+                    score--;
+                }
+            }
         }
+
+        return score;
     }
-    
-    void performPlayNotes() {
+
+    void playNotes() {
         if (mSound) {
             final ProgressDialog dialog = new ProgressDialog(mActivity);
             dialog.setMessage("Listen...");
@@ -131,7 +157,7 @@ public abstract class GameRound {
                 }
             });
             dialog.show();
-            
+
             playNotes(new SoundPlayer.PlayerCallback() {
                 @Override
                 public void playbackComplete() {
@@ -141,11 +167,18 @@ public abstract class GameRound {
             });
         }
     }
-    
+
+    protected static void setListenersIntoButtons(View[] buttons, OnClickListener[] listeners) {
+        int count = buttons.length;
+        for (int i = 0; i < count; i++) {
+            buttons[i].setOnClickListener(listeners[i]);
+        }
+    }
+
     private OnClickListener mReplayListener = new OnClickListener() {
         @Override
         public void onClick(View arg0) {
-            performPlayNotes();
+            playNotes();
         }
     };
 }
