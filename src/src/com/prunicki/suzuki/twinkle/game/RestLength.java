@@ -21,8 +21,8 @@ package com.prunicki.suzuki.twinkle.game;
 import com.prunicki.suzuki.twinkle.GameRoundCallback;
 import com.prunicki.suzuki.twinkle.widget.SimpleNoteView;
 
-public class NoteLength extends AbstractLengthRound {
-    public NoteLength(GameRoundCallback callback) {
+public class RestLength extends AbstractLengthRound {
+    public RestLength(GameRoundCallback callback) {
         super(callback);
     }
     
@@ -32,19 +32,19 @@ public class NoteLength extends AbstractLengthRound {
         
         switch(mNote) {
             case WHOLE_NOTE:
-                noteChar = SimpleNoteView.WHOLE_NOTE;
+                noteChar = SimpleNoteView.WHOLE_REST;
                 break;
             case HALF_NOTE:
-                noteChar = SimpleNoteView.HALF_NOTE;
+                noteChar = SimpleNoteView.HALF_REST;
                 break;
             case QUARTER_NOTE:
-                noteChar = SimpleNoteView.QUARTER_NOTE;
+                noteChar = SimpleNoteView.QUARTER_REST;
                 break;
             case EIGHTH_NOTE:
-                noteChar = SimpleNoteView.EIGHTH_NOTE;
+                noteChar = SimpleNoteView.EIGHTH_REST;
                 break;
             case SIXTEENTH_NOTE:
-                noteChar = SimpleNoteView.SIXTEENTH_NOTE;
+                noteChar = SimpleNoteView.SIXTEENTH_REST;
                 break;
             default:
                 throw new IllegalStateException("Invalid note " + mNote);

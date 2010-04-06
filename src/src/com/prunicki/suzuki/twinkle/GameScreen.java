@@ -11,6 +11,7 @@ import com.prunicki.suzuki.twinkle.game.HearNote;
 import com.prunicki.suzuki.twinkle.game.HearRhythm;
 import com.prunicki.suzuki.twinkle.game.NoteLength;
 import com.prunicki.suzuki.twinkle.game.Pitch;
+import com.prunicki.suzuki.twinkle.game.RestLength;
 import com.prunicki.suzuki.twinkle.game.SeeNote;
 import com.prunicki.suzuki.twinkle.game.SeeRhythm;
 import com.prunicki.suzuki.twinkle.model.ModelHelper;
@@ -29,7 +30,8 @@ public class GameScreen extends TwinkleActivity implements GameRoundCallback {
     
     public GameScreen() {
         int i = 0;
-        gameRounds = new GameRound[6];
+        gameRounds = new GameRound[7];
+        gameRounds[i++] = new RestLength(this);
         gameRounds[i++] = new NoteLength(this);
         gameRounds[i++] = new Pitch(this);
         gameRounds[i++] = new SeeNote(this);

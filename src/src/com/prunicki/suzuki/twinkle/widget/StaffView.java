@@ -52,11 +52,16 @@ public abstract class StaffView extends View {
     public static final char EIGHTH_END_NOTE = '<';
     public static final char SIXTEENTH_END_NOTE = '=';
     
-    public static final String EIGHTH_REST = "A";
-    public static final String SIXTEENTH_REST = "B";
+    public static final char WHOLE_REST = '?';
+    public static final char HALF_REST = '@';
+    public static final char QUARTER_REST = 'A';
+    public static final char EIGHTH_REST = 'B';
+    public static final char SIXTEENTH_REST = 'C';
+    public static final char THIRTYSECOND_REST = 'D';
+    public static final char SIXTYFOURTH_REST = 'E';
     
     private final float mDensity;
-    private final float mStrokeWidth;
+    protected final float mStrokeWidth;
     private final float mPadding;
     
     private final Path mFillPath;
@@ -70,6 +75,7 @@ public abstract class StaffView extends View {
     
     protected float[] mLineY;
     
+    protected float mFontWidth;
     private int mLastWidth;
     private int mLastHeight;
     protected float mLineHeight;
@@ -214,8 +220,9 @@ public abstract class StaffView extends View {
         
         fontPaint.getTextWidths(TIME_4, tmpFloatArray);
         
+        mFontWidth = tmpFloatArray[0];
         mLineHeight = staffHeight;
-        mStartNoteX = timeSigX + tmpFloatArray[0];
+        mStartNoteX = timeSigX + mFontWidth * 1.1f;
     }
     
     private void traceLine(Path path, float startX, float startY, float endX, float endY) {
