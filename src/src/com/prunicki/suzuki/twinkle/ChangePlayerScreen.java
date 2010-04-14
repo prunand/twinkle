@@ -27,10 +27,10 @@ public class ChangePlayerScreen extends TwinkleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.changeplayer);
-        
-        mAppCtx = (TwinkleApplication) getApplicationContext();
-        
         setTitle("Choose Player");
+        
+        TwinkleApplication appCtx = (TwinkleApplication) getApplicationContext();
+        mAppCtx = appCtx;
         
         mlistView = (ListView) findViewById(android.R.id.list);
         mCancel = findViewById(R.id.Cancel);
@@ -41,25 +41,20 @@ public class ChangePlayerScreen extends TwinkleActivity {
         
         mAddPlayer.setOnClickListener(mAddPlayerListener);
         mCancel.setOnClickListener(mCancelListener);
-    }
-    
-    @Override
-    protected void onResume() {
-        super.onResume();
-        
-        TwinkleApplication appCtx = mAppCtx;
         
         ScoreDAO dao = appCtx.getDAO();
         mCursor = dao.fetchAllPlayers();
         
         ChangePlayerListViewAdapter cursorAdapter = new ChangePlayerListViewAdapter(appCtx, mCursor);
         mlistView.setAdapter(cursorAdapter);
+        
+        startManagingCursor(mCursor);
     }
-
+    
     @Override
-    protected void onPause() {
-        super.onPause();
-        mCursor.close();
+    protected void onResume() {
+        super.onResume();
+        mCursor.requery();
     }
     
     void setCurrentPlayer(long id) {
