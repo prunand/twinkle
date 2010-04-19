@@ -15,28 +15,21 @@ public class ModelHelper {
 
         try {
             String name = cursor.getString(ScoreDAO.PLAYER_NAME_COLUMN_INDEX);
-            int difficulty = cursor.getInt(ScoreDAO.PLAYER_DIFFICULTY_COLUMN_INDEX);
-            Score[] scores = fetchScores(id, dao);
-            if (scores == null) {
+            Score score = fetchScore(id, dao);
+            if (score == null) {
                 return null;
             }
-            return new Player(id, name, difficulty, scores[Score.DIFFICULTY_LEVEL_EASY],
-                    scores[Score.DIFFICULTY_LEVEL_HARD]);
+            return new Player(id, name, score);
         } finally {
             cursor.close();
         }
     }
 
     public static void savePlayer(Player player, ScoreDAO dao) {
-        dao.savePlayer(player.getId(), player.getName(), player.getDifficulty());
-        Score easyScore = player.getEasyScore();
-        dao.saveScore(easyScore.getId(), easyScore.getPlayerId(), easyScore.getDifficulty(),
-                easyScore.getHiScore(), easyScore.getLastScore(), easyScore.getTotalScore(),
-                easyScore.getTotalPlayed());
-        Score hardScore = player.getHardScore();
-        dao.saveScore(hardScore.getId(), hardScore.getPlayerId(), hardScore.getDifficulty(),
-                hardScore.getHiScore(), hardScore.getLastScore(), hardScore.getTotalScore(),
-                hardScore.getTotalPlayed());
+        dao.savePlayer(player.getId(), player.getName());
+        Score score = player.getScore();
+        dao.saveScore(score.getId(), score.getPlayerId(), score.getHiScore(),
+                score.getLastScore(), score.getTotalScore(), score.getTotalPlayed());
     }
 
     public static void deletePlayer(Player player, ScoreDAO dao) {
@@ -45,25 +38,14 @@ public class ModelHelper {
         dao.deletePlayer(playerId);
     }
     
-    public static String getDifficultyString(int difficulty) {
-        return difficulty == Score.DIFFICULTY_LEVEL_EASY ? "Easy" : "Hard";
-    }
-    
-    private static Score[] fetchScores(long id, ScoreDAO dao) {
+    private static Score fetchScore(long id, ScoreDAO dao) {
         Cursor cursor = dao.fetchScoresForPlayer(id);
         if (cursor == null) {
             return null;
         }
         
-        Score[] scores = new Score[2];
-        
         try {
-            Score tmpScore = mapScore(cursor);
-            scores[tmpScore.getDifficulty()] = tmpScore;
-            cursor.moveToNext();
-            tmpScore = mapScore(cursor);
-            scores[tmpScore.getDifficulty()] = tmpScore;
-            return scores;
+            return mapScore(cursor);
         } finally {
             cursor.close();
         }
@@ -72,12 +54,11 @@ public class ModelHelper {
     private static Score mapScore(Cursor cursor) {
         long scoreId = cursor.getLong(DdlBuilder.TABLE_KEY_INDEX);
         int playerId = cursor.getInt(ScoreDAO.SCORE_PLAYER_ID_COLUMN_INDEX);
-        int difficulty = cursor.getInt(ScoreDAO.PLAYER_DIFFICULTY_COLUMN_INDEX);
         int hiScore = cursor.getInt(ScoreDAO.SCORE_HI_SCORE_COLUMN_INDEX);
         int lastScore = cursor.getInt(ScoreDAO.SCORE_LAST_SCORE_COLUMN_INDEX);
         int totalScore = cursor.getInt(ScoreDAO.SCORE_TOTAL_SCORE_COLUMN_INDEX);
         int totalPlayed = cursor.getInt(ScoreDAO.SCORE_TOTAL_PLAYED_COLUMN_INDEX);
         
-        return new Score(scoreId, playerId, difficulty, hiScore, lastScore, totalScore, totalPlayed);
+        return new Score(scoreId, playerId, hiScore, lastScore, totalScore, totalPlayed);
     }
 }

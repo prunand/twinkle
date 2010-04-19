@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.prunicki.suzuki.twinkle.db.ScoreDAO;
-import com.prunicki.suzuki.twinkle.model.Score;
 
 public class NewPlayerDialog extends TwinkleDialog {
     private TwinkleApplication mAppCtx;
@@ -61,9 +60,8 @@ public class NewPlayerDialog extends TwinkleDialog {
             if (name.length() > 0) {
                 TwinkleApplication appCtx = mAppCtx;
                 ScoreDAO dao = appCtx.getDAO();
-                long id = dao.createPlayer(name, Score.DIFFICULTY_LEVEL_EASY);
-                dao.createScore(id, Score.DIFFICULTY_LEVEL_EASY);
-                dao.createScore(id, Score.DIFFICULTY_LEVEL_HARD);
+                long id = dao.createPlayer(name);
+                dao.createScore(id);
                 mNewPlayerId = id;
                 dismiss();
             }

@@ -1,6 +1,5 @@
 package com.prunicki.suzuki.twinkle;
 
-import static com.prunicki.suzuki.twinkle.model.Score.DIFFICULTY_LEVEL_EASY;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -18,11 +17,8 @@ import com.prunicki.suzuki.twinkle.model.ModelHelper;
 import com.prunicki.suzuki.twinkle.model.Player;
 
 public class GameScreen extends TwinkleActivity implements GameRoundCallback {
-    public static final String DIFFICULTY_LEVEL_KEY = "difficultyLevel";
-    
     private Player mPlayer;
     private ScoreDAO mDao;
-    private int mDifficultyLevel;
     private ViewGroup mGameView;
     private GameRound[] gameRounds;
     private GameRound mCurrentGameRound;
@@ -49,7 +45,6 @@ public class GameScreen extends TwinkleActivity implements GameRoundCallback {
         mPlayer = app.getCurrentPlayer();
         mDao = app.getDAO();
         
-        mDifficultyLevel = getIntent().getIntExtra(DIFFICULTY_LEVEL_KEY, DIFFICULTY_LEVEL_EASY);
         mGameView = (ViewGroup) findViewById(R.id.GameView);
         
         mCurrentGameRound = gameRounds[mCurrentRoundIndex++];
@@ -83,7 +78,7 @@ public class GameScreen extends TwinkleActivity implements GameRoundCallback {
             int score = 0;
             
             for (int i = 0; i < gameRounds.length; i++) {
-                score += gameRounds[i].getScore(mDifficultyLevel);
+                score += gameRounds[i].getScore();
             }
             mPlayer.setLastScore(score);
             ModelHelper.savePlayer(mPlayer, mDao);

@@ -20,8 +20,6 @@ public class PracticeScreen extends TwinkleActivity implements GameRoundCallback
     public static final int SEE_RHYTHM_PRACTICE_TYPE = 3;
     public static final int HEAR_RHYTHM_PRACTICE_TYPE = 4;
     
-    public static final String DIFFICULTY_LEVEL_KEY = "difficultyLevel";
-    
     private ViewGroup mGameView;
     private GameRound mGameRound;
     private View mNextButton;

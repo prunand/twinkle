@@ -34,7 +34,6 @@ public class PlayerInfoScreen extends TwinkleActivity {
         mDao = mApp.getDAO();
         
         mNameField = (EditText) findViewById(R.id.Name);
-        TextView levelView = (TextView) findViewById(R.id.Level);
         TextView hiScoreView = (TextView) findViewById(R.id.HiScore);
         TextView avgScoreView = (TextView) findViewById(R.id.AvgScore);
         TextView lastScoreView = (TextView) findViewById(R.id.LastScore);
@@ -46,7 +45,6 @@ public class PlayerInfoScreen extends TwinkleActivity {
         long playerId = getIntent().getLongExtra(PLAYER_ID_KEY, -1);
         Player player = findPlayer(currentPlayer, playerId, mDao);
         
-        levelView.setText("Level: " + player.getDifficultyAsString());
         hiScoreView.setText("Hi Score: " + player.getHiScore());
         avgScoreView.setText("Average Score: " + Math.round(player.getAverage() * 10) / 10f);
         lastScoreView.setText("Last Score: " + player.getLastScore());

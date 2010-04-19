@@ -8,24 +8,19 @@ import java.util.ArrayList;
 import com.prunicki.suzuki.twinkle.Utils;
 
 public class Score {
-    public static final int DIFFICULTY_LEVEL_EASY = 0;
-    public static final int DIFFICULTY_LEVEL_HARD = 1;
-    
     public static final String PROP_CHG_LAST_SCORE = "propChgLastScore";
     
     private final long mId;
     private final long mPlayerId;
-    private final int mDifficulty;
     private int mHiScore;
     private int mLastScore;
     private int mTotalScore;
     private int mTotalPlayed;
     private ArrayList<WeakReference<PropertyChangeListener>> mListeners;
     
-    public Score(long id, long playerId, int difficulty, int hiScore, int lastScore, int totalScore, int totalPlayed) {
+    public Score(long id, long playerId, int hiScore, int lastScore, int totalScore, int totalPlayed) {
         mId = id;
         mPlayerId = playerId;
-        mDifficulty = difficulty;
         mHiScore = hiScore;
         mLastScore = lastScore;
         mTotalScore = totalScore;
@@ -40,10 +35,6 @@ public class Score {
     
     public long getPlayerId() {
         return mPlayerId;
-    }
-
-    public int getDifficulty() {
-        return mDifficulty;
     }
 
     public int getHiScore() {

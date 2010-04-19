@@ -18,8 +18,6 @@
  */
 package com.prunicki.suzuki.twinkle.game;
 
-import static com.prunicki.suzuki.twinkle.model.Score.DIFFICULTY_LEVEL_HARD;
-
 import java.util.Random;
 
 import android.app.Activity;
@@ -129,14 +127,12 @@ public abstract class GameRound {
         return mMaxRandom;
     }
 
-    public int getScore(int mDifficultyLevel) {
+    public int getScore() {
         int score = getMaxScore();
 
-        if (mDifficultyLevel == DIFFICULTY_LEVEL_HARD) {
-            for (int i = 0; i < mMaxRandom; i++) {
-                if (mButtonListeners[i].isClickedWrong()) {
-                    score--;
-                }
+        for (int i = 0; i < mMaxRandom; i++) {
+            if (mButtonListeners[i].isClickedWrong()) {
+                score--;
             }
         }
 

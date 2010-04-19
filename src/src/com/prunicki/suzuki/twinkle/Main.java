@@ -18,10 +18,8 @@
  */
 package com.prunicki.suzuki.twinkle;
 
-import static com.prunicki.suzuki.twinkle.model.Score.DIFFICULTY_LEVEL_EASY;
-import static com.prunicki.suzuki.twinkle.model.Score.DIFFICULTY_LEVEL_HARD;
-import static com.prunicki.suzuki.twinkle.model.Score.PROP_CHG_LAST_SCORE;
 import static com.prunicki.suzuki.twinkle.Constants.PLAYER_ID_KEY;
+import static com.prunicki.suzuki.twinkle.model.Score.PROP_CHG_LAST_SCORE;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -37,14 +35,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.ToggleButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.prunicki.suzuki.twinkle.db.ScoreDAO;
-import com.prunicki.suzuki.twinkle.model.ModelHelper;
 import com.prunicki.suzuki.twinkle.model.Player;
 
 public class Main extends TwinkleActivity {
@@ -52,8 +46,7 @@ public class Main extends TwinkleActivity {
     private static final int SELECT_PLAYER_FOR_PLAY = 1;
     private static final int SALUTATION_WIDGET = 1;
     private static final int HISCORE_WIDGET = 2;
-    private static final int DIFFICULTY_WIDGET = 4;
-    private static final int ALL_WIDGETS = SALUTATION_WIDGET | HISCORE_WIDGET | DIFFICULTY_WIDGET;
+    private static final int ALL_WIDGETS = SALUTATION_WIDGET | HISCORE_WIDGET;
     
     private TwinkleApplication mApp;
     private ScoreDAO mDao;
@@ -64,7 +57,6 @@ public class Main extends TwinkleActivity {
     private Button mPlayButton;
     private Button mPracticeButton;
     private Button mSwitchPlayerButton;
-    private ToggleButton mDifficultyButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,13 +73,11 @@ public class Main extends TwinkleActivity {
         mPlayButton = (Button) findViewById(R.id.MainPlay);
         mSwitchPlayerButton = (Button) findViewById(R.id.SwitchPlayer);
         mPracticeButton = (Button) findViewById(R.id.MainPractice);
-        mDifficultyButton = (ToggleButton) findViewById(R.id.MainDifficultyLevel);
         
         mPlayerInfo.setOnClickListener(mPlayerInfoListener);
         mPlayButton.setOnClickListener(mPlayListener);
         mSwitchPlayerButton.setOnClickListener(mSwitchPlayerListener);
         mPracticeButton.setOnClickListener(mPracticeListener);
-        mDifficultyButton.setOnCheckedChangeListener(mDifficultyListener);
     }
     
     @Override
@@ -168,20 +158,12 @@ public class Main extends TwinkleActivity {
                 //TODO Move text to strings.xml
                 mHiScore.setText("Hi Score: " + player.getHiScore());
             }
-            if ((flags & DIFFICULTY_WIDGET) > 0) {
-                boolean hard = player.getDifficulty() == DIFFICULTY_LEVEL_HARD ? true : false;
-                mDifficultyButton.setChecked(hard);
-            }
         }
     }
 
     void startGame() {
         if (mPlayer != null) {
-            boolean hard = mDifficultyButton.isChecked();
-            int level = hard ? DIFFICULTY_LEVEL_HARD : DIFFICULTY_LEVEL_EASY;
-            
             Intent intent = new Intent(Main.this, GameScreen.class);
-            intent.putExtra(GameScreen.DIFFICULTY_LEVEL_KEY, level);
             startActivity(intent);
         }
     }
@@ -234,20 +216,6 @@ public class Main extends TwinkleActivity {
         @Override
         public void onDismiss(DialogInterface dialog) {
             startGame();
-        }
-    };
-    
-    private OnCheckedChangeListener mDifficultyListener = new OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            int difficulty = isChecked ? DIFFICULTY_LEVEL_HARD : DIFFICULTY_LEVEL_EASY;
-            
-            Player player = mPlayer;
-            if (player != null) {
-                player.setDifficulty(difficulty);
-                ModelHelper.savePlayer(player, mDao);
-                setPlayerWidgetValues(player, HISCORE_WIDGET);
-            }
         }
     };
     

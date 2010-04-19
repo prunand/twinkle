@@ -60,16 +60,6 @@
         android:layout_weight="1"
         android:textSize="50sp"
         android:layout_margin="15dip"/>
-    <ToggleButton
-        android:id="@+id/MainDifficultyLevel"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="100dip"
-        android:layout_marginRight="100dip"
-        android:layout_marginBottom="15dip"
-        android:layout_gravity="center"
-        android:textOff="Easy"
-        android:textOn="Hard"/>
     <Button
         android:id="@+id/MainPractice"
         android:text="Practice"

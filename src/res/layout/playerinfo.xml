@@ -41,12 +41,6 @@
             android:text="Delete"/>
     </LinearLayout>
     <TextView
-        android:id="@+id/Level"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="Level: Easy"/>
-    <TextView
         android:id="@+id/HiScore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
