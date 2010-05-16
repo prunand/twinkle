@@ -24,6 +24,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -141,26 +142,44 @@ public abstract class GameRound {
 
     void playNotes() {
         if (mSound) {
-            final ProgressDialog dialog = new ProgressDialog(mActivity);
-            dialog.setMessage("Listen...");
-            dialog.setIndeterminate(true);
-            dialog.setCancelable(true);
-            dialog.setOnCancelListener(new OnCancelListener() {
+            AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
                 @Override
-                public void onCancel(DialogInterface dialog) {
-                    Log.d(Main.TAG, "Dialog cancelled.");
-                    mSoundPlayer.pause();
+                protected void onPostExecute(Void result) {
+                    final ProgressDialog dialog = new ProgressDialog(mActivity);
+                    dialog.setMessage("Listen...");
+                    dialog.setIndeterminate(true);
+                    dialog.setCancelable(true);
+                    dialog.setOnCancelListener(new OnCancelListener() {
+                        @Override
+                        public void onCancel(DialogInterface dialog) {
+                            Log.d(Main.TAG, "Dialog cancelled.");
+                            mSoundPlayer.pause();
+                        }
+                    });
+                    dialog.show();
+                    
+                    playNotes(new SoundPlayer.PlayerCallback() {
+                        @Override
+                        public void playbackComplete() {
+                            Log.d(Main.TAG, "Dismissing playback dialog.");
+                            dialog.dismiss();
+                        }
+                    });
                 }
-            });
-            dialog.show();
 
-            playNotes(new SoundPlayer.PlayerCallback() {
                 @Override
-                public void playbackComplete() {
-                    Log.d(Main.TAG, "Dismissing playback dialog.");
-                    dialog.dismiss();
+                protected Void doInBackground(Void... params) {
+                    try {
+                        Thread.sleep(250);
+                    } catch (InterruptedException e) {
+                        //Nothing to do really.
+                    }
+                    
+                    return null;
                 }
-            });
+            };
+            
+            task.execute((Void) null);
         }
     }
 
