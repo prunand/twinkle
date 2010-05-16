@@ -1,6 +1,8 @@
 package com.prunicki.suzuki.twinkle;
 
 import static com.prunicki.suzuki.twinkle.Constants.PLAYER_ID_KEY;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -76,15 +78,26 @@ public class PlayerInfoScreen extends TwinkleActivity {
     private OnClickListener mDeleteListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            Player player = mPlayer;
+            final Player player = mPlayer;
             
-            long playerId = player.getId();
-            ModelHelper.deletePlayer(player, mDao);
-            if (playerId == mCurrentPlayerid) {
-                mApp.setCurrentPlayer(null);
-            }
+            AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(PlayerInfoScreen.this);
+            dialogBuilder.setTitle("Delete Player?");
+            dialogBuilder.setMessage("Are you sure you want to delete " +  mPlayer.getName() + "?");
+            dialogBuilder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    long playerId = player.getId();
+                    ModelHelper.deletePlayer(player, mDao);
+                    if (playerId == mCurrentPlayerid) {
+                        mApp.setCurrentPlayer(null);
+                    }
+                    finish();
+                }
+            });
+            dialogBuilder.setNegativeButton("Keep", null);
             
-            finish();
+            AlertDialog dlg = dialogBuilder.create();
+            dlg.show();
         }
     };
     
