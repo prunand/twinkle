@@ -11,16 +11,16 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         <Button
-            android:id="@+id/Cancel"
-            android:layout_width="0px"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cancel"/>
-        <Button
             android:id="@+id/AddPlayer"
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Add Player"/>
+        <Button
+            android:id="@+id/Cancel"
+            android:layout_width="0px"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel"/>
     </LinearLayout>
 </LinearLayout>

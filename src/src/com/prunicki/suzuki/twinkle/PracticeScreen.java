@@ -8,17 +8,21 @@ import android.view.View.OnClickListener;
 import com.prunicki.suzuki.twinkle.game.GameRound;
 import com.prunicki.suzuki.twinkle.game.HearNote;
 import com.prunicki.suzuki.twinkle.game.HearRhythm;
+import com.prunicki.suzuki.twinkle.game.NoteLength;
 import com.prunicki.suzuki.twinkle.game.Pitch;
+import com.prunicki.suzuki.twinkle.game.RestLength;
 import com.prunicki.suzuki.twinkle.game.SeeNote;
 import com.prunicki.suzuki.twinkle.game.SeeRhythm;
 
 public class PracticeScreen extends TwinkleActivity implements GameRoundCallback {
     public static final String PRACTICE_TYPE_KEY = "practiceType";
     public static final int PITCH_PRACTICE_TYPE = 0;
-    public static final int SEE_NOTE_PRACTICE_TYPE = 1;
-    public static final int HEAR_NOTE_PRACTICE_TYPE = 2;
-    public static final int SEE_RHYTHM_PRACTICE_TYPE = 3;
-    public static final int HEAR_RHYTHM_PRACTICE_TYPE = 4;
+    public static final int PITCH_NOTE_PRACTICE_TYPE = 1;
+    public static final int READ_NOTE_PRACTICE_TYPE = 2;
+    public static final int READ_REST_PRACTICE_TYPE = 3;
+    public static final int READ_LENGTH_PRACTICE_TYPE = 4;
+    public static final int SEE_RHYTHM_PRACTICE_TYPE = 5;
+    public static final int HEAR_RHYTHM_PRACTICE_TYPE = 6;
     
     private ViewGroup mGameView;
     private GameRound mGameRound;
@@ -36,11 +40,17 @@ public class PracticeScreen extends TwinkleActivity implements GameRoundCallback
             case PITCH_PRACTICE_TYPE:
                 gameRound = new Pitch(this);
                 break;
-            case SEE_NOTE_PRACTICE_TYPE:
+            case PITCH_NOTE_PRACTICE_TYPE:
+                gameRound = new HearNote(this);
+                break;
+            case READ_NOTE_PRACTICE_TYPE:
                 gameRound = new SeeNote(this);
                 break;
-            case HEAR_NOTE_PRACTICE_TYPE:
-                gameRound = new HearNote(this);
+            case READ_REST_PRACTICE_TYPE:
+                gameRound = new RestLength(this);
+                break;
+            case READ_LENGTH_PRACTICE_TYPE:
+                gameRound = new NoteLength(this);
                 break;
             case SEE_RHYTHM_PRACTICE_TYPE:
                 gameRound = new SeeRhythm(this);

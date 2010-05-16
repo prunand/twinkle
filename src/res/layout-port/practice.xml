@@ -21,58 +21,107 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical">
-    <LinearLayout
+    <View
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"/>
-    <Button
-        android:id="@+id/Pitch"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dip"
         android:layout_gravity="center"
-        android:drawableBottom="@drawable/higher_or_lower"
-        android:text="@string/btn_pitch"/>
-    <TableLayout
+        android:layout_margin="10dip"
+        android:background="@drawable/border">
+        <TextView
+            android:id="@+id/PitchText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="20sp"
+            android:text="Pitch"/>
+        <Button
+            android:id="@+id/PitchNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/PitchText"
+            android:drawableBottom="@drawable/ear"
+            android:text="Listen"/>
+        <Button
+            android:id="@+id/PitchRelative"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/PitchText"
+            android:layout_toRightOf="@id/PitchNote"
+            android:drawableBottom="@drawable/higher_or_lower"
+            android:text="High - Low"/>
+    </RelativeLayout>
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
-        <TableRow>
-            <Button
-                android:id="@+id/SeeNote"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_margin="10dip"
-                android:drawableBottom="@drawable/see_note"
-                android:text="@string/btn_see_note"/>
-            <Button
-                android:id="@+id/HearNote"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_margin="10dip"
-                android:drawableBottom="@drawable/hear_note"
-                android:text="@string/btn_hear_note"/>
-        </TableRow>
-        <TableRow>
-            <Button
-                android:id="@+id/SeeRhythm"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_margin="10dip"
-                android:drawableBottom="@drawable/see_rhythm"
-                android:text="@string/btn_see_rhythm"/>
-            <Button
-                android:id="@+id/HearRhythm"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_margin="10dip"
-                android:drawableBottom="@drawable/hear_rhythm"
-                android:text="@string/btn_hear_rhythm"/>
-        </TableRow>
-    </TableLayout>
-    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_margin="10dip"
+        android:background="@drawable/border">
+        <TextView
+            android:id="@+id/NoteReadingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="20sp"
+            android:text="Note Reading"/>
+        <Button
+            android:id="@+id/ReadNote"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/NoteReadingText"
+            android:drawableBottom="@drawable/read_notes"
+            android:text="Notes"/>
+        <Button
+            android:id="@+id/ReadRest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/NoteReadingText"
+            android:layout_toRightOf="@id/ReadNote"
+            android:drawableBottom="@drawable/read_rests"
+            android:text="Rests"/>
+        <Button
+            android:id="@+id/ReadLength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/NoteReadingText"
+            android:layout_toRightOf="@id/ReadRest"
+            android:drawableBottom="@drawable/read_length"
+            android:text="Length"/>
+    </RelativeLayout>
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        />
+        android:layout_gravity="center"
+        android:layout_margin="10dip"
+        android:background="@drawable/border">
+        <TextView
+            android:id="@+id/RhythmText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="20sp"
+            android:text="Rhythm"/>
+        <Button
+            android:id="@+id/HearRhythm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/RhythmText"
+            android:drawableBottom="@drawable/ear"
+            android:text="Listen"/>
+        <Button
+            android:id="@+id/SeeRhythm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/RhythmText"
+            android:layout_toRightOf="@id/HearRhythm"
+            android:drawableBottom="@drawable/rhythm"
+            android:text="Name"/>
+    </RelativeLayout>
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"/>
 </LinearLayout>

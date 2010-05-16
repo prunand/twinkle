@@ -64,8 +64,8 @@ public class ScoreDAO {
     public void open() throws SQLException {
         mDBHelper = new ScoreDBHelper(mContext);
         mDb = mDBHelper.getWritableDatabase();
-        mDBHelper.dropTables(mDb);
-        mDBHelper.onCreate(mDb);
+//        mDBHelper.dropTables(mDb);
+//        mDBHelper.onCreate(mDb);
     }
     
     public void release() {
