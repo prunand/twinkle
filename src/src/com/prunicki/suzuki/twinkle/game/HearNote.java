@@ -64,7 +64,7 @@ public class HearNote extends GameRound {
 
     @Override
     protected void playNotes(SoundPlayer.PlayerCallback soundPlayerCallback) {
-        mSoundPlayer.playNote(mNote, soundPlayerCallback);
+        mApp.getSoundPlayer().playNote(mNote, soundPlayerCallback);
     }
 
     @Override

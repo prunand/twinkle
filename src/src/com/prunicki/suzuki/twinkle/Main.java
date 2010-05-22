@@ -38,7 +38,6 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.prunicki.suzuki.twinkle.db.ScoreDAO;
 import com.prunicki.suzuki.twinkle.model.Player;
 
 public class Main extends TwinkleActivity {
@@ -49,7 +48,6 @@ public class Main extends TwinkleActivity {
     private static final int ALL_WIDGETS = SALUTATION_WIDGET | HISCORE_WIDGET;
     
     private TwinkleApplication mApp;
-    private ScoreDAO mDao;
     private Player mPlayer;
     private TextView mSalutation;
     private TextView mHiScore;
@@ -65,7 +63,6 @@ public class Main extends TwinkleActivity {
         
         mApp = (TwinkleApplication) getApplication();
         mApp.addPropertyChangeListener(mPropChgListener);
-        mDao = mApp.getDAO();
         
         mSalutation = (TextView) findViewById(R.id.Salutation);
         mHiScore = (TextView) findViewById(R.id.HiScore);
@@ -171,7 +168,7 @@ public class Main extends TwinkleActivity {
     private OnClickListener mPlayListener = new OnClickListener() {
         public void onClick(View v) {
             if (mPlayer == null) {
-                int cnt = mDao.playerCount();
+                int cnt = mApp.getDAO().playerCount();
                 if (cnt > 0) {
                     Intent intent = new Intent(Main.this, ChangePlayerScreen.class);
                     startActivityForResult(intent, SELECT_PLAYER_FOR_PLAY);

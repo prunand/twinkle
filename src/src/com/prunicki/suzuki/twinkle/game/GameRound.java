@@ -44,7 +44,7 @@ public abstract class GameRound {
     private final int mMaxRandom;
 
     protected Activity mActivity;
-    protected SoundPlayer mSoundPlayer;
+    protected TwinkleApplication mApp;
     protected View[] mButtons;
     protected GameButtonListener[] mButtonListeners;
     protected int mFirstRun;
@@ -65,6 +65,7 @@ public abstract class GameRound {
 
     public void onCreate(Activity activity) {
         mActivity = activity;
+        mApp = (TwinkleApplication) mActivity.getApplication();
 
         mReplayButton = activity.findViewById(R.id.Replay);
         if (mSound) {
@@ -78,8 +79,7 @@ public abstract class GameRound {
 
     public void onResume() {
         mFirstRun++;
-        mSoundPlayer = ((TwinkleApplication) mActivity.getApplication()).getSoundPlayer();
-        GameButtonListener.setSoundPlayerIntoListeners(mButtonListeners, mSoundPlayer);
+        GameButtonListener.setSoundPlayerIntoListeners(mButtonListeners, mApp.getSoundPlayer());
 
         if (isFirstRun()) {
             playNotes();
@@ -153,7 +153,7 @@ public abstract class GameRound {
                         @Override
                         public void onCancel(DialogInterface dialog) {
                             Log.d(Main.TAG, "Dialog cancelled.");
-                            mSoundPlayer.pause();
+                            mApp.getSoundPlayer().pause();
                         }
                     });
                     dialog.show();

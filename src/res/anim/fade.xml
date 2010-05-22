@@ -18,6 +18,8 @@
     along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <alpha xmlns:android="http://schemas.android.com/apk/res/android"
+    android:visible="true"
+    android:oneshot="true"
     android:fromAlpha="1.0"
     android:toAlpha="0.0"
     android:duration="100"/>

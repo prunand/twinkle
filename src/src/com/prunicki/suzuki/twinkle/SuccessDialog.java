@@ -32,8 +32,8 @@ import android.widget.TextView;
 import com.prunicki.suzuki.twinkle.SoundPlayer.PlayerCallback;
 
 public class SuccessDialog {
+    private TwinkleApplication mApp;
     private View mSuccessImage;
-    private SoundPlayer mSoundPlayer;
     private SuccessPlayerCallback mPlayerCallback;
     private TextView mSuccessText;
     private Activity mActivity;
@@ -42,7 +42,7 @@ public class SuccessDialog {
     
     public SuccessDialog(Context context, int score) {
         mActivity = (Activity) context;
-        mSoundPlayer = ((TwinkleApplication) mActivity.getApplication()).getSoundPlayer();
+        mApp = (TwinkleApplication) mActivity.getApplication();
         mPlayerCallback = new SuccessPlayerCallback();
         
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -73,12 +73,12 @@ public class SuccessDialog {
     
     protected void show() {
         mdialog.show();
-        mSoundPlayer.playSuccess(mPlayerCallback);
+        mApp.getSoundPlayer().playSuccess(mPlayerCallback);
     }
     
     void pausePlayer() {
         stopped.set(true);
-        mSoundPlayer.pause();
+        mApp.getSoundPlayer().pause();
     }
 
     private OnCancelListener mCancelListener = new OnCancelListener() {

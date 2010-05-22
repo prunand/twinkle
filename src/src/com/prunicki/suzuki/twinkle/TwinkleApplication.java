@@ -57,6 +57,7 @@ public class TwinkleApplication extends Application {
         super.onTerminate();
         
         releaseSoundPlayer();
+        releaseDAO();
     }
     
     public void addPropertyChangeListener(PropertyChangeListener listener) {

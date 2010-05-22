@@ -59,7 +59,7 @@ public class HearRhythm extends GameRound {
 
     @Override
     protected void playNotes(SoundPlayer.PlayerCallback soundPlayerCallback) {
-        mSoundPlayer.playRhythm(mRhythm, soundPlayerCallback);
+        mApp.getSoundPlayer().playRhythm(mRhythm, soundPlayerCallback);
     }
 
     @Override

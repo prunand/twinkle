@@ -23,7 +23,6 @@ public class PlayerInfoScreen extends TwinkleActivity {
     private View mCancelBtn;
 
     TwinkleApplication mApp;
-    ScoreDAO mDao;
     long mCurrentPlayerid;
 
     @Override
@@ -33,7 +32,6 @@ public class PlayerInfoScreen extends TwinkleActivity {
         setTitle("Player Info");
         
         mApp =  (TwinkleApplication) getApplication();
-        mDao = mApp.getDAO();
         
         mNameField = (EditText) findViewById(R.id.Name);
         TextView hiScoreView = (TextView) findViewById(R.id.HiScore);
@@ -45,7 +43,7 @@ public class PlayerInfoScreen extends TwinkleActivity {
         
         Player currentPlayer = mApp.getCurrentPlayer();
         long playerId = getIntent().getLongExtra(PLAYER_ID_KEY, -1);
-        Player player = findPlayer(currentPlayer, playerId, mDao);
+        Player player = findPlayer(currentPlayer, playerId, mApp.getDAO());
         
         hiScoreView.setText("Hi Score: " + player.getHiScore());
         avgScoreView.setText("Average Score: " + Math.round(player.getAverage() * 10) / 10f);
@@ -87,7 +85,7 @@ public class PlayerInfoScreen extends TwinkleActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     long playerId = player.getId();
-                    ModelHelper.deletePlayer(player, mDao);
+                    ModelHelper.deletePlayer(player, mApp.getDAO());
                     if (playerId == mCurrentPlayerid) {
                         mApp.setCurrentPlayer(null);
                     }
@@ -105,10 +103,11 @@ public class PlayerInfoScreen extends TwinkleActivity {
         @Override
         public void onClick(View v) {
             String newName = mNameField.getText().toString();
-            Cursor cursor = mDao.fetchPlayer(newName);
+            ScoreDAO dao = mApp.getDAO();
+            Cursor cursor = dao.fetchPlayer(newName);
             if (cursor == null) {
                 mPlayer.setName(newName);
-                ModelHelper.savePlayer(mPlayer, mDao);
+                ModelHelper.savePlayer(mPlayer, dao);
             } else {
                 cursor.close();
             }

@@ -58,8 +58,7 @@ public class NewPlayerDialog extends TwinkleDialog {
             String name = mName.getText().toString();
             
             if (name.length() > 0) {
-                TwinkleApplication appCtx = mAppCtx;
-                ScoreDAO dao = appCtx.getDAO();
+                ScoreDAO dao = mAppCtx.getDAO();
                 long id = dao.createPlayer(name);
                 dao.createScore(id);
                 mNewPlayerId = id;

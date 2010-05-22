@@ -61,7 +61,7 @@ public class Pitch extends GameRound {
     
     @Override
     protected void playNotes(SoundPlayer.PlayerCallback soundPlayerCallback) {
-        mSoundPlayer.playNote(mNotes, soundPlayerCallback);
+        mApp.getSoundPlayer().playNote(mNotes, soundPlayerCallback);
     }
 
     @Override
