@@ -7,7 +7,7 @@ import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import com.prunicki.suzuki.twinkle.Utils;
+import com.prunicki.suzuki.twinkle.util.PropertyChangeUtil;
 
 public class Player {
     public static final String PROP_CHG_NAME = "propChgName";
@@ -41,7 +41,7 @@ public class Player {
     public void setName(String name) {
         String oldName = this.mName;
         this.mName = clipName(name);
-        Utils.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(this, PROP_CHG_NAME, oldName, name));
+        PropertyChangeUtil.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(this, PROP_CHG_NAME, oldName, name));
     }
 
     public int getHiScore() {
@@ -81,18 +81,18 @@ public class Player {
     }
     
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        Utils.addPropertyChangeListener(mListeners, listener);
+        PropertyChangeUtil.addPropertyChangeListener(mListeners, listener);
     }
     
     public void removePropertyChangeListener(PropertyChangeListener listener) {
-        Utils.removePropertyChangeListener(mListeners, listener);
+        PropertyChangeUtil.removePropertyChangeListener(mListeners, listener);
     }
     
     private class ScoreChangeListener implements PropertyChangeListener {
         @Override
         public void propertyChange(PropertyChangeEvent event) {
             if (PROP_CHG_LAST_SCORE.equals(event.getPropertyName())) {
-                Utils.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(Player.this, PROP_CHG_LAST_SCORE, event.getOldValue(), event.getNewValue()));
+                PropertyChangeUtil.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(Player.this, PROP_CHG_LAST_SCORE, event.getOldValue(), event.getNewValue()));
             }
         }
     }

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 
 import com.prunicki.suzuki.twinkle.db.ScoreDAO;
 import com.prunicki.suzuki.twinkle.model.Player;
+import com.prunicki.suzuki.twinkle.util.PropertyChangeUtil;
 
 import android.app.Application;
 
@@ -61,11 +62,11 @@ public class TwinkleApplication extends Application {
     }
     
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        Utils.addPropertyChangeListener(listeners, listener);
+        PropertyChangeUtil.addPropertyChangeListener(listeners, listener);
     }
     
     public void removePropertyChangeListener(PropertyChangeListener listener) {
-        Utils.removePropertyChangeListener(listeners, listener);
+        PropertyChangeUtil.removePropertyChangeListener(listeners, listener);
     }
     
     public Player getCurrentPlayer() {
@@ -77,7 +78,7 @@ public class TwinkleApplication extends Application {
             Player oldPlayer = mCurrentPlayer;
             mCurrentPlayer = player;
             
-            Utils.firePropertyChangeEvent(listeners, new PropertyChangeEvent(this, PROP_CHG_PLAYER, oldPlayer, player));
+            PropertyChangeUtil.firePropertyChangeEvent(listeners, new PropertyChangeEvent(this, PROP_CHG_PLAYER, oldPlayer, player));
         }
     }
     

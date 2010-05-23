@@ -5,7 +5,7 @@ import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-import com.prunicki.suzuki.twinkle.Utils;
+import com.prunicki.suzuki.twinkle.util.PropertyChangeUtil;
 
 public class Score {
     public static final String PROP_CHG_LAST_SCORE = "propChgLastScore";
@@ -54,7 +54,7 @@ public class Score {
         mTotalScore += lastScore;
         mTotalPlayed++;
         
-        Utils.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(this, PROP_CHG_LAST_SCORE, oldLastScore, lastScore));
+        PropertyChangeUtil.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(this, PROP_CHG_LAST_SCORE, oldLastScore, lastScore));
     }
 
     public int getTotalScore() {
@@ -70,10 +70,10 @@ public class Score {
     }
     
     public void addPropertyChangeListener(PropertyChangeListener listener) {
-        Utils.addPropertyChangeListener(mListeners, listener);
+        PropertyChangeUtil.addPropertyChangeListener(mListeners, listener);
     }
     
     public void removePropertyChangeListener(PropertyChangeListener listener) {
-        Utils.removePropertyChangeListener(mListeners, listener);
+        PropertyChangeUtil.removePropertyChangeListener(mListeners, listener);
     }
 }

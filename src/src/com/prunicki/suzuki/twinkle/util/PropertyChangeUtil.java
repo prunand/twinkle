@@ -1,4 +1,4 @@
-package com.prunicki.suzuki.twinkle;
+package com.prunicki.suzuki.twinkle.util;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -6,7 +6,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class Utils {
+public final class PropertyChangeUtil {
     public static void addPropertyChangeListener(List<WeakReference<PropertyChangeListener>> listeners, PropertyChangeListener listener) {
         boolean add = true;
         ArrayList<WeakReference<PropertyChangeListener>> deadListeners = null;
