@@ -41,7 +41,6 @@ import android.widget.TextView;
 import com.prunicki.suzuki.twinkle.model.Player;
 
 public class Main extends TwinkleActivity {
-    public static final String TAG = "SuzukiTwinkle";
     private static final int SELECT_PLAYER_FOR_PLAY = 1;
     private static final int SALUTATION_WIDGET = 1;
     private static final int HISCORE_WIDGET = 2;

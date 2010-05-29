@@ -18,6 +18,8 @@
  */
 package com.prunicki.suzuki.twinkle;
 
+import static com.prunicki.suzuki.twinkle.Constants.TAG;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -125,7 +127,7 @@ public class SoundPlayer {
                 if (mSuzukiJetPlayer.pause()) {
                     mSuzukiJetPlayer.clearQueue();
                 } else {
-                    Log.d(Main.TAG, "Could not pause the jet player.");
+                    Log.d(TAG, "Could not pause the jet player.");
                 }
             }
             mSoundPool.stop(mSoundStream);
@@ -164,20 +166,20 @@ public class SoundPlayer {
             }
             
             if (queued) {
-                if (Log.isLoggable(Main.TAG, Log.DEBUG)) {
-                    Log.d(Main.TAG, "Segment " + segment + " queued.");
+                if (Log.isLoggable(TAG, Log.DEBUG)) {
+                    Log.d(TAG, "Segment " + segment + " queued.");
                 }
                 mPlayingMidi.set(true);
                 mSuzukiJetPlayer.play();
             } else {
-                if (Log.isLoggable(Main.TAG, Log.DEBUG)) {
-                    Log.d(Main.TAG, "Segment " + segment + " _NOT_ queued.");
+                if (Log.isLoggable(TAG, Log.DEBUG)) {
+                    Log.d(TAG, "Segment " + segment + " _NOT_ queued.");
                 }
             }
             mCallback.set(callback);
         } else {
-            if (Log.isLoggable(Main.TAG, Log.WARN)) {
-                Log.w(Main.TAG, "Attempting to play Segment " + segment + " when not initialized.");
+            if (Log.isLoggable(TAG, Log.WARN)) {
+                Log.w(TAG, "Attempting to play Segment " + segment + " when not initialized.");
             }
         }
     }
@@ -212,12 +214,12 @@ public class SoundPlayer {
         @Override
         public void onJetEvent(JetPlayer player, short segment, byte track,
                 byte channel, byte controller, byte value) {
-            Log.d(Main.TAG, "Received Jet event: " + value);
+            Log.d(TAG, "Received Jet event: " + value);
         }
 
         @Override
         public void onJetNumQueuedSegmentUpdate(JetPlayer player, int nbSegments) {
-            Log.d(Main.TAG, "Number of queued segments updated: " + nbSegments);
+            Log.d(TAG, "Number of queued segments updated: " + nbSegments);
             if (nbSegments == 0 && mPlayingMidi.get()) {
                 PlayerCallback callback = mCallback.get();
                 if (callback != null) {
@@ -229,13 +231,13 @@ public class SoundPlayer {
 
         @Override
         public void onJetPauseUpdate(JetPlayer player, int paused) {
-            Log.d(Main.TAG, "Jet paused: " + paused);
+            Log.d(TAG, "Jet paused: " + paused);
         }
 
         @Override
         public void onJetUserIdUpdate(JetPlayer player, int userId,
                 int repeatCount) {
-            Log.d(Main.TAG, "User id updated: " + userId);
+            Log.d(TAG, "User id updated: " + userId);
         }
     }
     

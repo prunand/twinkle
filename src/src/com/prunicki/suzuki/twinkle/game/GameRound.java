@@ -18,6 +18,8 @@
  */
 package com.prunicki.suzuki.twinkle.game;
 
+import static com.prunicki.suzuki.twinkle.Constants.TAG;
+
 import java.util.Random;
 
 import android.app.Activity;
@@ -31,7 +33,6 @@ import android.view.View.OnClickListener;
 
 import com.prunicki.suzuki.twinkle.GameButtonListener;
 import com.prunicki.suzuki.twinkle.GameRoundCallback;
-import com.prunicki.suzuki.twinkle.Main;
 import com.prunicki.suzuki.twinkle.R;
 import com.prunicki.suzuki.twinkle.SoundPlayer;
 import com.prunicki.suzuki.twinkle.TwinkleApplication;
@@ -152,7 +153,7 @@ public abstract class GameRound {
                     dialog.setOnCancelListener(new OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
-                            Log.d(Main.TAG, "Dialog cancelled.");
+                            Log.d(TAG, "Dialog cancelled.");
                             mApp.getSoundPlayer().pause();
                         }
                     });
@@ -161,7 +162,7 @@ public abstract class GameRound {
                     playNotes(new SoundPlayer.PlayerCallback() {
                         @Override
                         public void playbackComplete() {
-                            Log.d(Main.TAG, "Dismissing playback dialog.");
+                            Log.d(TAG, "Dismissing playback dialog.");
                             dialog.dismiss();
                         }
                     });

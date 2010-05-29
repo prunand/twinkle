@@ -18,13 +18,13 @@
  */
 package com.prunicki.suzuki.twinkle.game;
 
+import static com.prunicki.suzuki.twinkle.Constants.TAG;
 import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 
 import com.prunicki.suzuki.twinkle.GameButtonListener;
 import com.prunicki.suzuki.twinkle.GameRoundCallback;
-import com.prunicki.suzuki.twinkle.Main;
 import com.prunicki.suzuki.twinkle.R;
 import com.prunicki.suzuki.twinkle.widget.SimpleNoteView;
 
@@ -74,7 +74,7 @@ public class AbstractLengthRound extends GameRound {
     @Override
     protected void prepareNext() {
         mNote = nextRandom(mNote);
-        Log.d(Main.TAG, "Next Random " + mNote);
+        Log.d(TAG, "Next Random " + mNote);
     }
     
     private class NotelengthListener extends GameButtonListener {

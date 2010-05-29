@@ -1,14 +1,13 @@
 package com.prunicki.suzuki.twinkle.util;
 
+import static com.prunicki.suzuki.twinkle.Constants.TAG;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.util.Log;
 
-import com.prunicki.suzuki.twinkle.Main;
-
 public class ExceptionUtil {
     public static void displayException(RuntimeException e, int maxStack, Context context) {
-        Log.d(Main.TAG, "Caught runtime exception: " + e.getMessage());
+        Log.d(TAG, "Caught runtime exception: " + e.getMessage());
         
         AlertDialog.Builder exceptionDialogBldr = new AlertDialog.Builder(context);
         

@@ -1,5 +1,6 @@
 package com.prunicki.suzuki.twinkle;
 
+import static com.prunicki.suzuki.twinkle.Constants.TAG;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -104,7 +105,7 @@ public class GameScreen extends TwinkleActivity implements GameRoundCallback {
                     SuccessDialog dlg = new SuccessDialog(GameScreen.this, score);
                     dlg.show();
                     
-                    Log.d(Main.TAG, "Score = " + score);
+                    Log.d(TAG, "Score = " + score);
                 }
             }
             

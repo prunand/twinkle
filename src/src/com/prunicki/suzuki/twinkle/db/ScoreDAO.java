@@ -1,5 +1,6 @@
 package com.prunicki.suzuki.twinkle.db;
 
+import static com.prunicki.suzuki.twinkle.Constants.TAG;
 import static com.prunicki.suzuki.twinkle.db.DdlBuilder.INTEGER_TYPE;
 import static com.prunicki.suzuki.twinkle.db.DdlBuilder.TABLE_KEY_NAME;
 import static com.prunicki.suzuki.twinkle.db.DdlBuilder.TEXT_TYPE;
@@ -163,7 +164,7 @@ public class ScoreDAO {
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             //FIXME Should not be deleting all old data on upgrade
-            Log.w(Main.TAG, "Upgrading database from version " + oldVersion + " to "
+            Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
                     + newVersion + ", which will destroy all old data");
             dropTables(db);
             onCreate(db);
