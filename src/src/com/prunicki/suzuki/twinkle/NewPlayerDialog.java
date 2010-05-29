@@ -59,9 +59,7 @@ public class NewPlayerDialog extends TwinkleDialog {
             
             if (name.length() > 0) {
                 ScoreDAO dao = mAppCtx.getDAO();
-                long id = dao.createPlayer(name);
-                dao.createScore(id);
-                mNewPlayerId = id;
+                mNewPlayerId = dao.createPlayer(name);
                 dismiss();
             }
         }

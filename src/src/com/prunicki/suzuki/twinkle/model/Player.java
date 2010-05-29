@@ -1,7 +1,5 @@
 package com.prunicki.suzuki.twinkle.model;
 
-import static com.prunicki.suzuki.twinkle.model.Score.PROP_CHG_LAST_SCORE;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.lang.ref.WeakReference;
@@ -11,23 +9,26 @@ import com.prunicki.suzuki.twinkle.util.PropertyChangeUtil;
 
 public class Player {
     public static final String PROP_CHG_NAME = "propChgName";
+    public static final String PROP_CHG_LAST_SCORE = "propChgLastScore";
     private static final int MAX_NAME_LENGTH = 15;
     
     private final long mId;
     private String mName;
-    private Score mScore;
-    private ScoreChangeListener scoreChangeListener;
+    private int mHiScore;
+    private int mLastScore;
+    private int mTotalScore;
+    private int mTotalPlayed;
     ArrayList<WeakReference<PropertyChangeListener>> mListeners;
     
-    public Player(long id, String name, Score score) {
+    public Player(long id, String name, int hiScore, int lastScore, int totalScore, int totalPlayed) {
         this.mId = id;
         this.mName = clipName(name);
-        mScore = score;
+        this.mHiScore = hiScore;
+        this.mLastScore = lastScore;
+        this.mTotalScore = totalScore;
+        this.mTotalPlayed = totalPlayed;
         
-        scoreChangeListener = new ScoreChangeListener();
         mListeners = new ArrayList<WeakReference<PropertyChangeListener>>();
-        
-        mScore.addPropertyChangeListener(scoreChangeListener);
     }
     
     public long getId() {
@@ -45,31 +46,35 @@ public class Player {
     }
 
     public int getHiScore() {
-        return mScore.getHiScore();
+        return mHiScore;
     }
 
     public int getLastScore() {
-        return mScore.getLastScore();
+        return mLastScore;
     }
 
     public void setLastScore(int lastScore) {
-        mScore.setLastScore(lastScore);
+        int oldLastScore = lastScore;
+        this.mLastScore = lastScore;
+        if (lastScore > mHiScore) {
+            mHiScore = lastScore;
+        }
+        mTotalScore += lastScore;
+        mTotalPlayed++;
+        
+        PropertyChangeUtil.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(this, PROP_CHG_LAST_SCORE, oldLastScore, lastScore));
     }
 
     public int getTotalScore() {
-        return mScore.getTotalScore();
+        return mTotalScore;
     }
     
     public int getTotalPlayed() {
-        return mScore.getTotalPlayed();
+        return mTotalPlayed;
     }
     
     public float getAverage() {
-        return mScore.getAverage();
-    }
-    
-    public Score getScore() {
-        return mScore;
+        return mTotalPlayed == 0 ? 0f :(float) mTotalScore / mTotalPlayed;
     }
     
     private static String clipName(String name) {
@@ -86,14 +91,5 @@ public class Player {
     
     public void removePropertyChangeListener(PropertyChangeListener listener) {
         PropertyChangeUtil.removePropertyChangeListener(mListeners, listener);
-    }
-    
-    private class ScoreChangeListener implements PropertyChangeListener {
-        @Override
-        public void propertyChange(PropertyChangeEvent event) {
-            if (PROP_CHG_LAST_SCORE.equals(event.getPropertyName())) {
-                PropertyChangeUtil.firePropertyChangeEvent(mListeners, new PropertyChangeEvent(Player.this, PROP_CHG_LAST_SCORE, event.getOldValue(), event.getNewValue()));
-            }
-        }
     }
 }

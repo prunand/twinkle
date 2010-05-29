@@ -19,7 +19,7 @@
 package com.prunicki.suzuki.twinkle;
 
 import static com.prunicki.suzuki.twinkle.Constants.PLAYER_ID_KEY;
-import static com.prunicki.suzuki.twinkle.model.Score.PROP_CHG_LAST_SCORE;
+import static com.prunicki.suzuki.twinkle.model.Player.PROP_CHG_LAST_SCORE;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;

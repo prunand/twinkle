@@ -1,7 +1,5 @@
 package com.prunicki.suzuki.twinkle;
 
-import com.prunicki.suzuki.twinkle.db.ScoreDAO;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -9,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+
+import com.prunicki.suzuki.twinkle.db.ScoreDAO;
 
 public class ChangePlayerListViewAdapter extends CursorAdapter {
     
