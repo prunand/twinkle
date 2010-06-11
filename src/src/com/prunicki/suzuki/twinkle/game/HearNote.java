@@ -20,6 +20,7 @@ package com.prunicki.suzuki.twinkle.game;
 
 import android.app.Activity;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.prunicki.suzuki.twinkle.GameButtonListener;
 import com.prunicki.suzuki.twinkle.GameRoundCallback;
@@ -29,8 +30,8 @@ import com.prunicki.suzuki.twinkle.SoundPlayer;
 public class HearNote extends GameRound {
     int mNote;
     
-    public HearNote(GameRoundCallback callback) {
-        super(R.layout.hearnote, true, 7, callback);
+    public HearNote(ViewGroup viewGroup, GameRoundCallback callback) {
+        super(R.layout.hearnote, viewGroup, true, 7, callback);
         mNote = -1;
         prepareNext();
     }

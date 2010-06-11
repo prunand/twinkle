@@ -20,6 +20,7 @@ package com.prunicki.suzuki.twinkle.game;
 
 import android.app.Activity;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.prunicki.suzuki.twinkle.GameButtonListener;
 import com.prunicki.suzuki.twinkle.GameRoundCallback;
@@ -31,8 +32,8 @@ public class Pitch extends GameRound {
     boolean mSame;
     boolean mHigher;
 
-    public Pitch(GameRoundCallback callback) {
-        super(R.layout.pitch, true, 3, callback);
+    public Pitch(ViewGroup viewGroup, GameRoundCallback callback) {
+        super(R.layout.pitch, viewGroup, true, 3, callback);
         
         mNotes = new int[2];
         mNotes[0] = -1;

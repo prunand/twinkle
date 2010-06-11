@@ -22,6 +22,7 @@ import static com.prunicki.suzuki.twinkle.Constants.TAG;
 import android.app.Activity;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.prunicki.suzuki.twinkle.GameButtonListener;
 import com.prunicki.suzuki.twinkle.GameRoundCallback;
@@ -38,8 +39,8 @@ public class AbstractLengthRound extends GameRound {
     protected SimpleNoteView mStaffView;
     int mNote;
     
-    public AbstractLengthRound(GameRoundCallback callback) {
-        super(R.layout.notelength, false, 5, callback);
+    public AbstractLengthRound(ViewGroup viewGroup, GameRoundCallback callback) {
+        super(R.layout.notelength, viewGroup, false, 5, callback);
         
         mNote = -1;
         prepareNext();

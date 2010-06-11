@@ -18,12 +18,14 @@
  */
 package com.prunicki.suzuki.twinkle.game;
 
+import android.view.ViewGroup;
+
 import com.prunicki.suzuki.twinkle.GameRoundCallback;
 import com.prunicki.suzuki.twinkle.widget.SimpleNoteView;
 
 public class RestLength extends AbstractLengthRound {
-    public RestLength(GameRoundCallback callback) {
-        super(callback);
+    public RestLength(ViewGroup viewGroup, GameRoundCallback callback) {
+        super(viewGroup, callback);
     }
     
     @Override

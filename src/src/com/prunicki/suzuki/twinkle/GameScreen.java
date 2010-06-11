@@ -36,6 +36,7 @@ import com.prunicki.suzuki.twinkle.game.SeeNote;
 import com.prunicki.suzuki.twinkle.game.SeeRhythm;
 import com.prunicki.suzuki.twinkle.model.ModelHelper;
 import com.prunicki.suzuki.twinkle.model.Player;
+import com.prunicki.suzuki.twinkle.util.WidgetUtil;
 
 public class GameScreen extends TwinkleActivity implements GameRoundCallback {
     private static final int END_ROUND_ANIMATION_TIME = 1000;
@@ -47,15 +48,7 @@ public class GameScreen extends TwinkleActivity implements GameRoundCallback {
     private int mCurrentRoundIndex;
     
     public GameScreen() {
-        int i = 0;
         gameRounds = new GameRound[7];
-        gameRounds[i++] = new RestLength(this);
-        gameRounds[i++] = new NoteLength(this);
-        gameRounds[i++] = new Pitch(this);
-        gameRounds[i++] = new SeeNote(this);
-        gameRounds[i++] = new HearNote(this);
-        gameRounds[i++] = new SeeRhythm(this);
-        gameRounds[i++] = new HearRhythm(this);
     }
 
     @Override
@@ -67,6 +60,15 @@ public class GameScreen extends TwinkleActivity implements GameRoundCallback {
         mPlayer = mApp.getCurrentPlayer();
         
         mGameView = (ViewGroup) findViewById(R.id.GameView);
+        
+        int i = 0;
+        gameRounds[i++] = new RestLength(mGameView, this);
+        gameRounds[i++] = new NoteLength(mGameView, this);
+        gameRounds[i++] = new Pitch(mGameView, this);
+        gameRounds[i++] = new SeeNote(mGameView, this);
+        gameRounds[i++] = new HearNote(mGameView, this);
+        gameRounds[i++] = new SeeRhythm(mGameView, this);
+        gameRounds[i++] = new HearRhythm(mGameView, this);
         
         mCurrentGameRound = gameRounds[mCurrentRoundIndex++];
         initCurrentGameRound();
@@ -91,45 +93,19 @@ public class GameScreen extends TwinkleActivity implements GameRoundCallback {
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected void onPreExecute() {
-                if (mCurrentRoundIndex < gameRounds.length) {
-                    Animation anim = AnimationUtils.loadAnimation(GameScreen.this, R.anim.fade);
-                    anim.setDuration(END_ROUND_ANIMATION_TIME);
-                    mGameView.startAnimation(anim);
+                if (!isGameOver()) {
+                    startAnimation();
                 }
             }
 
             @Override
             protected void onPostExecute(Void result) {
-                mGameView.removeAllViews();
-                mCurrentGameRound.onPause();
-                
-                GameRound[] games = gameRounds;
-                int length = games.length;
-                
-                if (mCurrentRoundIndex < length) {
-                    mCurrentGameRound = games[mCurrentRoundIndex++];
-                    
-                    initCurrentGameRound();
-                    mCurrentGameRound.onResume();
-                } else {
-                    int score = 0;
-                    
-                    for (int i = 0; i < length; i++) {
-                        score += games[i].getScore();
-                    }
-                    mPlayer.setLastScore(score);
-                    ModelHelper.savePlayer(mPlayer, mApp.getDAO());
-                    
-                    SuccessDialog dlg = new SuccessDialog(GameScreen.this, score);
-                    dlg.show();
-                    
-                    Log.d(TAG, "Score = " + score);
-                }
+                processEndGame();
             }
             
             @Override
             protected Void doInBackground(Void... params) {
-                if (mCurrentRoundIndex < gameRounds.length) {
+                if (!isGameOver()) {
                     try {
                         Thread.sleep(END_ROUND_ANIMATION_TIME);
                     } catch (InterruptedException e) {
@@ -142,6 +118,45 @@ public class GameScreen extends TwinkleActivity implements GameRoundCallback {
         };
         
         task.execute((Void) null);
+    }
+
+    boolean isGameOver() {
+        return mCurrentRoundIndex >= gameRounds.length;
+    }
+
+    void startAnimation() {
+        WidgetUtil.setChildWidgetsEnabled(mGameView, false);
+        Animation anim = AnimationUtils.loadAnimation(GameScreen.this, R.anim.fade);
+        anim.setDuration(END_ROUND_ANIMATION_TIME);
+        mGameView.startAnimation(anim);
+    }
+
+    void processEndGame() {
+        mGameView.removeAllViews();
+        mCurrentGameRound.onPause();
+        
+        GameRound[] games = gameRounds;
+        int length = games.length;
+        
+        if (mCurrentRoundIndex < length) {
+            mCurrentGameRound = games[mCurrentRoundIndex++];
+            
+            initCurrentGameRound();
+            mCurrentGameRound.onResume();
+        } else {
+            int score = 0;
+            
+            for (int i = 0; i < length; i++) {
+                score += games[i].getScore();
+            }
+            mPlayer.setLastScore(score);
+            ModelHelper.savePlayer(mPlayer, mApp.getDAO());
+            
+            SuccessDialog dlg = new SuccessDialog(GameScreen.this, score);
+            dlg.show();
+            
+            Log.d(TAG, "Score = " + score);
+        }
     }
     
     private void initCurrentGameRound() {

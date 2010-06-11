@@ -18,12 +18,14 @@
  */
 package com.prunicki.suzuki.twinkle.game;
 
+import android.view.ViewGroup;
+
 import com.prunicki.suzuki.twinkle.GameRoundCallback;
 import com.prunicki.suzuki.twinkle.widget.SimpleNoteView;
 
 public class NoteLength extends AbstractLengthRound {
-    public NoteLength(GameRoundCallback callback) {
-        super(callback);
+    public NoteLength(ViewGroup viewGroup, GameRoundCallback callback) {
+        super(viewGroup, callback);
     }
     
     @Override

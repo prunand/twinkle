@@ -20,6 +20,7 @@ package com.prunicki.suzuki.twinkle.game;
 
 import android.app.Activity;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.prunicki.suzuki.twinkle.GameButtonListener;
 import com.prunicki.suzuki.twinkle.GameRoundCallback;
@@ -31,8 +32,8 @@ public class SeeRhythm extends GameRound {
     private RhythmView mStaffView;
     int mRhythm;
     
-    public SeeRhythm(GameRoundCallback callback) {
-        super(R.layout.seerhythm, false, 4, callback);
+    public SeeRhythm(ViewGroup viewGroup, GameRoundCallback callback) {
+        super(R.layout.seerhythm, viewGroup, false, 4, callback);
         
         mRhythm = -1;
         prepareNext();

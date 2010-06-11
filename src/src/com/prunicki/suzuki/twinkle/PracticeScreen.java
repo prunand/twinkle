@@ -51,36 +51,35 @@ public class PracticeScreen extends TwinkleActivity implements GameRoundCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game);
         
-        int practiceType = getIntent().getIntExtra(PRACTICE_TYPE_KEY, -1);
+        mGameView = (ViewGroup) findViewById(R.id.GameView);
         
+        int practiceType = getIntent().getIntExtra(PRACTICE_TYPE_KEY, -1);
         GameRound gameRound = null;
         switch(practiceType) {
             case PITCH_PRACTICE_TYPE:
-                gameRound = new Pitch(this);
+                gameRound = new Pitch(mGameView, this);
                 break;
             case PITCH_NOTE_PRACTICE_TYPE:
-                gameRound = new HearNote(this);
+                gameRound = new HearNote(mGameView, this);
                 break;
             case READ_NOTE_PRACTICE_TYPE:
-                gameRound = new SeeNote(this);
+                gameRound = new SeeNote(mGameView, this);
                 break;
             case READ_REST_PRACTICE_TYPE:
-                gameRound = new RestLength(this);
+                gameRound = new RestLength(mGameView, this);
                 break;
             case READ_LENGTH_PRACTICE_TYPE:
-                gameRound = new NoteLength(this);
+                gameRound = new NoteLength(mGameView, this);
                 break;
             case SEE_RHYTHM_PRACTICE_TYPE:
-                gameRound = new SeeRhythm(this);
+                gameRound = new SeeRhythm(mGameView, this);
                 break;
             case HEAR_RHYTHM_PRACTICE_TYPE:
-                gameRound = new HearRhythm(this);
+                gameRound = new HearRhythm(mGameView, this);
                 break;
             default:
                 throw new IllegalArgumentException("Unkown practice type " + practiceType);
         }
-        
-        mGameView = (ViewGroup) findViewById(R.id.GameView);
         
         mGameRound = gameRound;
         initCurrentGameRound(gameRound);

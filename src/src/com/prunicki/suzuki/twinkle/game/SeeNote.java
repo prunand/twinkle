@@ -20,6 +20,7 @@ package com.prunicki.suzuki.twinkle.game;
 
 import android.app.Activity;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.prunicki.suzuki.twinkle.GameButtonListener;
 import com.prunicki.suzuki.twinkle.GameRoundCallback;
@@ -32,8 +33,8 @@ public class SeeNote extends GameRound {
     
     int mNote;
     
-    public SeeNote(GameRoundCallback callback) {
-        super(R.layout.seenote, false, 7, callback);
+    public SeeNote(ViewGroup viewGroup, GameRoundCallback callback) {
+        super(R.layout.seenote, viewGroup, false, 7, callback);
         
         mNote = -1;
         prepareNext();

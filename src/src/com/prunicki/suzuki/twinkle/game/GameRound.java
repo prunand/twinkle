@@ -29,6 +29,7 @@ import android.content.DialogInterface.OnCancelListener;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 
 import com.prunicki.suzuki.twinkle.GameButtonListener;
@@ -36,14 +37,16 @@ import com.prunicki.suzuki.twinkle.GameRoundCallback;
 import com.prunicki.suzuki.twinkle.R;
 import com.prunicki.suzuki.twinkle.SoundPlayer;
 import com.prunicki.suzuki.twinkle.TwinkleApplication;
+import com.prunicki.suzuki.twinkle.util.WidgetUtil;
 
 public abstract class GameRound {
     public final int mResourceId;
+    private ViewGroup viewGroup;
     private final boolean mSound;
 
     private final Random mRandom;
     private final int mMaxRandom;
-
+    
     protected Activity mActivity;
     protected TwinkleApplication mApp;
     protected View[] mButtons;
@@ -53,8 +56,9 @@ public abstract class GameRound {
 
     private View mReplayButton;
 
-    public GameRound(int resourceId, boolean sound, int numGameButtons, GameRoundCallback callback) {
+    public GameRound(int resourceId, ViewGroup viewGroup, boolean sound, int numGameButtons, GameRoundCallback callback) {
         this.mResourceId = resourceId;
+        this.viewGroup = viewGroup;
         mSound = sound;
         mMaxRandom = numGameButtons;
         mCallback = callback;
@@ -145,11 +149,22 @@ public abstract class GameRound {
         if (mSound) {
             AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
                 @Override
+                protected void onPreExecute() {
+                    WidgetUtil.setChildWidgetsEnabled(viewGroup, false);
+                }
+
+                @Override
                 protected void onPostExecute(Void result) {
                     final ProgressDialog dialog = new ProgressDialog(mActivity);
                     dialog.setMessage("Listen...");
                     dialog.setIndeterminate(true);
                     dialog.setCancelable(true);
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            WidgetUtil.setChildWidgetsEnabled(viewGroup, true);
+                        }
+                    });
                     dialog.setOnCancelListener(new OnCancelListener() {
                         @Override
                         public void onCancel(DialogInterface dialog) {
