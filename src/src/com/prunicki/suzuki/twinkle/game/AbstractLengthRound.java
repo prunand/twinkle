@@ -23,6 +23,7 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.prunicki.suzuki.twinkle.GameButtonListener;
 import com.prunicki.suzuki.twinkle.GameRoundCallback;
@@ -36,12 +37,14 @@ public class AbstractLengthRound extends GameRound {
     protected static final int EIGHTH_NOTE = 3;
     protected static final int SIXTEENTH_NOTE = 4;
     
+    private final String descTxt;
     protected SimpleNoteView mStaffView;
     int mNote;
     
-    public AbstractLengthRound(ViewGroup viewGroup, GameRoundCallback callback) {
+    public AbstractLengthRound(ViewGroup viewGroup, GameRoundCallback callback, String descTxt) {
         super(R.layout.notelength, viewGroup, false, 5, callback);
         
+        this.descTxt = descTxt;
         mNote = -1;
         prepareNext();
     }
@@ -69,6 +72,12 @@ public class AbstractLengthRound extends GameRound {
         setListenersIntoButtons(buttons, listeners);
 
         mStaffView = (SimpleNoteView) activity.findViewById(R.id.StaffView);
+        
+        String lengthText = mActivity.getResources().getString(R.string.length_desc);
+        lengthText = String.format(lengthText, descTxt);
+        TextView txtView = (TextView) activity.findViewById(R.id.DescText);
+        txtView.setText(lengthText);
+        
         showNextView();
     }
 

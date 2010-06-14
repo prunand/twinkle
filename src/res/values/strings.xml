@@ -30,9 +30,10 @@
     <string name="btn_see_rhythm">See Rhythm</string>
     <string name="btn_hear_rhythm">Hear Rhythm</string>
     <string name="pitch_desc">Is the last note higher,\nlower or the same?</string>
+    <string name="length_desc">Name the %s length in the staff.</string>
     <string name="note_desc">What note do you hear?</string>
     <string name="rhythm_desc">What rhythm do you hear?</string>
-    <string name="you_won_stars">You won %1$d stars!</string>
+    <string name="you_won_stars">You won %d stars!</string>
     <string name="great_job">Great Job!</string>
     <string name="about_label">About...</string>
     <string name="about_shortcut">s</string>

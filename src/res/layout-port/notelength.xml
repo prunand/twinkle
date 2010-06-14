@@ -18,6 +18,16 @@
     along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:id="@+id/DescText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dip"
+        android:layout_gravity="center"
+        android:padding="5dip"
+        android:background="@drawable/border"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"/>
     <com.prunicki.suzuki.twinkle.widget.SimpleNoteView
         android:id="@+id/StaffView"
         android:layout_width="fill_parent"

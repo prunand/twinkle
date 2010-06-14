@@ -25,7 +25,7 @@ import com.prunicki.suzuki.twinkle.widget.SimpleNoteView;
 
 public class NoteLength extends AbstractLengthRound {
     public NoteLength(ViewGroup viewGroup, GameRoundCallback callback) {
-        super(viewGroup, callback);
+        super(viewGroup, callback, "note");
     }
     
     @Override

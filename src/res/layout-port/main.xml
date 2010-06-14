@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:text="Switch"
-            android:textSize="10sp"/>
+            android:textSize="12sp"/>
     </RelativeLayout>
     <Button
         android:id="@+id/MainPlay"
@@ -58,7 +58,7 @@
         android:layout_gravity="center"
         android:layout_weight="1"
         android:layout_margin="15dip"
-        android:drawableTop="@drawable/many_notes"
+        android:drawableTop="@drawable/play"
         android:text="Play !!!"
         android:textSize="50sp"/>
     <Button
@@ -67,5 +67,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:textSize="10sp"/>
+        android:textSize="12sp"/>
 </LinearLayout>

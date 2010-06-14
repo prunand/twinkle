@@ -18,7 +18,16 @@
     along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <style name="SuzukiTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+    <style name="TwinkleTheme" parent="@android:style/Theme.Light.NoTitleBar.Fullscreen">
         <item name="android:windowBackground">@drawable/background</item>
+        <item name="android:textColorPrimary">@color/default_button</item>
+        <item name="android:buttonStyle">@style/Twinkle.Button</item>
+    </style>
+    <style name="TwinkleTheme.Dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:buttonStyle">@style/Twinkle.Button</item>
+    </style>
+    <style name="Twinkle.Button" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/button</item>
+        <item name="android:textColor">@color/default_button</item>
     </style>
 </resources>

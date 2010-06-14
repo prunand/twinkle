@@ -18,12 +18,25 @@
     along with Twinkle.  If not, see <http://www.gnu.org/licenses/>.
  -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dip"
+        android:layout_gravity="center"
+        android:padding="5dip"
+        android:background="@drawable/border"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
+        android:text="Name the note in the staff."/>
     <com.prunicki.suzuki.twinkle.widget.NoteView
         android:id="@+id/NoteView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="15dip"/>
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"
+        android:layout_marginTop="5dip"
+        android:layout_marginBottom="5dip"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
