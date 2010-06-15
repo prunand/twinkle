@@ -28,7 +28,7 @@
         android:background="@drawable/border"
         android:gravity="center_horizontal"
         android:textStyle="bold"/>
-    <com.prunicki.suzuki.twinkle.widget.SimpleNoteView
+    <com.prunicki.twinkle.widget.SimpleNoteView
         android:id="@+id/StaffView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

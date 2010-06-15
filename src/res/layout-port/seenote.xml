@@ -28,7 +28,7 @@
         android:gravity="center_horizontal"
         android:textStyle="bold"
         android:text="Name the note in the staff."/>
-    <com.prunicki.suzuki.twinkle.widget.NoteView
+    <com.prunicki.twinkle.widget.NoteView
         android:id="@+id/NoteView"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
