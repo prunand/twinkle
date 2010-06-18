@@ -18,8 +18,15 @@
  */
 package com.prunicki.suzuki.twinkle;
 
+import java.util.List;
+
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,12 +36,16 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import com.prunicki.suzuki.twinkle.db.SuzukiDAO;
+
 public class Main extends TwinkleActivity {
-    static final String TAG = "SuzukiTwinkle";
+    public static final String TAG = "SuzukiTwinkle";
     
     private Button mNameButton;
     private Button mPitchButton;
     private Button mRhythmButton;
+
+    private SuzukiApplication app;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +59,32 @@ public class Main extends TwinkleActivity {
         mPitchButton.setOnClickListener(mPitchListener);
         mRhythmButton.setOnClickListener(mRhythmListener);
         mNameButton.setOnClickListener(mNameListener);
+        
+        app = (SuzukiApplication) getApplication();
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        
+        Intent twinkleIntent = new Intent();
+        twinkleIntent.setClassName("com.prunicki.twinkle", "com.prunicki.twinkle.Main");
+        PackageManager pm = getPackageManager();
+        List<ResolveInfo> queryIntentActivities = pm.queryIntentActivities(twinkleIntent, PackageManager.MATCH_DEFAULT_ONLY);
+        int size = queryIntentActivities.size();
+        if (size == 0) {
+            SuzukiDAO dao = app.getDAO();
+
+            int numDismisses = dao.queryNumberOfDismisses();
+            if (numDismisses > 2) {
+                numDismisses = 0;
+            }
+
+            if (numDismisses == 0) {
+                showUpgradeDialog();
+            }
+            dao.updateNumberOfDismisses(numDismisses + 1);
+        }
     }
 
     @Override
@@ -75,6 +112,32 @@ public class Main extends TwinkleActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+    
+    private void showUpgradeDialog() {
+        AlertDialog.Builder dlgBldr = new AlertDialog.Builder(this);
+        dlgBldr.setTitle("Upgrade");
+        dlgBldr.setMessage("Suzuki Twinkle is now \"Twinkle\".\n" +
+                "Please install Twinkle from the Android Market.");
+        
+        dlgBldr.setPositiveButton("Install Now", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Uri marketUri = Uri.parse("market://search?q=pname:com.prunicki.twinkle");
+                Intent marketIntent =  new Intent(Intent.ACTION_VIEW).setData(marketUri);
+                startActivity(marketIntent);
+                dialog.dismiss();
+            }
+        });
+        dlgBldr.setNegativeButton("Ignore", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        
+        AlertDialog dlg = dlgBldr.create();
+        dlg.show();
     }
 
     private OnClickListener mPitchListener = new OnClickListener() {

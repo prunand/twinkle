@@ -23,10 +23,13 @@ import java.util.HashMap;
 
 import android.app.Application;
 
+import com.prunicki.suzuki.twinkle.db.SuzukiDAO;
+
 public class SuzukiApplication extends Application {
     private static final Long PLAYER = new Long(1);
     
     private HashMap<Long, SoftReference<Object>> map;
+    private SuzukiDAO dao;
 
     @Override
     public void onCreate() {
@@ -48,6 +51,7 @@ public class SuzukiApplication extends Application {
         super.onTerminate();
         
         releasePlayer();
+        releaseDAO();
     }
     
     public Player getPlayer() {
@@ -60,7 +64,7 @@ public class SuzukiApplication extends Application {
             map.put(PLAYER, new SoftReference<Object>(player));
         }
         
-        return (Player) player;
+        return player;
     }
 
     private void releasePlayer() {
@@ -69,6 +73,22 @@ public class SuzukiApplication extends Application {
         
         if (player != null) {
             player.release();
+        }
+    }
+    
+    public SuzukiDAO getDAO() {
+        if (dao == null) {
+            dao = new SuzukiDAO(this);
+            dao.open();
+        }
+        
+        return dao;
+    }
+    
+    private void releaseDAO() {
+        if (dao != null) {
+            dao.release();
+            dao = null;
         }
     }
 }
