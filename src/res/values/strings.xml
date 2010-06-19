@@ -31,6 +31,8 @@
     <string name="rhythm_desc">What rhythm do you hear?</string>
     <string name="about_label">About...</string>
     <string name="about_shortcut">s</string>
+    <string name="rename_notice">Suzuki Twinkle is now Twinkle.</string>
+    <string name="upgrade"><u>Upgrade now!</u></string>
     <string name="about">\nAn aid for beginning Suzuki students.\n\nCopyright (c) 2010 Andrew Prunicki\n\nEmail feedback: prunand@iit.edu</string>
-    <string name="in_memory">\n\nIn loving memory of John Paul, who never had the opportunity to learn the violin.</string>
+    <string name="in_memory">\nIn loving memory of John Paul, who never had the opportunity to learn the violin.</string>
 </resources>

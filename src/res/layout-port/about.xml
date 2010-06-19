@@ -41,6 +41,21 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"/>
     <TextView
+        android:text="@string/rename_notice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"/>
+    <TextView
+        android:id="@+id/Upgrade"
+        android:text="@string/upgrade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"/>
+    <TextView
         android:text="@string/about"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
