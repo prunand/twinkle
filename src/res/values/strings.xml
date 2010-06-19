@@ -19,7 +19,7 @@
  -->
 <resources>
     <string name="app_name">Suzuki Twinkle</string>
-    <string name="app_version">Version: 0.2</string>
+    <string name="app_version">Version: 0.2.1\n</string>
     <string name="dialog_success">Good Job!</string>
     <string name="dialog_sight_sound">Sight or Sound?</string>
     <string name="btn_name">Name that Note</string>
