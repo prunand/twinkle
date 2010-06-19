@@ -135,7 +135,7 @@ public class Main extends TwinkleActivity {
     private void showUpgradeDialog() {
         AlertDialog.Builder dlgBldr = new AlertDialog.Builder(this);
         dlgBldr.setTitle("Upgrade to Twinkle");
-        dlgBldr.setMessage("Suzuki Twinkle is now \"Twinkle\".\n\n" +
+        dlgBldr.setMessage("Suzuki Twinkle is now:\n\"Twinkle\".\n\n" +
             "Would you like to upgrade to Twinkle now?");
         
         dlgBldr.setPositiveButton("Upgrade Now", new DialogInterface.OnClickListener() {
@@ -161,16 +161,13 @@ public class Main extends TwinkleActivity {
     private void showUninstallDialog() {
         AlertDialog.Builder dlgBldr = new AlertDialog.Builder(this);
         dlgBldr.setTitle("Uninstall Suzuki Twinkle");
-        dlgBldr.setMessage("Twinkle has replaced Suzuki Twinkle and you have it.\n\n" +
+        dlgBldr.setMessage("Twinkle has replaced Suzuki Twinkle and you now have it.\n\n" +
             "Would you like to uninstall Suzuki Twinkle now?");
         
         dlgBldr.setPositiveButton("Uninstall Now", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (!startMarket(SUZUKI_TWINKLE_PKG_NAME)) {
-                    startManageAppActivity();
-                }
-
+                startManageAppActivity(SUZUKI_TWINKLE_PKG_NAME);
                 finish();
             }
         });
@@ -194,13 +191,6 @@ public class Main extends TwinkleActivity {
         return size > 0;
     }
     
-    void startManageAppActivity() {
-        Intent intent = new Intent();
-        intent.setClassName(ANDROID_SETTINGS_PKG, INSTALL_APP_DETAILS);
-        intent.putExtra(ANDROID_SETTINGS_APP_PKG_NAME, SUZUKI_TWINKLE_PKG_NAME);
-        startActivity(intent);
-    }
-    
     boolean startMarket(String pkgName) {
         boolean started = true;
         Uri marketUri = Uri.parse("market://search?q=pname:" + pkgName);
@@ -211,6 +201,13 @@ public class Main extends TwinkleActivity {
             started = false;
         }
         return started;
+    }
+    
+    void startManageAppActivity(String pkgName) {
+        Intent intent = new Intent();
+        intent.setClassName(ANDROID_SETTINGS_PKG, INSTALL_APP_DETAILS);
+        intent.putExtra(ANDROID_SETTINGS_APP_PKG_NAME, pkgName);
+        startActivity(intent);
     }
 
     void showNoMarketToast() {
